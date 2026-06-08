@@ -216,6 +216,22 @@ a { color: inherit; text-decoration: none; }
 }
 .lexicon__by .name { color: var(--ink); font-weight: 800; }
 
+/* ---------- on rotation (taste) ---------- */
+.listening { padding: 4rem 0; }
+.listening__lead {
+  margin-top: 1.4rem;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+}
+.listening__artists {
+  margin-top: 1rem;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 600;
+  color: var(--muted);
+}
+
 /* ---------- section scaffold ---------- */
 .section { padding: 5rem 0; border-top: 1px solid var(--rule); }
 .section__grid {
