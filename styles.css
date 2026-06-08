@@ -40,9 +40,10 @@ body {
 }
 
 a { color: inherit; text-decoration: none; }
-/* green text-selection — the page's signature */
-::selection { background: var(--accent); color: #fff; }
-::-moz-selection { background: var(--accent); color: #fff; }
+/* green text-selection — the page's signature.
+   Use a literal color: var() is unreliable inside ::selection. */
+::selection { background: #2f8f5b; color: #fff; }
+::-moz-selection { background: #2f8f5b; color: #fff; }
 
 /* ---------- shared ---------- */
 .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); }
