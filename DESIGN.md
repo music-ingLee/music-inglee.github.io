@@ -1,22 +1,22 @@
-# DESIGN.md — Editorial / Gallery (MMCA-inspired)
+# DESIGN.md — MoMA-inspired
 
 ## Overview
-A museum-catalog aesthetic on a warm gallery white (`#f7f6f3`) using the
-**studyForest light palette** with a single green accent (`#2f8f5b`). No cards,
-no boxes — content is organized like an exhibition index: generous whitespace,
-hairline rules, numbered sections (01 / About …), and large editorial typography.
+A stark modernist identity: pure white (`#ffffff`) and near-black (`#0a0a0a` / `#000`)
+with bold grotesque typography on a strong grid. The **studyForest green** (`#2f8f5b`)
+is held back as a single interaction accent — it appears only on hover, active nav,
+and as small section numbers, so the page reads black-and-white at rest and reveals
+color on touch.
 
 ## Key characteristics
-- **Type**: Inter (300–600). Oversized light hero name, tight `-0.03em` tracking;
-  small uppercase rail labels with wide `0.18em` tracking.
-- **Color**: near-black text on warm off-white; green used sparingly for
-  section numbers, links, and hover states only.
-- **Layout**: two-column scaffold — sticky left rail label + right body. Works
-  section is an exhibition index (number · title · year) separated by hairlines.
-- **Motion**: smooth scroll + subtle IntersectionObserver fade-up (`.reveal`);
-  underline-grow on nav hover; active-section nav tracking. Honors
-  `prefers-reduced-motion`.
-- **Imagery**: portrait shown as a framed figure with caption (not a circular avatar).
+- **Type**: Inter at heavy weights (700–800). Oversized bold hero name with very tight
+  `-0.045em` tracking; bold uppercase rail labels.
+- **Color**: black on white; neutral (not warm) grays; green only as interaction pop.
+- **Grid**: two-column scaffold (sticky rail label + body); sections divided by strong
+  1–2px black rules — modernist, graphic, confident.
+- **Works**: exhibition index with big bold titles; a green underline wipes in on hover.
+- **Motion**: smooth scroll + IntersectionObserver fade-up (`.reveal`); nav underline
+  grow; active-section tracking. Honors `prefers-reduced-motion`.
+- **Imagery**: portrait as a hard-framed B&W figure (not a circular avatar).
 
 ## Sections
 Nav · Hero · 01 About · 02 CV · 03 Works · 04 Courses · 05 Contact · 06 Colophon (AI Usage) · Footer.
