@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 168 168" width="168" height="168" role="img" aria-label="Profile placeholder">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#6366f1"/>
-      <stop offset="1" stop-color="#06b6d4"/>
+      <stop offset="0" stop-color="#2e7d5b"/>
+      <stop offset="1" stop-color="#57b07c"/>
     </linearGradient>
   </defs>
-  <rect width="168" height="168" rx="84" fill="#161b22"/>
+  <rect width="168" height="168" rx="84" fill="#1a1b1e"/>
   <circle cx="84" cy="84" r="82" fill="none" stroke="url(#g)" stroke-width="3"/>
   <!-- Replace this file by adding a real photo at assets/profile.jpg -->
   <text x="84" y="104" font-family="-apple-system, Segoe UI, sans-serif"

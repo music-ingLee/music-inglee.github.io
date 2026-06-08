@@ -1,9 +1,10 @@
-# DESIGN.md — Dark Modern
+# DESIGN.md — Dark Forest (studyForest palette)
 
 ## Overview
-A dark, developer-portfolio aesthetic. Deep near-black surfaces (`#0a0c10` / `#161b22`)
-with a single confident accent: an indigo→cyan gradient (`#6366f1 → #06b6d4`) used for
-the brand, gradient hero glow, section-title ticks, and the primary button.
+A dark, developer-portfolio aesthetic using the **studyForest "숲" palette**.
+Warm near-black surfaces (`#131416` / `#1a1b1e` / `#212327`) with a single confident
+green accent (`#57b07c`, light `#8fd6a6`) used for the brand, hero glow, section-title
+ticks, and the primary button. No blue — a calm, restrained single-accent system.
 
 ## Key characteristics
 - **Surfaces**: layered dark grays with 1px `#2a3140` borders; 14px rounded corners.
