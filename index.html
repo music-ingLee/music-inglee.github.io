@@ -4,20 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- TODO: replace with your real name -->
-  <title>[이름] — Personal Page</title>
+  <title>이윤태 — music_ing Lee · Quale</title>
   <meta name="description" content="Personal page of a Computer Science & Engineering student at Seoul National University." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=2" />
+  <link rel="stylesheet" href="styles.css?v=3" />
 </head>
 <body>
 
   <!-- ===== nav (links to every section) ===== -->
   <nav class="nav" id="nav">
-    <!-- TODO: your name / initials -->
-    <span class="nav__brand">[이름]</span>
+    <span class="nav__brand">music_ing&nbsp;Lee</span>
     <ul class="nav__links">
+      <li><a href="#musicking">Musicking</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#cv">CV</a></li>
       <li><a href="#works">Works</a></li>
@@ -30,10 +30,10 @@
   <!-- ===== hero ===== -->
   <header class="hero wrap" id="top">
     <p class="eyebrow hero__eyebrow">Seoul National University — Computer Science &amp; Engineering</p>
-    <!-- TODO: your real name (Korean or English) -->
-    <h1 class="hero__name">[이름]<br>Your&nbsp;Name</h1>
-    <!-- TODO: one-line positioning statement -->
-    <p class="hero__role">컴퓨터공학 전공 · [관심 분야 한 줄, 예: 시스템 / AI / 웹]</p>
+    <h1 class="hero__name">이윤태</h1>
+    <p class="hero__aka">music_ing&nbsp;Lee &nbsp;·&nbsp; Quale</p>
+    <!-- TODO(다음 단계): 전공·관심사 한 줄 -->
+    <p class="hero__role">컴퓨터공학 전공 · [관심 분야 한 줄 — 다음 단계에서 채울 자리]</p>
     <div class="hero__meta">
       <span>Seoul, KR</span>
       <a href="mailto:qualia0521@snu.ac.kr">qualia0521@snu.ac.kr</a>
@@ -42,6 +42,22 @@
   </header>
 
   <main>
+
+    <!-- ===== Manifesto: musicking ===== -->
+    <section class="statement" id="musicking">
+      <div class="wrap reveal">
+        <p class="rail"><span class="num">✦</span> &nbsp;/&nbsp; Manifesto</p>
+        <div class="lexicon">
+          <h2 class="lexicon__word">musicking<span class="lexicon__pron">/ˈmjuː·zɪ·kɪŋ/</span><span class="lexicon__pos">noun &amp; verb</span></h2>
+          <p class="lexicon__def">
+            음악을 명사가 아니라 <em>동사</em>로 대하는 것 — 소유하거나 소비하는
+            <span class="strike">대상</span>이 아니라, 연주하고 듣고 함께 만드는
+            <strong>능동적 행위</strong>로 살아가는 태도.
+          </p>
+          <p class="lexicon__by"><span class="name">이윤태</span> · music_ing Lee · Quale — musicking의 주창자 <span class="muted">/ advocate</span></p>
+        </div>
+      </div>
+    </section>
 
     <!-- ===== 01 About ===== -->
     <section class="section" id="about">
@@ -235,11 +251,10 @@ Static, GitHub Pages compatible.</span>
   </main>
 
   <footer class="footer">
-    <!-- TODO: replace name -->
-    <span>© 2026 [이름]</span>
+    <span>© 2026 이윤태 · music_ing Lee</span>
     <span>Built with an AI agent · Hosted on GitHub Pages</span>
   </footer>
 
-  <script src="script.js?v=2"></script>
+  <script src="script.js?v=3"></script>
 </body>
 </html>
