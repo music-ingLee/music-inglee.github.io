@@ -216,20 +216,21 @@ a { color: inherit; text-decoration: none; }
 }
 .lexicon__by .name { color: var(--ink); font-weight: 800; }
 
-/* ---------- on rotation (taste) ---------- */
-.listening { padding: 4rem 0; }
-.listening__lead {
-  margin-top: 1.4rem;
-  font-size: clamp(1.8rem, 5vw, 3rem);
-  font-weight: 800;
-  letter-spacing: -0.035em;
-  color: var(--ink);
-}
-.listening__artists {
-  margin-top: 1rem;
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  font-weight: 600;
+/* ---------- hero: on-rotation line ---------- */
+.hero__rotation {
+  margin-top: 2rem;
+  font-size: clamp(0.95rem, 1.7vw, 1.12rem);
   color: var(--muted);
+  font-weight: 500;
+  max-width: 56ch;
+}
+.hero__rotation-label {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-ink);
+  margin-right: 0.7rem;
 }
 
 /* ---------- section scaffold ---------- */
