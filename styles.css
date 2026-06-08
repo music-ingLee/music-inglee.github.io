@@ -231,6 +231,11 @@ a { color: inherit; text-decoration: none; }
   color: var(--accent-ink);
   margin-right: 0.7rem;
 }
+.hero__artists {
+  display: block;
+  margin-top: 0.4rem;
+  color: var(--muted);
+}
 
 /* ---------- section scaffold ---------- */
 .section { padding: 5rem 0; border-top: 1px solid var(--rule); }
