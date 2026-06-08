@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600" width="480" height="600" role="img" aria-label="Portrait placeholder">
+  <rect width="480" height="600" fill="#efece6"/>
+  <rect x="0.5" y="0.5" width="479" height="599" fill="none" stroke="#d8d2c8"/>
+  <!-- minimal gallery placeholder · replace with assets/profile.jpg -->
+  <circle cx="240" cy="250" r="70" fill="none" stroke="#9a958c" stroke-width="2"/>
+  <path d="M150 420 q90 -120 180 0" fill="none" stroke="#9a958c" stroke-width="2"/>
+  <text x="240" y="540" font-family="-apple-system, Inter, Segoe UI, sans-serif"
+        font-size="15" letter-spacing="4" text-anchor="middle" fill="#2f8f5b">PORTRAIT</text>
+</svg>
