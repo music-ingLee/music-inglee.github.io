@@ -40,7 +40,9 @@ body {
 }
 
 a { color: inherit; text-decoration: none; }
-::selection { background: var(--ink); color: #fff; }
+/* green text-selection — the page's signature */
+::selection { background: var(--accent); color: #fff; }
+::-moz-selection { background: var(--accent); color: #fff; }
 
 /* ---------- shared ---------- */
 .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); }
