@@ -122,6 +122,39 @@ a { color: inherit; text-decoration: none; }
   padding-bottom: 4rem;
 }
 .hero__eyebrow { margin-bottom: 1.4rem; }
+
+/* minimal sheet-music accent: a short 5-line staff + one green note,
+   the cover's single point of color */
+.hero__staff {
+  position: relative;
+  width: 168px;
+  height: 33px;            /* 5 hairlines at 8px spacing (0,8,16,24,32) */
+  margin-bottom: 1.7rem;
+  background-image: repeating-linear-gradient(
+    to bottom, #d8d8d8 0 1px, transparent 1px 8px);
+}
+.hero__note {
+  position: absolute;
+  left: 40px; top: 12px;   /* head astride the middle line */
+  width: 10px; height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+  transform: translateX(0) rotate(-18deg);
+  transition: transform 0.45s cubic-bezier(.2,.7,.2,1);
+}
+.hero__note::after {       /* stem */
+  content: "";
+  position: absolute;
+  right: 0; top: -15px;
+  width: 1.6px; height: 17px;
+  background: var(--accent);
+}
+.hero:hover .hero__note { transform: translateX(80px) rotate(-18deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__note { transition: none; }
+  .hero:hover .hero__note { transform: translateX(0) rotate(-18deg); }
+}
 .hero__name {
   font-size: clamp(3rem, 13vw, 9.5rem);
   font-weight: 800;
