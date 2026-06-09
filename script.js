@@ -4,29 +4,26 @@ const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
 onScroll();
 window.addEventListener('scroll', onScroll, { passive: true });
 
-// ---- portrait blurs as it enters the top inversion band ----
-// (the photo is kept un-inverted; blurring it in the band stops it from
-//  looking like the effect is broken there)
+// ---- portrait darkens (not inverts) as it enters the top band ----
+// the photo is excluded from the invert band; a viewport-locked black
+// gradient shade darkens it top-down, matching the band's fade.
 const band = document.querySelector('.invert-band');
 const figure = document.querySelector('.figure');
-const reduceBlur = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const shade = figure && figure.querySelector('.figure__shade');
 let figTick = false;
-const updateFigBlur = () => {
+const updateShade = () => {
   figTick = false;
-  if (!figure || !band) return;
+  if (!band || !shade) return;
   const bandH = band.getBoundingClientRect().height;
-  if (!bandH) { figure.style.filter = ''; return; }   // band off (reduced motion)
-  const top = figure.getBoundingClientRect().top;
-  let t = 1 - top / bandH;                 // 0 at band bottom → 1 at viewport top
-  t = Math.min(1, Math.max(0, t));
-  figure.style.filter = t > 0 ? `blur(${(t * 6).toFixed(2)}px)` : '';
+  if (!bandH) { shade.style.height = '0'; return; }   // band off (reduced motion)
+  const figTop = figure.getBoundingClientRect().top;
+  shade.style.top = (-figTop) + 'px';                 // lock the shade to the viewport top…
+  shade.style.height = bandH + 'px';                  // …spanning exactly the band
 };
-const reqFigBlur = () => { if (!figTick) { figTick = true; requestAnimationFrame(updateFigBlur); } };
-if (!reduceBlur) {
-  window.addEventListener('scroll', reqFigBlur, { passive: true });
-  window.addEventListener('resize', reqFigBlur, { passive: true });
-  updateFigBlur();
-}
+const reqShade = () => { if (!figTick) { figTick = true; requestAnimationFrame(updateShade); } };
+window.addEventListener('scroll', reqShade, { passive: true });
+window.addEventListener('resize', reqShade, { passive: true });
+updateShade();
 
 // ---- About: emphasize the paragraph nearest the reading line ----
 const aboutLedes = [...document.querySelectorAll('#about .lede')];
