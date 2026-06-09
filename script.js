@@ -4,6 +4,30 @@ const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
 onScroll();
 window.addEventListener('scroll', onScroll, { passive: true });
 
+// ---- portrait blurs as it enters the top inversion band ----
+// (the photo is kept un-inverted; blurring it in the band stops it from
+//  looking like the effect is broken there)
+const band = document.querySelector('.invert-band');
+const figure = document.querySelector('.figure');
+const reduceBlur = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let figTick = false;
+const updateFigBlur = () => {
+  figTick = false;
+  if (!figure || !band) return;
+  const bandH = band.getBoundingClientRect().height;
+  if (!bandH) { figure.style.filter = ''; return; }   // band off (reduced motion)
+  const top = figure.getBoundingClientRect().top;
+  let t = 1 - top / bandH;                 // 0 at band bottom → 1 at viewport top
+  t = Math.min(1, Math.max(0, t));
+  figure.style.filter = t > 0 ? `blur(${(t * 6).toFixed(2)}px)` : '';
+};
+const reqFigBlur = () => { if (!figTick) { figTick = true; requestAnimationFrame(updateFigBlur); } };
+if (!reduceBlur) {
+  window.addEventListener('scroll', reqFigBlur, { passive: true });
+  window.addEventListener('resize', reqFigBlur, { passive: true });
+  updateFigBlur();
+}
+
 // ---- scroll reveal (subtle fade-up) ----
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const reveals = document.querySelectorAll('.reveal');
