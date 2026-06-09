@@ -291,6 +291,12 @@ a { color: inherit; text-decoration: none; }
 .lede + .lede { margin-top: 1.1rem; }
 .muted { color: var(--muted); font-weight: 400; }
 
+/* About: reading focus — the paragraph nearest the reading line is
+   emphasized, the rest recede. .active is toggled in script.js */
+#about .lede { color: var(--faint); transition: color 0.5s ease; }
+#about .lede.active { color: var(--ink); }
+@media (prefers-reduced-motion: reduce) { #about .lede { transition: none; } }
+
 /* ---------- about: pull-quote + four fields ---------- */
 .pullquote {
   margin: 2.8rem 0;

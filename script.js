@@ -28,6 +28,28 @@ if (!reduceBlur) {
   updateFigBlur();
 }
 
+// ---- About: emphasize the paragraph nearest the reading line ----
+const aboutLedes = [...document.querySelectorAll('#about .lede')];
+if (aboutLedes.length) {
+  let ledeTick = false;
+  const updateLede = () => {
+    ledeTick = false;
+    const focusY = window.innerHeight * 0.42;
+    let best = null, bestDist = Infinity;
+    for (const p of aboutLedes) {
+      const r = p.getBoundingClientRect();
+      const d = focusY < r.top ? r.top - focusY
+              : focusY > r.bottom ? focusY - r.bottom : 0;
+      if (d < bestDist) { bestDist = d; best = p; }
+    }
+    aboutLedes.forEach(p => p.classList.toggle('active', p === best));
+  };
+  const reqLede = () => { if (!ledeTick) { ledeTick = true; requestAnimationFrame(updateLede); } };
+  window.addEventListener('scroll', reqLede, { passive: true });
+  window.addEventListener('resize', reqLede, { passive: true });
+  updateLede();
+}
+
 // ---- scroll reveal (subtle fade-up) ----
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const reveals = document.querySelectorAll('.reveal');
