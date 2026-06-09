@@ -314,7 +314,9 @@ a { color: inherit; text-decoration: none; }
 
 /* ---------- about figure ---------- */
 .about__layout { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
-.figure { margin-top: 2.8rem; max-width: 360px; }
+/* keep the portrait above the inversion band (z60) so it never goes
+   color-negative when it scrolls through the top zone — stays true color */
+.figure { margin-top: 2.8rem; max-width: 360px; position: relative; z-index: 61; }
 .figure img {
   width: 100%;
   display: block;
