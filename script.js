@@ -13,10 +13,14 @@ const shade = media && media.querySelector('.figure__shade');
 let figTick = false;
 const updateShade = () => {
   figTick = false;
+  if (!media) return;
+  const mediaTop = media.getBoundingClientRect().top;
+  // clip the part of the photo that would cover the (inverted) nav
+  const navBottom = nav ? nav.getBoundingClientRect().bottom : 0;
+  media.style.clipPath = `inset(${Math.max(0, navBottom - mediaTop)}px 0 0 0)`;
   if (!band || !shade) return;
   const bandH = band.getBoundingClientRect().height;
   if (!bandH) { shade.style.height = '0'; return; }   // band off (reduced motion)
-  const mediaTop = media.getBoundingClientRect().top;
   shade.style.top = (-mediaTop) + 'px';               // lock the shade to the viewport top…
   shade.style.height = bandH + 'px';                  // …spanning exactly the band
 };

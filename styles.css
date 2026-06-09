@@ -54,14 +54,15 @@ a { color: inherit; text-decoration: none; }
    inverted: anything that scrolls up past this line flips to black bg /
    white text. constant — independent of scroll depth. the bottom edge is
    masked so the blade fades softly instead of a hard line.
-   sits below the nav (z 30 < 50) so the menu stays on top and content
-   slides under it; pointer-events: none keeps the menu clickable. */
+   sits ABOVE the nav (z 60 > 50) so the banner inverts (stays black); the
+   photo is clipped at the nav line (script.js) so it still slides under it.
+   pointer-events: none keeps the menu clickable. */
 .invert-band {
   position: fixed;
   top: 0; left: 0;
   width: 100%;
   height: 176px;          /* ends just below the sticky left headers (top:100px) */
-  z-index: 30;
+  z-index: 60;
   pointer-events: none;
   backdrop-filter: invert(1);
   -webkit-backdrop-filter: invert(1);
@@ -329,11 +330,11 @@ a { color: inherit; text-decoration: none; }
 /* ---------- about figure ---------- */
 .about__layout { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
 .figure { margin-top: 2.8rem; max-width: 360px; }
-/* only the image sits above the band (z40: above band 30, below nav 50) so it
-   isn't color-inverted and slides under the nav; the caption stays in flow and
-   inverts like other text. a viewport-locked black shade darkens the image
-   top-down to match the band; overflow clips it to the image. */
-.figure__media { position: relative; z-index: 40; overflow: hidden; display: block; }
+/* only the image sits above the band (z61) so it isn't color-inverted; the
+   caption stays in flow and inverts like other text. a viewport-locked black
+   shade darkens the image top-down to match the band; overflow clips it to
+   the image. script.js clips the top at the nav line so it slides under nav. */
+.figure__media { position: relative; z-index: 61; overflow: hidden; display: block; }
 .figure__shade {
   position: absolute; left: 0; width: 100%;
   pointer-events: none;
