@@ -4,26 +4,6 @@ const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
 onScroll();
 window.addEventListener('scroll', onScroll, { passive: true });
 
-// ---- scroll-depth inversion: top of screen darkens the further you scroll ----
-const root = document.documentElement;
-const reduceMo = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-let invTicking = false;
-const updateInvert = () => {
-  invTicking = false;
-  if (reduceMo) return;
-  const max = root.scrollHeight - window.innerHeight;
-  const p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
-  root.style.setProperty('--inv', p.toFixed(3));
-};
-const requestInvert = () => {
-  if (!invTicking) { invTicking = true; requestAnimationFrame(updateInvert); }
-};
-if (!reduceMo) {
-  window.addEventListener('scroll', requestInvert, { passive: true });
-  window.addEventListener('resize', requestInvert, { passive: true });
-  updateInvert();
-}
-
 // ---- scroll reveal (subtle fade-up) ----
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const reveals = document.querySelectorAll('.reveal');
