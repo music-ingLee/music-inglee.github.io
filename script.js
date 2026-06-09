@@ -8,16 +8,16 @@ window.addEventListener('scroll', onScroll, { passive: true });
 // the photo is excluded from the invert band; a viewport-locked black
 // gradient shade darkens it top-down, matching the band's fade.
 const band = document.querySelector('.invert-band');
-const figure = document.querySelector('.figure');
-const shade = figure && figure.querySelector('.figure__shade');
+const media = document.querySelector('.figure__media');
+const shade = media && media.querySelector('.figure__shade');
 let figTick = false;
 const updateShade = () => {
   figTick = false;
   if (!band || !shade) return;
   const bandH = band.getBoundingClientRect().height;
   if (!bandH) { shade.style.height = '0'; return; }   // band off (reduced motion)
-  const figTop = figure.getBoundingClientRect().top;
-  shade.style.top = (-figTop) + 'px';                 // lock the shade to the viewport top…
+  const mediaTop = media.getBoundingClientRect().top;
+  shade.style.top = (-mediaTop) + 'px';               // lock the shade to the viewport top…
   shade.style.height = bandH + 'px';                  // …spanning exactly the band
 };
 const reqShade = () => { if (!figTick) { figTick = true; requestAnimationFrame(updateShade); } };

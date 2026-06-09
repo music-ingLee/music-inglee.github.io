@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20" />
+  <link rel="stylesheet" href="styles.css?v=21" />
 </head>
 <body>
 
@@ -102,10 +102,12 @@
 
           <!-- editorial portrait: drop assets/profile.jpg to replace the placeholder -->
           <figure class="figure">
-            <img src="assets/profile.jpg?v=2" alt="이윤태"
-                 onerror="this.onerror=null;this.src='assets/portrait-placeholder.svg';" />
+            <div class="figure__media">
+              <img src="assets/profile.jpg?v=2" alt="이윤태"
+                   onerror="this.onerror=null;this.src='assets/portrait-placeholder.svg';" />
+              <div class="figure__shade" aria-hidden="true"></div>
+            </div>
             <figcaption>이윤태 · music_ing&nbsp;Lee</figcaption>
-            <div class="figure__shade" aria-hidden="true"></div>
           </figure>
         </div>
       </div>
@@ -126,8 +128,8 @@
                 <ul>
                   <li>
                     <div class="cv-item__top"><span class="cv-item__name">Seoul National University</span><span class="cv-item__when">2021 – present</span></div>
-                    <div class="cv-item__desc">B.A. Psychology · main major</div>
-                    <div class="cv-item__desc">B.Eng. Music Informatics · Student Design Major · since 2023</div>
+                    <div class="cv-item__desc">B.A. Psychology · Main Major</div>
+                    <div class="cv-item__desc">B.E. Music Informatics · Student Design Major · 2023 – present</div>
                   </li>
                 </ul>
               </div>
@@ -354,6 +356,6 @@ Static, GitHub Pages compatible.</span>
     <span>Hosted on GitHub Pages</span>
   </footer>
 
-  <script src="script.js?v=6"></script>
+  <script src="script.js?v=7"></script>
 </body>
 </html>
