@@ -116,7 +116,10 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 6rem 0 4rem;
+  /* vertical only — keep .wrap's horizontal gutter so the hero
+     lines up with the nav instead of hugging the window edge */
+  padding-top: 6rem;
+  padding-bottom: 4rem;
 }
 .hero__eyebrow { margin-bottom: 1.4rem; }
 .hero__name {
