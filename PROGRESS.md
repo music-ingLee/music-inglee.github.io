@@ -18,7 +18,7 @@
 - 배포 = `git push` → main → GitHub Pages 빌드(~1–2분)
 - HTML은 GitHub가 **10분 캐시**함 → push 후 바로 보려면 `Cmd+Shift+R`(하드 리프레시). `?fresh=N`도 우회용.
 - **CSS/JS 바꿀 때마다 index.html의 버전 쿼리를 올려야 함** (안 그러면 옛 스타일이 캐시에 묶임 — 초반에 크게 데임).
-  - 현재: `styles.css?v=27`, `script.js?v=8`
+  - 현재: `styles.css?v=28`, `script.js?v=8`
 
 ## 핵심 인터랙션 — "파쇄기(shredder)"
 - 화면 최상단 고정 반전 띠 `.invert-band`: `backdrop-filter: invert(1)`, **height 200px**, **z-index 60(= nav 위)** → nav 배너도 검정으로 반전됨(사용자 필수 요구).
@@ -54,6 +54,10 @@
 - 메뉴 디자인 규칙(리터치 후): 항목 사이 **검정 구분선 금지**(여백으로만 구분). 패널은 그림자 없이 **얇은 1px 검정 프레임 하나**.
   호버 시 항목 라벨에 **초록 밑줄 wipe**(`a > span` background-size 0→100%, nav/제목과 동일 모티프) + 우측 초록 `↗`.
   초록은 채움(fill) 금지, 선으로만. 라벨은 `<span>`으로 감싸야 밑줄이 small 제외하고 라벨에만 걸림.
+- 카피 톤(2026-06-13 정정): "강의에서 배운 자료구조" 같은 **수업 과제 톤 금지**. 설계 철학으로 쓸 것 —
+  분기 vs 선형 불일치 / 외재 인지(머릿속→화면) / 자료구조가 모델 맥락을 지배(path_to_root만 전송).
+  원천: `CoreComp/fromScratch`의 `LLM_학습_병목_문제의식.md`, `studyForest_paper_draft_ko.md`, finalPoster/finalReport.
+  dangling 안내문("제목에 마우스 올리면…") 삭제 — 호버하면 자연히 발견됨. styles `?v=27→28`(`.work__hint` 제거).
 
 ## 다음 / 열린 아이디어
 - (없음 — 필요 시 여기에 추가)

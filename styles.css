@@ -530,7 +530,6 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: 0;
   margin-top: 4px;
 }
-.work__hint { color: var(--faint); font-size: 0.85em; }
 
 .work__desc { margin-top: 0.8rem; color: var(--muted); max-width: 52ch; font-weight: 400; }
 .work__year { font-size: 0.85rem; color: var(--faint); text-align: right; padding-top: 0.7rem; font-weight: 600; }
