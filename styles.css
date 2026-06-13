@@ -439,6 +439,71 @@ a { color: inherit; text-decoration: none; }
   transition: background-size 0.3s cubic-bezier(.2,.7,.2,1);
 }
 .work:hover .work__title { background-size: 100% 2px; }
+
+/* studyForest: hover the title to choose Python / Java build */
+.work__title--menu { position: relative; display: inline-block; background-image: none; }
+.work__trigger {
+  cursor: pointer;
+  color: var(--ink);
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-size: 0% 2px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s cubic-bezier(.2,.7,.2,1);
+}
+.work:hover .work__trigger,
+.work__title--menu:hover .work__trigger,
+.work__title--menu:focus-within .work__trigger { background-size: 100% 2px; }
+.work__trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.work__launch {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.55rem;
+  display: flex;
+  flex-direction: column;
+  min-width: 260px;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.14);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s linear 0.18s;
+  z-index: 30;
+}
+/* invisible bridge so moving the cursor into the menu doesn't cross a dead gap */
+.work__launch::before {
+  content: "";
+  position: absolute;
+  top: -0.55rem; left: 0; right: 0; height: 0.55rem;
+}
+.work__title--menu:hover .work__launch,
+.work__title--menu:focus-within .work__launch {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.work__launch a {
+  display: block;
+  padding: 0.75rem 1.1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.work__launch a:last-child { border-bottom: none; }
+.work__launch a:hover, .work__launch a:focus-visible { background: var(--accent); color: #fff; outline: none; }
+.work__launch small { display: block; font-weight: 400; font-size: 0.78rem; color: var(--muted); margin-top: 3px; }
+.work__launch a:hover small, .work__launch a:focus-visible small { color: rgba(255,255,255,0.88); }
+.work__hint { color: var(--faint); font-size: 0.85em; }
+
 .work__desc { margin-top: 0.8rem; color: var(--muted); max-width: 52ch; font-weight: 400; }
 .work__year { font-size: 0.85rem; color: var(--faint); text-align: right; padding-top: 0.7rem; font-weight: 600; }
 .work__desc code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85em; }
