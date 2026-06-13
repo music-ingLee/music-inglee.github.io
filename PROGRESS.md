@@ -18,7 +18,7 @@
 - 배포 = `git push` → main → GitHub Pages 빌드(~1–2분)
 - HTML은 GitHub가 **10분 캐시**함 → push 후 바로 보려면 `Cmd+Shift+R`(하드 리프레시). `?fresh=N`도 우회용.
 - **CSS/JS 바꿀 때마다 index.html의 버전 쿼리를 올려야 함** (안 그러면 옛 스타일이 캐시에 묶임 — 초반에 크게 데임).
-  - 현재: `styles.css?v=26`, `script.js?v=8`
+  - 현재: `styles.css?v=27`, `script.js?v=8`
 
 ## 핵심 인터랙션 — "파쇄기(shredder)"
 - 화면 최상단 고정 반전 띠 `.invert-band`: `backdrop-filter: invert(1)`, **height 200px**, **z-index 60(= nav 위)** → nav 배너도 검정으로 반전됨(사용자 필수 요구).
@@ -50,7 +50,10 @@
   `.work__launch::before`로 갭 브리지(커서 이동 중 닫힘 방지). 그 아래 줄에 로컬용 `docker run ...` 명령(복사용 code).
 - ⚠️ GHCR 이미지(`ghcr.io/music-inglee/studyforest-java`)는 repo가 private이라 **패키지도 private** →
   외부인이 `docker run`하면 권한 에러. 공개하려면 GitHub 패키지 settings에서 visibility를 Public으로(미완, 선택).
-- 커밋: `f0ca006`(링크 추가) → `0136545`(호버 메뉴). styles.css 변경에 맞춰 `?v=25→26` 올림.
+- 커밋: `f0ca006`(링크 추가) → `0136545`(호버 메뉴 1차) → 리터치(MoMA화). styles.css `?v=25→26→27`.
+- 메뉴 디자인 규칙(리터치 후): 항목 사이 **검정 구분선 금지**(여백으로만 구분). 패널은 그림자 없이 **얇은 1px 검정 프레임 하나**.
+  호버 시 항목 라벨에 **초록 밑줄 wipe**(`a > span` background-size 0→100%, nav/제목과 동일 모티프) + 우측 초록 `↗`.
+  초록은 채움(fill) 금지, 선으로만. 라벨은 `<span>`으로 감싸야 밑줄이 small 제외하고 라벨에만 걸림.
 
 ## 다음 / 열린 아이디어
 - (없음 — 필요 시 여기에 추가)
