@@ -2,7 +2,7 @@
 
 > 다음 세션에서 이어서 작업할 때 이 파일부터 읽으면 됨.
 > "무엇을 했는지"는 `git log`에 상세히 있음. 이 파일은 **현재 상태 · 규칙 · 결정 · 다음 할 일**.
-> 마지막 업데이트: 2026-06-09
+> 마지막 업데이트: 2026-06-13
 
 ## 무엇인가
 이윤태 개인 포트폴리오 사이트 `music-inglee.github.io`. MoMA 스타일(흰/검 + 초록 포인트).
@@ -18,7 +18,7 @@
 - 배포 = `git push` → main → GitHub Pages 빌드(~1–2분)
 - HTML은 GitHub가 **10분 캐시**함 → push 후 바로 보려면 `Cmd+Shift+R`(하드 리프레시). `?fresh=N`도 우회용.
 - **CSS/JS 바꿀 때마다 index.html의 버전 쿼리를 올려야 함** (안 그러면 옛 스타일이 캐시에 묶임 — 초반에 크게 데임).
-  - 현재: `styles.css?v=25`, `script.js?v=8`
+  - 현재: `styles.css?v=26`, `script.js?v=8`
 
 ## 핵심 인터랙션 — "파쇄기(shredder)"
 - 화면 최상단 고정 반전 띠 `.invert-band`: `backdrop-filter: invert(1)`, **height 200px**, **z-index 60(= nav 위)** → nav 배너도 검정으로 반전됨(사용자 필수 요구).
@@ -38,6 +38,19 @@
 
 ## 작업 성향 메모 (사용자)
 디테일에 예민함(픽셀/지각적 이슈까지). 미니멀·정제 선호, 격식체 라벨 싫어함. 부작용 생기면 기능을 버리지 말고 구조(z-index/clip)로 해결. 라벨 등은 선택지 제시 선호.
+
+## Works 001 — studyForest 실행 메뉴 (2026-06-13, ComP extra challenge 연계)
+- 배경: studyForest 백엔드를 Java로 전면 재구현(코드는 별도 repo `music-ingLee/studyForest`,
+  로컬 `~/Desktop/SNU/4thYear/Spring/CoreComp/fromScratch/webapp-java/`). 이 사이트는 그 두 배포본을 노출.
+- 배포본 2개:
+  - Python(원본·FastAPI): https://studyforest-ucmb.onrender.com
+  - Java(OOP 재구현·Docker on Render): https://studyforest-java.onrender.com
+- Works 001 제목을 **호버 드롭다운 메뉴**로 변경 (`.work__title--menu` / `.work__trigger` / `.work__launch`):
+  제목에 호버(또는 focus, 모바일은 탭)하면 Python·Java 두 버전 선택지가 펼쳐짐. 순수 CSS(:hover + :focus-within),
+  `.work__launch::before`로 갭 브리지(커서 이동 중 닫힘 방지). 그 아래 줄에 로컬용 `docker run ...` 명령(복사용 code).
+- ⚠️ GHCR 이미지(`ghcr.io/music-inglee/studyforest-java`)는 repo가 private이라 **패키지도 private** →
+  외부인이 `docker run`하면 권한 에러. 공개하려면 GitHub 패키지 settings에서 visibility를 Public으로(미완, 선택).
+- 커밋: `f0ca006`(링크 추가) → `0136545`(호버 메뉴). styles.css 변경에 맞춰 `?v=25→26` 올림.
 
 ## 다음 / 열린 아이디어
 - (없음 — 필요 시 여기에 추가)
