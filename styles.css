@@ -660,30 +660,6 @@ a { color: inherit; text-decoration: none; }
 .contact__big a { background-image: linear-gradient(var(--accent), var(--accent)); background-size: 100% 2px; background-position: 0 100%; background-repeat: no-repeat; transition: background-size 0.25s; }
 .contact__big a:hover { background-size: 100% 100%; color: #fff; }
 
-/* ---------- colophon / AI usage ---------- */
-.colophon { color: var(--muted); max-width: 60ch; font-size: 1.02rem; }
-.colophon strong { color: var(--ink); font-weight: 700; }
-.colophon .prompt {
-  display: block;
-  margin-top: 1rem;
-  background: var(--panel);
-  border: 1px solid var(--rule);
-  border-left: 3px solid var(--accent);
-  padding: 1rem 1.2rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.82rem;
-  color: var(--text);
-  white-space: pre-wrap;
-  line-height: 1.7;
-}
-.colophon code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  background: var(--ink);
-  color: #fff;
-  padding: 0.12rem 0.45rem;
-  font-size: 0.85rem;
-}
-
 /* ---------- footer ---------- */
 .footer {
   border-top: 1px solid var(--rule);
