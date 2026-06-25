@@ -78,3 +78,37 @@ const spy = new IntersectionObserver((entries) => {
   });
 }, { rootMargin: '-45% 0px -50% 0px' });
 sections.forEach(s => spy.observe(s));
+
+// ---- lightbox: full-length screening room ----
+document.querySelectorAll('[data-lightbox]').forEach((trigger) => {
+  const box = document.getElementById(trigger.dataset.lightbox);
+  if (!box) return;
+  const video = box.querySelector('.lightbox__video');
+  const closeBtn = box.querySelector('.lightbox__close');
+  let lastFocus = null;
+
+  const open = () => {
+    lastFocus = trigger;
+    if (video && !video.src && video.dataset.src) video.src = video.dataset.src;
+    box.hidden = false;
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => box.classList.add('open'));
+    closeBtn?.focus();
+    if (video) video.play().catch(() => {});
+  };
+  const close = () => {
+    box.classList.remove('open');
+    if (video) video.pause();
+    document.body.style.overflow = '';
+    const done = () => { box.hidden = true; box.removeEventListener('transitionend', done); };
+    if (reduce) done(); else box.addEventListener('transitionend', done);
+    lastFocus?.focus();
+  };
+
+  trigger.addEventListener('click', open);
+  closeBtn?.addEventListener('click', close);
+  box.addEventListener('click', (e) => { if (e.target === box) close(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !box.hidden) close();
+  });
+});

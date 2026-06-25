@@ -290,6 +290,7 @@
                   <source src="assets/synaesthesia.mp4" type="video/mp4" />
                   이 브라우저는 video 태그를 지원하지 않습니다. <a href="assets/synaesthesia.mp4">영상 내려받기 ↓</a>
                 </video>
+                <button type="button" class="work__fulllink" data-lightbox="synaesthesia-full" aria-haspopup="dialog">전체 버전 (2:14)&nbsp;↗</button>
               </div>
             </article>
           </div>
@@ -325,6 +326,16 @@
     <span>Hosted on GitHub Pages</span>
   </footer>
 
-  <script src="script.js?v=8"></script>
+  <!-- ===== lightbox: full-length screening ===== -->
+  <div class="lightbox" id="synaesthesia-full" role="dialog" aria-modal="true" aria-label="Synaesthesia 전체 버전" hidden>
+    <button type="button" class="lightbox__close" aria-label="닫기">닫기&nbsp;✕</button>
+    <div class="lightbox__stage">
+      <video class="lightbox__video" controls playsinline preload="none"
+             poster="assets/synaesthesia-poster.jpg" data-src="assets/synaesthesia-full.mp4"></video>
+      <p class="lightbox__cap"><span class="label-eyebrow">전체 버전</span>Synaesthesia · 2:14 · Max/MSP</p>
+    </div>
+  </div>
+
+  <script src="script.js?v=9"></script>
 </body>
 </html>

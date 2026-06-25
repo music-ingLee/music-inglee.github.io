@@ -659,6 +659,89 @@ a { color: inherit; text-decoration: none; }
 .work__poster:hover .work__poster-cap,
 .work__poster:hover .work__poster-cap strong { color: var(--accent); }
 
+/* full-version trigger: quiet text button, green wipe on interaction */
+.work__fulllink {
+  display: inline-block;
+  margin-top: 0.7rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  transition: color 0.18s ease, border-color 0.18s ease;
+}
+.work__fulllink:hover,
+.work__fulllink:focus-visible { color: var(--accent); border-color: var(--accent); outline: none; }
+
+/* lightbox: darkened screening room */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 4vw, 3rem);
+  background: rgba(0, 0, 0, 0.94);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+.lightbox[hidden] { display: none; }
+.lightbox.open { opacity: 1; }
+.lightbox__stage {
+  width: 100%;
+  max-width: 1100px;
+  transform: translateY(8px);
+  transition: transform 0.22s ease;
+}
+.lightbox.open .lightbox__stage { transform: none; }
+.lightbox__video {
+  display: block;
+  width: 100%;
+  max-height: 80vh;
+  background: #000;
+  border: 1px solid #222;
+}
+.lightbox__cap {
+  margin-top: 1rem;
+  color: #c8c8c8;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.lightbox__cap .label-eyebrow {
+  display: inline-block;
+  margin: 0 0.7rem 0 0;
+  padding: 0;
+  border: 0;
+  color: #6f6f6f;
+  vertical-align: middle;
+}
+.lightbox__close {
+  position: absolute;
+  top: clamp(1rem, 3vw, 2rem);
+  right: clamp(1rem, 3vw, 2rem);
+  padding: 0.5rem 0.85rem;
+  background: none;
+  border: 1px solid #333;
+  color: #e8e8e8;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color 0.18s ease, border-color 0.18s ease;
+}
+.lightbox__close:hover,
+.lightbox__close:focus-visible { color: var(--accent); border-color: var(--accent); outline: none; }
+@media (prefers-reduced-motion: reduce) {
+  .lightbox, .lightbox__stage { transition: none; }
+}
+
 /* ---------- contact ---------- */
 .contact__big {
   font-size: clamp(1.8rem, 6vw, 4rem);
