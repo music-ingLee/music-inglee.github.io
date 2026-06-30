@@ -305,7 +305,6 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: -0.03em;
   line-height: 1.22;
   color: var(--ink);
-  text-indent: -0.5em;
 }
 .fourfields {
   margin-top: 2.4rem;
