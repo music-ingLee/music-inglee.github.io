@@ -337,16 +337,18 @@ a { color: inherit; text-decoration: none; }
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
   gap: clamp(2rem, 4vw, 4rem);
-  align-items: start;
+  align-items: stretch;
 }
 .about__text { min-width: 0; }
 .about__layout { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
-.figure { margin-top: 0; max-width: 360px; }
+/* portrait fills the column to the height of the text beside it: the media
+   flex-grows, the img covers it; caption stays pinned at the bottom */
+.figure { margin-top: 0; max-width: none; display: flex; flex-direction: column; }
 /* only the image sits above the band (z61) so it isn't color-inverted; the
    caption stays in flow and inverts like other text. a viewport-locked black
    shade darkens the image top-down to match the band; overflow clips it to
    the image. script.js clips the top at the nav line so it slides under nav. */
-.figure__media { position: relative; z-index: 61; overflow: hidden; display: block; }
+.figure__media { position: relative; z-index: 61; overflow: hidden; display: block; flex: 1 1 auto; min-height: 0; border: 1px solid var(--rule); }
 .figure__shade {
   position: absolute; left: 0; width: 100%;
   pointer-events: none;
@@ -359,10 +361,10 @@ a { color: inherit; text-decoration: none; }
 }
 .figure img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
   background: var(--panel);
-  border: 1px solid var(--rule);
 }
 .figure figcaption {
   margin-top: 0.6rem;
@@ -415,7 +417,10 @@ a { color: inherit; text-decoration: none; }
 
 /* dense blocks (e.g. Collectives) fold into two columns so one long
    list doesn't outweigh the single-item blocks above it */
-.cv-list--two { grid-template-columns: 1fr 1fr; gap: 1.3rem 2.4rem; }
+/* cap each entry's width so the name↔year pair stays tight; the empty
+   space to each column's right visually separates the two columns */
+.cv-list--two { grid-template-columns: 1fr 1fr; gap: 1.4rem 3rem; }
+.cv-list--two > li { max-width: 30rem; }
 
 .inline-tags { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; }
 .inline-tags span { font-size: 1.05rem; font-weight: 500; color: var(--ink); }
@@ -660,27 +665,37 @@ a { color: inherit; text-decoration: none; }
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
   gap: clamp(1.5rem, 3vw, 3rem);
-  align-items: start;
+  align-items: stretch;
   margin-top: 1rem;
 }
 .work__copy { min-width: 0; }
 .work__split .work__desc { margin-top: 0; max-width: none; }
 .work__split .work__desc + .work__desc { margin-top: 0.8rem; }
-.work__split .work__poster { margin-top: 0; max-width: none; }
-.work__poster {
+
+/* poster / video fill the column to the height of the copy beside them:
+   the media area flex-grows and the image/video covers it; the caption
+   or full-version link stays pinned at the bottom */
+.work__poster, .work__media { margin-top: 0; max-width: none; display: flex; flex-direction: column; }
+.work__poster-media, .work__video-wrap {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
   display: block;
-  margin-top: 1.1rem;
+  border: 1px solid var(--rule);
+  background: #000;
+}
+.work__poster img, .work__video {
+  display: block;
   width: 100%;
-  max-width: 640px;
+  height: 100%;
+  object-fit: cover;
+  margin-top: 0;
+  border: none;
+}
+.work__poster {
+  width: 100%;
   text-decoration: none;
   color: var(--muted);
-}
-.work__poster img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border: 1px solid var(--rule);
-  background: var(--panel);
 }
 .work__poster-cap {
   display: inline-block;
@@ -822,9 +837,13 @@ a { color: inherit; text-decoration: none; }
   .section__head { position: static; }
   .def { grid-template-columns: 1fr; gap: 0.4rem; }
   .cv-list--two { grid-template-columns: 1fr; }
+  .cv-list--two > li { max-width: none; }
   .about__body { grid-template-columns: 1fr; }
   .work__split { grid-template-columns: 1fr; }
-  .work__split .work__poster { max-width: 640px; }
+  /* stacked: revert the fill-to-text-height media back to natural flow */
+  .figure, .work__poster, .work__media { display: block; max-width: 640px; }
+  .figure__media, .work__poster-media, .work__video-wrap { flex: none; }
+  .figure img, .work__poster img, .work__video { height: auto; object-fit: fill; }
   .work { grid-template-columns: 40px 1fr; }
   .work__year { display: none; }
 }
