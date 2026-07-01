@@ -69,13 +69,17 @@ if (reduce) {
 const links = [...document.querySelectorAll('.nav__links a')];
 const byId = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
 const sections = [...document.querySelectorAll('main section[id]')];
+// track which sections are inside the reading band; when none are (e.g. back
+// at the very top over the hero), no nav link should stay highlighted
+const inBand = new Set();
 const spy = new IntersectionObserver((entries) => {
   entries.forEach(e => {
-    if (e.isIntersecting) {
-      links.forEach(a => a.classList.remove('active'));
-      byId.get(e.target.id)?.classList.add('active');
-    }
+    if (e.isIntersecting) inBand.add(e.target.id);
+    else inBand.delete(e.target.id);
   });
+  links.forEach(a => a.classList.remove('active'));
+  const current = sections.find(s => inBand.has(s.id));
+  if (current) byId.get(current.id)?.classList.add('active');
 }, { rootMargin: '-45% 0px -50% 0px' });
 sections.forEach(s => spy.observe(s));
 
