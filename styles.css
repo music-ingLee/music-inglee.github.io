@@ -15,7 +15,7 @@
   --rule:      #111111;   /* strong graphic rule */
   --accent:    #2f8f5b;   /* studyForest green — interaction only */
   --accent-ink:#1e6e43;
-  --maxw: 1760px;
+  --maxw: 1400px;
   --gutter: clamp(1.5rem, 7vw, 4rem);
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue",
                "Apple SD Gothic Neo", "Pretendard", Arial, sans-serif;
@@ -48,9 +48,7 @@ a { color: inherit; text-decoration: none; }
 ::-moz-selection { background: #2f8f5b; color: #fff; }
 
 /* ---------- shared ---------- */
-/* left-aligned (not centered) so the body starts at the same gutter as the
-   nav brand, instead of floating in from a centered column on wide screens */
-.wrap { max-width: var(--maxw); margin: 0; padding: 0 var(--gutter); }
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); }
 
 /* ---------- top inversion band ("shredder") ----------
    a fixed dark zone over the top ~1/5 of the viewport. always fully
@@ -104,13 +102,19 @@ a { color: inherit; text-decoration: none; }
   position: sticky;
   top: 0;
   z-index: 50;
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  backdrop-filter: saturate(1.1) blur(6px);
+}
+/* inner shares the content max-width so the brand lines up with the body's
+   left edge and the links with its right edge — nav and content read as one */
+.nav__inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 1rem var(--gutter);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1rem var(--gutter);
-  background: color-mix(in srgb, var(--bg) 90%, transparent);
-  backdrop-filter: saturate(1.1) blur(6px);
 }
 .nav__brand {
   font-size: 1.05rem;
@@ -163,9 +167,8 @@ a { color: inherit; text-decoration: none; }
   flex-direction: column;
   justify-content: space-between;
   padding: 0.07em 0;       /* nudge top/bottom lines inside the glyph height */
-  /* break out of the left-aligned .wrap so the staff reaches the window's right
-     edge: extend past the content-box right edge (min(maxw,100vw) - gutter) */
-  margin-right: calc(min(var(--maxw), 100vw) - var(--gutter) - 100vw);
+  /* break out of the centered .wrap so the staff reaches the window's right edge */
+  margin-right: calc(50% - 50vw);
 }
 .hero__staff i { display: block; height: clamp(3px, 0.5vw, 6px); background: #000; }
 .hero__name {
@@ -335,20 +338,20 @@ a { color: inherit; text-decoration: none; }
    not tall. text takes the fluid column; the portrait caps at 340px */
 .about__body {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
-  gap: clamp(2rem, 4vw, 4rem);
-  align-items: stretch;
+  grid-template-columns: minmax(0, 38rem) 300px;
+  justify-content: start;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: start;
 }
 .about__text { min-width: 0; }
 .about__layout { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
-/* portrait fills the column to the height of the text beside it: the media
-   flex-grows, the img covers it; caption stays pinned at the bottom */
-.figure { margin-top: 0; max-width: none; display: flex; flex-direction: column; }
+/* portrait at natural aspect, pinned to the top of the text beside it */
+.figure { margin-top: 0.5rem; max-width: none; }
 /* only the image sits above the band (z61) so it isn't color-inverted; the
    caption stays in flow and inverts like other text. a viewport-locked black
    shade darkens the image top-down to match the band; overflow clips it to
    the image. script.js clips the top at the nav line so it slides under nav. */
-.figure__media { position: relative; z-index: 61; overflow: hidden; display: block; flex: 1 1 auto; min-height: 0; border: 1px solid var(--rule); }
+.figure__media { position: relative; z-index: 61; overflow: hidden; display: block; }
 .figure__shade {
   position: absolute; left: 0; width: 100%;
   pointer-events: none;
@@ -361,10 +364,10 @@ a { color: inherit; text-decoration: none; }
 }
 .figure img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
   background: var(--panel);
+  border: 1px solid var(--rule);
 }
 .figure figcaption {
   margin-top: 0.6rem;
@@ -663,32 +666,29 @@ a { color: inherit; text-decoration: none; }
    so the entry reads across the page rather than running long */
 .work__split {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  grid-template-columns: minmax(0, 40rem) 320px;
+  justify-content: start;
   gap: clamp(1.5rem, 3vw, 3rem);
-  align-items: stretch;
+  align-items: start;
   margin-top: 1rem;
 }
 .work__copy { min-width: 0; }
 .work__split .work__desc { margin-top: 0; max-width: none; }
 .work__split .work__desc + .work__desc { margin-top: 0.8rem; }
 
-/* poster / video fill the column to the height of the copy beside them:
-   the media area flex-grows and the image/video covers it; the caption
-   or full-version link stays pinned at the bottom */
-.work__poster, .work__media { margin-top: 0; max-width: none; display: flex; flex-direction: column; }
+/* poster / video at natural aspect, pinned to the top of the copy beside them */
+.work__poster, .work__media { margin-top: 0; max-width: none; display: block; }
 .work__poster-media, .work__video-wrap {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow: hidden;
   display: block;
+  overflow: hidden;
+  line-height: 0;
   border: 1px solid var(--rule);
   background: #000;
 }
 .work__poster img, .work__video {
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   margin-top: 0;
   border: none;
 }
@@ -840,10 +840,7 @@ a { color: inherit; text-decoration: none; }
   .cv-list--two > li { max-width: none; }
   .about__body { grid-template-columns: 1fr; }
   .work__split { grid-template-columns: 1fr; }
-  /* stacked: revert the fill-to-text-height media back to natural flow */
-  .figure, .work__poster, .work__media { display: block; max-width: 640px; }
-  .figure__media, .work__poster-media, .work__video-wrap { flex: none; }
-  .figure img, .work__poster img, .work__video { height: auto; object-fit: fill; }
+  .figure, .work__poster, .work__media { max-width: 520px; }
   .work { grid-template-columns: 40px 1fr; }
   .work__year { display: none; }
 }
