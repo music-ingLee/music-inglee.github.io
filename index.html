@@ -73,7 +73,8 @@
           <p class="rail"><span class="num">01</span> &nbsp;/&nbsp; About</p>
           <h2 class="section__title">소개</h2>
         </div>
-        <div class="section__body">
+        <div class="section__body about__body">
+          <div class="about__text">
           <blockquote class="pullquote">
             왜 leading tone은 ‘leading’ tone일까.
           </blockquote>
@@ -108,6 +109,7 @@
             한다. 그래서 서울대학교의 학생설계전공 제도를 활용해, 주전공인 심리학에 더해
             음악정보학을 함께 공부하고 있다.
           </p>
+          </div><!-- /.about__text -->
 
           <!-- editorial portrait: drop assets/profile.jpg to replace the placeholder -->
           <figure class="figure">
@@ -270,12 +272,14 @@
                 </h3>
                 <span class="work__context">서울대학교 · 학부대학 · 컴퓨팅 핵심: 컴퓨터로 사고하기<br>서울대학교 · 공과대학 · 컴퓨터공학부 · 컴퓨터프로그래밍<br>서울대학교 · 사회과학대학 · 심리학과 · 고급학습심리학</span>
                 <span class="work__spec">웹 애플리케이션 · Python, Java · 2026</span>
+                <div class="work__split">
                 <p class="work__desc">사고는 한 줄로 흐르지 않는다. 하나의 생각은 여러 갈래로 뻗고, 그 갈래마다 또 새로운 생각이 자라난다. 그러나 LLM으로 학습하는 환경, 끝없이 아래로만 쌓이는 선형 스크롤 UI는 이렇게 분기하는 사고와 맞물리지 못한다. 깊이 들어갈수록 처음 무엇을 알고 싶었는지 흐려지고, 전체 맥락을 머릿속에 떠안게 된다. studyForest는 대화를 질문들의 숲으로 다시 세운다. 머릿속에 쌓이던 탐구의 구조를 화면으로 꺼내 눈으로 보고 오갈 수 있게 하고, 그 구조가 곧 모델이 읽는 맥락이 된다. 뿌리에서 지금까지의 경로만 모델에 보내므로, 무엇이 맥락으로 들어갈지는 손댈 수 없는 기본값이 아니라 학습자가 보고 고르는 것이 된다.</p>
                 <p class="work__desc">Python으로 설계를 검증해 Render에 배포했고, 같은 설계를 Java(OOP)로 전면 재구현해 Docker 컨테이너로 구동된다.</p>
                 <a class="work__poster" href="assets/studyforest-poster.pdf" target="_blank" rel="noopener" aria-label="studyForest 포스터 PDF 열기">
                   <img src="assets/studyforest-poster.jpg" alt="studyForest 연구 포스터" loading="lazy" />
                   <span class="work__poster-cap">연구 포스터 · 컴퓨터프로그래밍 <strong>최우수 프로젝트</strong> (PDF) ↗</span>
                 </a>
+                </div><!-- /.work__split -->
               </div>
             </article>
             <article class="work">
