@@ -416,9 +416,9 @@ a { color: inherit; text-decoration: none; }
   white-space: nowrap;
   flex: 0 0 auto;
 }
-/* cap the width so a long description wraps to a tidy block on the left
-   instead of running one line into the right-aligned year column */
-.cv-item__desc { margin-top: 0.25rem; color: var(--muted); font-size: 0.9rem; font-weight: 400; max-width: 40rem; }
+/* reserve room on the right for the year, so a long description wraps
+   before it reaches the right-aligned year column instead of running under it */
+.cv-item__desc { margin-top: 0.25rem; color: var(--muted); font-size: 0.9rem; font-weight: 400; padding-right: 11rem; }
 
 /* dense blocks (e.g. Collectives) fold into two columns so one long
    list doesn't outweigh the single-item blocks above it */
@@ -842,6 +842,7 @@ a { color: inherit; text-decoration: none; }
   .cv-list--two > li { max-width: none; }
   .about__body { grid-template-columns: 1fr; }
   .work__split { grid-template-columns: 1fr; }
+  .cv-item__desc { padding-right: 0; }
   .figure, .work__poster, .work__media { max-width: 520px; }
   .work { grid-template-columns: 40px 1fr; }
   .work__year { display: none; }
