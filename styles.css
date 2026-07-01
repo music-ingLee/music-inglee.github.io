@@ -15,7 +15,7 @@
   --rule:      #111111;   /* strong graphic rule */
   --accent:    #2f8f5b;   /* studyForest green — interaction only */
   --accent-ink:#1e6e43;
-  --maxw: 1500px;
+  --maxw: 1760px;
   --gutter: clamp(1.5rem, 7vw, 4rem);
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue",
                "Apple SD Gothic Neo", "Pretendard", Arial, sans-serif;
@@ -298,7 +298,7 @@ a { color: inherit; text-decoration: none; }
 
 /* About: reading focus — the paragraph nearest the reading line is
    emphasized, the rest recede. .active is toggled in script.js */
-#about .lede { color: var(--faint); transition: color 0.5s ease; }
+#about .lede { color: var(--faint); transition: color 0.5s ease; max-width: none; }
 #about .lede.active { color: var(--ink); }
 @media (prefers-reduced-motion: reduce) { #about .lede { transition: none; } }
 
@@ -335,9 +335,8 @@ a { color: inherit; text-decoration: none; }
    not tall. text takes the fluid column; the portrait caps at 340px */
 .about__body {
   display: grid;
-  grid-template-columns: minmax(0, 40rem) minmax(260px, 340px);
-  justify-content: start;
-  gap: clamp(2rem, 4vw, 3.5rem);
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: clamp(2rem, 4vw, 4rem);
   align-items: start;
 }
 .about__text { min-width: 0; }
@@ -659,13 +658,13 @@ a { color: inherit; text-decoration: none; }
    so the entry reads across the page rather than running long */
 .work__split {
   display: grid;
-  grid-template-columns: minmax(0, 38rem) minmax(240px, 320px);
-  justify-content: start;
-  gap: clamp(1.5rem, 3vw, 2.5rem);
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: clamp(1.5rem, 3vw, 3rem);
   align-items: start;
   margin-top: 1rem;
 }
-.work__split .work__desc { margin-top: 0; }
+.work__copy { min-width: 0; }
+.work__split .work__desc { margin-top: 0; max-width: none; }
 .work__split .work__desc + .work__desc { margin-top: 0.8rem; }
 .work__split .work__poster { margin-top: 0; max-width: none; }
 .work__poster {
