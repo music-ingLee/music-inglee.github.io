@@ -14,7 +14,8 @@
   }
 
   /* header */
-  header { margin-bottom: 14px; }
+  header { margin-bottom: 14px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10mm; }
+  .crest { height: 19mm; width: auto; flex: 0 0 auto; }
   .name { font-size: 23pt; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
   .aka { color: #6a6a6a; font-weight: 600; margin-top: 5px; font-size: 10pt; }
   .contact { margin-top: 7px; color: #6a6a6a; font-size: 9pt; }
@@ -47,10 +48,13 @@
 </head>
 <body>
   <header>
-    <div class="name">이윤태</div>
-    <div class="aka">Yoontae Lee &nbsp;·&nbsp; music_ing Lee &nbsp;·&nbsp; Quale</div>
-    <div class="contact"><a href="mailto:qualia0521@snu.ac.kr">qualia0521@snu.ac.kr</a> &nbsp;·&nbsp; github.com/music-ingLee &nbsp;·&nbsp; music-inglee.github.io</div>
-    <div class="tagline">Psychology &amp; Music Informatics, Seoul National University.</div>
+    <div class="head-text">
+      <div class="name">이윤태</div>
+      <div class="aka">Yoontae Lee &nbsp;·&nbsp; music_ing Lee &nbsp;·&nbsp; Quale</div>
+      <div class="contact"><a href="mailto:qualia0521@snu.ac.kr">qualia0521@snu.ac.kr</a> &nbsp;·&nbsp; github.com/music-ingLee &nbsp;·&nbsp; music-inglee.github.io</div>
+      <div class="tagline">Psychology &amp; Music Informatics, Seoul National University.</div>
+    </div>
+    <img class="crest" src="assets/snu-emblem.png" alt="Seoul National University" />
   </header>
 
   <div class="section">
