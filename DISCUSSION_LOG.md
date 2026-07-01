@@ -25,4 +25,7 @@
 - **Focus 갱신(웹+CV)** — 항목을 Cognitive Psychology · Music Informatics · Science of Learning · Computational Neuroscience · Philosophy of Mind로. CV는 "Science of Learning" 뒤 강제 줄바꿈(3+2)으로 "Mind만 줄바꿈" 문제 해결.
 - **CV 링크** — 연락처의 github.com/music-ingLee(→GitHub 프로필), music-inglee.github.io(→홈페이지)를 클릭 가능한 `<a>`로(회색 유지). PDF에도 링크 주석 반영.
 
-**미완/다음:** float 전환 후 사진 높이가 2문단 끝에 정확히 떨어지는지 실사용 확인. 상단 태그라인(Psychology & Music Informatics, SNU) 중복 여부 사용자 확인 대기. Honors에 "컴퓨터프로그래밍 Top Project" 추가 검토 중. 남은 렉이 있으면 invert-band를 영상 구간에서만 잠깐 끄는 절충 카드.
+- **CV 태그라인 교체** — Education과 중복인 "Psychology & Music Informatics, SNU"를 연구 지향 한 줄로: "Music cognitive neuroscience × music informatics — toward personalized music generation." (`5c08a24`)
+- **Honors 추가(웹+CV)** — "Top Project — Computer Programming · Dept. of CSE, SNU · studyForest · 2026.06". 수업 단위 최우수 프로젝트 인정 → Honors 범주 적합, 범위 명시해 과장 방지. Hanjae 아래·Best Undergrad Research 위 배치.
+
+**미완/다음:** float 전환 후 사진 높이가 2문단 끝에 정확히 떨어지는지 실사용 확인. 태그라인 대안 문구(A/B/C) 제시함 — 사용자 선택 시 교체. 남은 렉이 있으면 invert-band를 영상 구간에서만 잠깐 끄는 절충 카드.
