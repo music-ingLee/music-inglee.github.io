@@ -22,4 +22,7 @@
 - **CV 엠블럼 재배치** — SNU CI를 헤더 텍스트 블록 높이(이름 top ~ 태그라인 bottom)에 스트레치, `object-fit: contain`으로 비율 유지. (`3afc8de`)
 - **About 문구 수정** — "인공지능과 인간의 자연지능이 …" → "인공지능 **연구**와 인간의 자연지능 **연구**가 서로를 비추며 **함께** 발전해 왔다"로, 대상이 아니라 두 연구분야가 함께 발전한다는 의미로.
 
-**미완/다음:** float 전환 후 사진 높이가 2문단 끝에 정확히 떨어지는지 실사용 확인(필요시 사진 폭 미세조정). 남은 렉이 있으면 invert-band를 영상 구간에서만 잠깐 끄는 절충 카드.
+- **Focus 갱신(웹+CV)** — 항목을 Cognitive Psychology · Music Informatics · Science of Learning · Computational Neuroscience · Philosophy of Mind로. CV는 "Science of Learning" 뒤 강제 줄바꿈(3+2)으로 "Mind만 줄바꿈" 문제 해결.
+- **CV 링크** — 연락처의 github.com/music-ingLee(→GitHub 프로필), music-inglee.github.io(→홈페이지)를 클릭 가능한 `<a>`로(회색 유지). PDF에도 링크 주석 반영.
+
+**미완/다음:** float 전환 후 사진 높이가 2문단 끝에 정확히 떨어지는지 실사용 확인. 상단 태그라인(Psychology & Music Informatics, SNU) 중복 여부 사용자 확인 대기. Honors에 "컴퓨터프로그래밍 Top Project" 추가 검토 중. 남은 렉이 있으면 invert-band를 영상 구간에서만 잠깐 끄는 절충 카드.
