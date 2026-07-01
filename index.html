@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=42" />
+  <link rel="stylesheet" href="styles.css?v=43" />
 </head>
 <body>
 
@@ -79,7 +79,17 @@
           <blockquote class="pullquote">
             왜 leading tone은 ‘leading’ tone일까.
           </blockquote>
-          <div class="about__text">
+
+          <!-- editorial portrait: floats right; paragraphs wrap beside it, then full-width below -->
+          <figure class="figure">
+            <div class="figure__media">
+              <img src="assets/profile.jpg?v=2" alt="이윤태" width="675" height="1100"
+                   onerror="this.onerror=null;this.src='assets/portrait-placeholder.svg';" />
+              <div class="figure__shade" aria-hidden="true"></div>
+            </div>
+            <figcaption>이윤태 · music_ing&nbsp;Lee</figcaption>
+          </figure>
+
           <p class="lede">
             음악이론을 처음 접한 순간부터 놓지 못한 물음이다. 어릴 적부터 음악을 듣고
             연주하기를 좋아했고, 고등학생에 이르러 인간의 음악처리 기전과 선호의 형성에
@@ -111,17 +121,6 @@
             한다. 그래서 서울대학교의 학생설계전공 제도를 활용해, 주전공인 심리학에 더해
             음악정보학을 함께 공부하고 있다.
           </p>
-          </div><!-- /.about__text -->
-
-          <!-- editorial portrait: drop assets/profile.jpg to replace the placeholder -->
-          <figure class="figure">
-            <div class="figure__media">
-              <img src="assets/profile.jpg?v=2" alt="이윤태" width="675" height="1100"
-                   onerror="this.onerror=null;this.src='assets/portrait-placeholder.svg';" />
-              <div class="figure__shade" aria-hidden="true"></div>
-            </div>
-            <figcaption>이윤태 · music_ing&nbsp;Lee</figcaption>
-          </figure>
         </div>
       </div>
     </section>

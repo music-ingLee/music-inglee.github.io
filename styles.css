@@ -338,21 +338,14 @@ a { color: inherit; text-decoration: none; }
 /* ---------- about figure ---------- */
 /* About: text and portrait sit side by side so the section reads wide,
    not tall. text takes the fluid column; the portrait caps at 340px */
-.about__body {
-  display: grid;
-  grid-template-columns: minmax(0, 38rem) 300px;
-  justify-content: start;
-  column-gap: clamp(2rem, 4vw, 3.5rem);
-  row-gap: 1.8rem;
-  align-items: start;
-}
-/* pullquote spans both columns on its own row, so the portrait below it
-   lines up with the first body paragraph rather than the pullquote */
-.about__body > .pullquote { grid-column: 1 / -1; margin-bottom: 0; }
-.about__text { min-width: 0; }
+/* pullquote spans full width; the portrait floats right so the first two
+   paragraphs wrap beside it and the rest run full-width below it */
+.about__body { display: block; }
+.about__body::after { content: ""; display: block; clear: both; }
+.about__body > .pullquote { margin-bottom: 1.4rem; }
 .about__layout { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
-/* portrait at natural aspect, top aligned with the first body paragraph */
-.figure { margin-top: 0; max-width: none; }
+/* portrait floats right of the opening paragraphs, natural aspect */
+.figure { float: right; width: 300px; max-width: none; margin: 0.4rem 0 1.2rem 2.5rem; }
 /* only the image sits above the band (z61) so it isn't color-inverted; the
    caption stays in flow and inverts like other text. a viewport-locked black
    shade darkens the image top-down to match the band; overflow clips it to
@@ -852,6 +845,7 @@ a { color: inherit; text-decoration: none; }
   .work__split { grid-template-columns: 1fr; }
   .cv-item__desc { padding-right: 0; }
   .figure, .work__poster, .work__media { max-width: 520px; }
+  .figure { float: none; width: auto; margin: 1.6rem 0 0; }
   .work { grid-template-columns: 40px 1fr; }
   .work__year { display: none; }
 }
