@@ -102,8 +102,10 @@ a { color: inherit; text-decoration: none; }
   position: sticky;
   top: 0;
   z-index: 50;
-  background: color-mix(in srgb, var(--bg) 90%, transparent);
-  backdrop-filter: saturate(1.1) blur(6px);
+  /* solid (no backdrop-filter blur): the top invert-band is the one effect
+     worth its compositing cost — the nav's frosted blur was a second
+     per-frame backdrop-filter and the main removable source of scroll lag */
+  background: var(--bg);
 }
 /* inner shares the content max-width so the brand lines up with the body's
    left edge and the links with its right edge — nav and content read as one */
