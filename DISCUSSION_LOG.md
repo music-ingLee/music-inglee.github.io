@@ -28,4 +28,6 @@
 - **CV 태그라인 교체** — Education과 중복인 "Psychology & Music Informatics, SNU"를 연구 지향 한 줄로: "Music cognitive neuroscience × music informatics — toward personalized music generation." (`5c08a24`)
 - **Honors 추가(웹+CV)** — "Top Project — Computer Programming · Dept. of CSE, SNU · studyForest · 2026.06". 수업 단위 최우수 프로젝트 인정 → Honors 범주 적합, 범위 명시해 과장 방지. Hanjae 아래·Best Undergrad Research 위 배치.
 
-**미완/다음:** float 전환 후 사진 높이가 2문단 끝에 정확히 떨어지는지 실사용 확인. 태그라인 대안 문구(A/B/C) 제시함 — 사용자 선택 시 교체. 남은 렉이 있으면 invert-band를 영상 구간에서만 잠깐 끄는 절충 카드.
+- **em dash 제거 + 태그라인 한 줄** — 사용자가 em dash 싫어함(선호 기억됨). 태그라인 em dash→쉼표, 폰트 10→9pt + `nowrap`으로 한 줄에 맞춤. Honors "Top Project" 제목 em dash→가운뎃점(`·`). (`683cc4d`)
+
+**미완/다음:** float 전환 후 사진 높이가 2문단 끝에 정확히 떨어지는지 실사용 확인. 남은 em dash 2곳(뮤지킹 `(Neo)Soul —`, 브라우저 `<title>`) 교체 여부 사용자 확인 대기. 태그라인 대안 문구(A/B/C)도 대기. 남은 렉이 있으면 invert-band를 영상 구간에서만 잠깐 끄는 절충 카드.
