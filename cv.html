@@ -14,8 +14,10 @@
   }
 
   /* header */
-  header { margin-bottom: 14px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10mm; }
-  .crest { height: 19mm; width: auto; flex: 0 0 auto; }
+  header { margin-bottom: 14px; display: flex; justify-content: space-between; align-items: stretch; gap: 10mm; }
+  /* stretch to the text block's height (name top → tagline bottom); contain
+     keeps the emblem square without distortion, pinned to the right */
+  .crest { flex: 0 0 auto; width: 26mm; align-self: stretch; height: auto; object-fit: contain; object-position: right center; }
   .name { font-size: 23pt; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
   .aka { color: #6a6a6a; font-weight: 600; margin-top: 5px; font-size: 10pt; }
   .contact { margin-top: 7px; color: #6a6a6a; font-size: 9pt; }
