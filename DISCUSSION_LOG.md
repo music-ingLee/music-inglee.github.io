@@ -31,3 +31,14 @@
 - **em dash 제거 + 태그라인 한 줄** — 사용자가 em dash 싫어함(선호 기억됨). 태그라인 em dash→쉼표, 폰트 10→9pt + `nowrap`으로 한 줄에 맞춤. Honors "Top Project" 제목 em dash→가운뎃점(`·`). (`683cc4d`)
 
 **미완/다음:** float 전환 후 사진 높이가 2문단 끝에 정확히 떨어지는지 실사용 확인. 남은 em dash 2곳(뮤지킹 `(Neo)Soul —`, 브라우저 `<title>`) 교체 여부 사용자 확인 대기. 태그라인 대안 문구(A/B/C)도 대기. 남은 렉이 있으면 invert-band를 영상 구간에서만 잠깐 끄는 절충 카드.
+
+## 2026-07-15 (Wednesday)
+
+폰트·자간 전면 정리 세션 (thinket.ai 디자인 작업 중 파생).
+
+- **한글 웹폰트 실제 로드** — 한글 위주 사이트인데 라틴 전용 Inter만 로드하고 있었음(스택의 Pretendard는 로컬 설치자에게만 존재하는 유령 이름 → OS별 폴백 복권 + Windows 맑은 고딕 faux bold). **Pretendard Variable을 jsdelivr CDN(dynamic subset)으로 로드**하고 스택을 `Inter → Pretendard Variable → …`로 재배열(라틴=Inter, 한글=Pretendard). index.html·cv.html 동일 적용.
+- **"자간 넓은 대문자 레이블" 전폐** — 사용자 표현으로 "너무 Claude스러운" 패턴. `text-transform: uppercase` + 양수 letter-spacing 조합을 사이트 전체에서 제거: `.rail`, `.nav__links`, `.lex__label`, `.def__key`, `.work__kind`, `.label-eyebrow`(한글 "라이브/작가의 말/전체 버전"에 0.18em 트래킹이 걸려 있었음), figcaption, CV `.label`. 레이블 위계는 굵기(700)·크기·초록으로만. 소문자 전환분은 크기 소폭 상향(예: nav 0.76→0.85rem, def key 0.74→0.85rem)으로 광학 보정.
+- **잔여 양수 자간 0으로** — hero aka/meta, lexicon by, work no(→tabular-nums), context/spec, lightbox close, footer의 0.01~0.04em 제거.
+- **한글 디스플레이 음수 자간 완화** — Inter 기준 값이 한글에 걸리던 곳: hero name −0.045→−0.02em, section title −0.035→−0.02em, pullquote −0.03→−0.015em, CV name −0.03→−0.015em. 라틴 전용(lexicon word "musicking", work titles, contact 이메일)은 유지.
+- **죽은 규칙 삭제** — HTML에서 미사용이던 `.eyebrow`, `.hero__eyebrow` 제거.
+- **cv.pdf 재생성** — 헤드리스 Chrome, 한 장 유지 확인. DESIGN.md Type 항목을 새 타이포 규칙으로 갱신.

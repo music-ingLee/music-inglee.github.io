@@ -8,8 +8,11 @@ and as small section numbers, so the page reads black-and-white at rest and reve
 color on touch.
 
 ## Key characteristics
-- **Type**: Inter at heavy weights (700–800). Oversized bold hero name with very tight
-  `-0.045em` tracking; bold uppercase rail labels.
+- **Type**: Inter (Latin) + Pretendard Variable (Hangul, jsdelivr CDN) at heavy weights
+  (700–800). Oversized bold hero name; Hangul display tracking capped at `-0.02em`
+  (Inter-grade `-0.045em` is Latin-only). **No tracked-out uppercase anywhere** — labels
+  (rail, def keys, work kinds, lexicon, CV) speak through weight, size, and green, in
+  written case with normal letter-spacing.
 - **Color**: black on white; neutral (not warm) grays; green only as interaction pop.
 - **Grid**: two-column scaffold (sticky rail label + body); sections divided by strong
   1–2px black rules — modernist, graphic, confident.
