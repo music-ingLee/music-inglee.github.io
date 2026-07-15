@@ -168,6 +168,8 @@ a { color: inherit; text-decoration: none; }
   font-weight: 800;
   line-height: 0.92;
   letter-spacing: -0.02em;   /* Hangul: Pretendard tightens less than Inter Latin */
+  margin-left: -0.04em;      /* optical: 이's left side bearing, so ink (not the
+                                glyph box) lines up with the lines below */
   color: var(--ink);
 }
 .hero__aka {
@@ -209,6 +211,7 @@ a { color: inherit; text-decoration: none; }
   font-weight: 800;
   letter-spacing: -0.045em;
   line-height: 0.95;
+  margin-left: -0.045em;     /* optical: m's side bearing vs the labels below */
   color: var(--ink);
 }
 .lexicon__pron {
@@ -274,6 +277,13 @@ a { color: inherit; text-decoration: none; }
   color: var(--ink);
   line-height: 1;
 }
+/* optical alignment to the rail's ink: each title's first glyph carries a
+   different left side bearing (소 0.021em · 이 0.042em · 작 0 · 연 0.031em),
+   so the nudge is tuned per section, not shared */
+#about   .section__title { margin-left: -0.010em; }
+#cv      .section__title { margin-left: -0.031em; }
+#works   .section__title { margin-left:  0.010em; }
+#contact .section__title { margin-left: -0.021em; }
 .section__body { min-width: 0; }
 .lede {
   font-size: clamp(1.1rem, 2vw, 1.45rem);
@@ -436,6 +446,7 @@ a { color: inherit; text-decoration: none; }
   font-size: clamp(1.6rem, 3.6vw, 2.6rem);
   font-weight: 800;
   letter-spacing: -0.035em;
+  margin-left: -0.012em;     /* optical: s/d/S side bearing vs the kind label */
   line-height: 1;
   color: var(--ink);
   display: inline;
@@ -774,6 +785,7 @@ a { color: inherit; text-decoration: none; }
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 1;
+  margin-left: -0.023em;     /* optical: q's round side bearing */
   color: var(--ink);
 }
 .contact__big a { background-image: linear-gradient(var(--accent), var(--accent)); background-size: 100% 2px; background-position: 0 100%; background-repeat: no-repeat; transition: background-size 0.25s; }

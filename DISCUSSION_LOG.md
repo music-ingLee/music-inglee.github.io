@@ -42,3 +42,4 @@
 - **한글 디스플레이 음수 자간 완화** — Inter 기준 값이 한글에 걸리던 곳: hero name −0.045→−0.02em, section title −0.035→−0.02em, pullquote −0.03→−0.015em, CV name −0.03→−0.015em. 라틴 전용(lexicon word "musicking", work titles, contact 이메일)은 유지.
 - **죽은 규칙 삭제** — HTML에서 미사용이던 `.eyebrow`, `.hero__eyebrow` 제거.
 - **cv.pdf 재생성** — 헤드리스 Chrome, 한 장 유지 확인. DESIGN.md Type 항목을 새 타이포 규칙으로 갱신.
+- **광학 좌측 정렬(optical margin alignment)** — 사용자 지적: 큰 제목과 위 레일 레이블의 시작점이 미세하게 안 맞음. 원인은 첫 글리프의 좌측 사이드 베어링(잉크가 글리프 박스보다 안쪽에서 시작). 2x 렌더로 실측: 이윤태 +6px, musicking +4px, 섹션 제목 ±0.5~1.5px(글리프별 상이: 소 0.021em · 이 0.042em · 작 0 · 연 0.031em). 보정: hero `-0.04em`, lexicon word `-0.045em`, 섹션 제목은 **#about/#cv/#works/#contact별 개별 nudge**, contact 이메일 `-0.023em`, work 제목 `-0.012em`, CV 이름 `-0.03em`. 재측정으로 전 쌍 0.5 CSS px 이내 확인. cv.pdf 재생성.
