@@ -69,6 +69,10 @@
   .entry + .entry { margin-top: 8px; }
   .entry .main { font-weight: 600; }
   .entry .sub { color: #6a6a6a; font-weight: 400; font-size: 9pt; margin-top: 1px; }
+  /* project links stay in the muted run of the line — the URL is there to be
+     clicked in the PDF, not to shout */
+  .entry .sub a { color: inherit; text-decoration: none; }
+  .entry .main .was { color: #6a6a6a; font-weight: 400; }
   .entry .when { color: #6a6a6a; font-size: 8.6pt; white-space: nowrap; text-align: right; flex: 0 0 auto; font-variant-numeric: tabular-nums; }
 
   .fields { font-weight: 600; }
@@ -134,7 +138,7 @@
     <div class="label">Honors</div>
     <div>
       <div class="entry"><div><div class="main">Hanjae Foundation Full Scholarship</div><div class="sub">full tuition + ₩1,000,000 / month stipend · admission to graduation</div></div><div class="when"></div></div>
-      <div class="entry"><div><div class="main">Top Project · Computer Programming</div><div class="sub">Dept. of Computer Science &amp; Engineering, SNU · studyForest</div></div><div class="when">2026.06</div></div>
+      <div class="entry"><div><div class="main">Top Project · Computer Programming</div><div class="sub">Dept. of Computer Science &amp; Engineering, SNU · studyForest (now Thinket)</div></div><div class="when">2026.06</div></div>
       <div class="entry"><div><div class="main">Best Undergraduate Research Award</div><div class="sub">Korea Brain &amp; Cognitive Sciences Community</div></div><div class="when">2022.02</div></div>
     </div>
   </div>
@@ -149,8 +153,8 @@
   <div class="section">
     <div class="label">Projects</div>
     <div>
-      <div class="entry"><div><div class="main">studyForest</div><div class="sub">Tree-structured LLM learning tool, built with course data structures · deployed on Render</div></div><div class="when">2026</div></div>
-      <div class="entry"><div><div class="main">daily-todo</div><div class="sub">Friction-free daily todo desktop app · Electron + Vite</div></div><div class="when">2026</div></div>
+      <div class="entry"><div><div class="main">Thinket <span class="was">(formerly studyForest)</span></div><div class="sub">Tree-structured LLM learning tool · path-scoped context · FastAPI + PostgreSQL · <a href="https://thinket.ai">thinket.ai</a>, invite-only beta</div></div><div class="when">2026</div></div>
+      <div class="entry"><div><div class="main">맨날 Maennal <span class="was">(formerly daily-todo)</span></div><div class="sub">Todo app that records the day rather than plans it; the month becomes a Bauhaus composition · React, Electron, PWA · <a href="https://maennal.com">maennal.com</a></div></div><div class="when">2026</div></div>
     </div>
   </div>
 </body>

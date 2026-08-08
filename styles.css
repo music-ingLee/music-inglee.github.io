@@ -704,6 +704,12 @@ a { color: inherit; text-decoration: none; }
   text-decoration: none;
   color: var(--muted);
 }
+/* the calendar plate is a still, not a link — it needs the figure margin reset
+   and must not take the poster's hover colour, which would promise a click */
+.work__poster--still { margin: 0; }
+.work__poster--still .work__poster-media { background: transparent; }
+/* a near-square screenshot needs more room than the portrait poster gets */
+.work__split--wide { grid-template-columns: minmax(0, 34rem) 420px; }
 .work__poster-cap {
   display: inline-block;
   margin-top: 0.55rem;
@@ -712,8 +718,8 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: -0.01em;
 }
 .work__poster-cap strong { color: var(--ink); font-weight: 700; }
-.work__poster:hover .work__poster-cap,
-.work__poster:hover .work__poster-cap strong { color: var(--accent); }
+a.work__poster:hover .work__poster-cap,
+a.work__poster:hover .work__poster-cap strong { color: var(--accent); }
 
 /* full-version trigger: quiet text button, green wipe on interaction */
 .work__fulllink {
