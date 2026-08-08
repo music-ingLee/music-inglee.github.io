@@ -22,11 +22,13 @@ color on touch.
   1–2px black rules — modernist, graphic, confident.
 - **Measure**: `--measure: 34.4em` caps body text at 40 Hangul characters a line. A Hangul
   glyph in Pretendard is a flat 0.86em wide at any size and `em` resolves at the point of
-  use, so one token serves every text size. About takes `--measure-wide: 41em` (48
-  characters) instead — the portrait floats *inside* those paragraphs, and at 40 the text's
-  right edge landed 15px from the photo's left edge, so the lines below the photo were no
-  wider than the lines beside it and the wrap read as a rectangle. The wider cap restores
-  the step. A float needs slack the way a grid column does not.
+  use, so one token serves every text size. **About is the one exception and takes no cap
+  at all**: the portrait floats *inside* those paragraphs, so the float itself holds the
+  lines beside it to ~39 characters, and the lines below it are meant to run out to the
+  column edge — which is exactly where the photo's right edge sits. Any cap stops the text
+  short of that edge and the wrap stops reading as a wrap. The price is ~54 characters
+  below the photo, paid on purpose. Text flowing around an image needs slack that a grid
+  column does not.
 - **Works**: exhibition index with big bold titles; a green underline wipes in on hover.
   Every entry is the same object: copy left, one **plate** right, the project's own app
   icon (32px) opening the kind line. The copy track **is** the measure, not a `1fr` that

@@ -41,11 +41,6 @@
      what lets the plate sit right against the text instead of across a hole.
      At this height every plate also lands within ~40px of its copy's baseline. */
   --plate-h: clamp(12rem, 19.5vw, 18.5rem);
-  /* About's paragraphs run wider than the works copy on purpose: the portrait
-     floats inside them, and a 40-character cap put the text's right edge 15px
-     from the photo's left edge, which killed the wrap. 48 characters leaves a
-     visible step between the lines beside the photo and the lines below it. */
-  --measure-wide: 41em;
   /* Jost carries Latin; Pretendard Variable (loaded via CDN) carries Hangul.
      Jost has no Hangul glyphs, so every Korean run falls through to Pretendard
      glyph-by-glyph, and mixed script stays clean. Futura/Avenir Next stand in
@@ -323,7 +318,12 @@ a { color: inherit; text-decoration: none; }
   font-size: clamp(1.1rem, 2vw, 1.45rem);
   line-height: 1.5;
   color: var(--text);
-  max-width: var(--measure-wide);
+  /* Deliberately uncapped, unlike every other text block on the page. The
+     portrait floats inside these paragraphs, so the lines beside it are held
+     to ~39 characters by the float itself, and the lines below it are meant
+     to run out to the column edge — which is exactly where the photo's right
+     edge sits. Any cap here stops the text short of that edge and the wrap
+     stops reading as a wrap. The cost is a long measure below the photo. */
   font-weight: 500;
   letter-spacing: -0.015em;
 }
