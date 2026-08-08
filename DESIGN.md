@@ -25,10 +25,15 @@ color on touch.
   `em` resolves against the element that uses it, so the same value gives the 16px works
   copy and the 23px About lede the same rhythm. Nothing sets its own max-width.
 - **Works**: exhibition index with big bold titles; a green underline wipes in on hover.
-  An entry's media picks its own layout by aspect ratio — landscape (calendar, video) sits
-  beside the copy, portrait (the research poster) stacks below it at the measure's width,
-  sharing the text's left and right edge. Pairing a 0.7-ratio plate with two short
-  paragraphs can only buy a void under the text, so it isn't attempted.
+  Every entry is the same object: copy left, one **plate** right, the project's own app
+  icon (32px) opening the kind line. Plates share a *height* (`--plate-h`), not a width —
+  each carries its own `--ratio`, so a 4:5 card deck, a 1.19 calendar and a 1.34 video
+  stand equally tall and hang flush to the column's right edge. Matching widths instead
+  would put a 200px void under 001's copy; matching heights is what makes the three read
+  as one shelf.
+- **Deck**: 001's plate is the Thinket cardnews, stacked-paper edge and all, opening a
+  paged reader (9 cards, light/dark, arrow keys, Esc). The research poster stays as a
+  caption link — at plate size its text was never legible anyway, and it is a PDF.
 - **Reflow**: both columns of a side-by-side entry are `fr` tracks, and the pair collapses
   on a container query over the entry's own width (`46rem`), not the viewport's. Fixed px
   media tracks are banned: one made the text absorb every pixel of shrink, down to three

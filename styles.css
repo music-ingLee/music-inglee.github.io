@@ -36,6 +36,10 @@
      the 16px work copy and the 23px About lede the same 40-character rhythm.
      40 is the ceiling: past it the eye loses the next line's start on return. */
   --measure: 34.4em;
+  /* how tall every works plate stands. Fixing the height (not the width) is
+     what makes a 4:5 card deck, a 1.19 calendar and a 1.34 video read as one
+     row of objects instead of three unrelated shapes. */
+  --plate-h: clamp(15rem, 26vw, 23rem);
   /* Jost carries Latin; Pretendard Variable (loaded via CDN) carries Hangul.
      Jost has no Hangul glyphs, so every Korean run falls through to Pretendard
      glyph-by-glyph, and mixed script stays clean. Futura/Avenir Next stand in
@@ -461,6 +465,12 @@ a { color: inherit; text-decoration: none; }
 .work:hover { background: var(--panel); }
 .work__no { font-size: 0.85rem; color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; padding-top: 0.6rem; }
 .work__main { min-width: 0; }
+.work__icon {
+  width: 32px; height: 32px;
+  display: inline-block;
+  vertical-align: -0.6em;
+  margin-right: 0.55rem;
+}
 .work__kind {
   display: block;
   font-size: 0.8rem;
@@ -677,22 +687,18 @@ a { color: inherit; text-decoration: none; }
   border: 1px solid var(--rule);
 }
 
-/* An entry's media decides its own layout, by aspect ratio.
-   Landscape media (the calendar, the video) sits beside the copy: at that
-   shape it is no taller than the text, so the two columns end together.
-   Portrait media (the research poster) stacks below instead — a 0.7 ratio
-   plate can never match two short paragraphs in height, so pairing them side
-   by side only buys a 200px void under the text. Stacked, the poster is free
-   to be large, and it shares the copy's exact left and right edge. */
-
-/* --- side by side (landscape media) --- */
+/* Every entry is the same object: copy on the left, one plate on the right.
+   What used to break that was height — a 0.71 portrait poster next to two
+   short paragraphs left a 200px void, and stacking that one entry made 001
+   read as a different kind of thing from 002. So the plates share a height
+   instead of a width: --plate-h fixes how tall every plate stands, each one's
+   own --ratio gives its width, and they all hang flush to the column's right
+   edge. Different pictures, one shelf. */
 .work__split {
   display: grid;
-  /* Both tracks yield. The copy holds the reading measure as a ceiling and the
-     media takes what is left, so narrowing the window costs both of them —
-     the old fixed 320px track never gave up a pixel and made the text absorb
-     every bit of the shrink, down to three characters a line at 860px. */
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  /* the copy takes the slack (its text still stops at the measure) and the
+     plate track is sized by the picture, so the right edge never moves */
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: clamp(1.5rem, 3vw, 3rem);
   align-items: start;
   margin-top: 1rem;
@@ -703,57 +709,101 @@ a { color: inherit; text-decoration: none; }
 .work__main { container-type: inline-size; }
 @container (max-width: 46rem) {
   .work__split { grid-template-columns: minmax(0, 1fr); }
-  /* stacked, the media takes the copy's measure rather than the full column —
-     a landscape still blown up to the whole width would out-shout the text */
-  .work__split > .work__poster,
   .work__split > .work__media { margin-top: 1.5rem; max-width: var(--measure); }
+  /* stacked, height is no longer the thing being matched — width is, so the
+     plate goes back to filling the measure at its natural ratio */
+  .work__split > .work__media .plate { height: auto; width: 100%; }
+  /* the paper-stack slivers are sized off --plate-h; once the plate goes
+     width-driven they have to follow it or they float loose at the corner */
+  .deck::before, .deck::after { height: 100%; width: 100%; aspect-ratio: auto; }
 }
 
-/* --- stacked (portrait media) --- */
-.work__stack { margin-top: 1rem; }
-.work__stack > .work__poster { margin-top: 1.5rem; max-width: var(--measure); }
-
 .work__copy { min-width: 0; }
-.work__split .work__desc,
-.work__stack .work__desc { margin-top: 0; max-width: var(--measure); }
-.work__split .work__desc + .work__desc,
-.work__stack .work__desc + .work__desc { margin-top: 0.8rem; }
+.work__split .work__desc { margin-top: 0; max-width: var(--measure); }
+.work__split .work__desc + .work__desc { margin-top: 0.8rem; }
 
-/* poster / video at natural aspect, pinned to the top of the copy beside them */
-.work__poster, .work__media { margin-top: 0; max-width: none; display: block; }
-.work__poster-media, .work__video-wrap {
+/* --- the plate: one framed picture box, whatever it holds --- */
+.work__media { margin-top: 0; max-width: none; display: block; }
+.plate {
   display: block;
+  height: var(--plate-h);
+  aspect-ratio: var(--ratio);
+  width: auto;
   overflow: hidden;
   line-height: 0;
   border: 1px solid var(--rule);
   background: #000;
 }
-.work__poster img, .work__video {
+.plate > img, .plate > video {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;   /* the box carries the picture's own ratio, so nothing crops */
   margin-top: 0;
   border: none;
 }
-.work__poster {
-  width: 100%;
-  text-decoration: none;
-  color: var(--muted);
-}
-/* the calendar plate is a still, not a link — it needs the figure margin reset
-   and must not take the poster's hover colour, which would promise a click */
-.work__poster--still { margin: 0; }
-.work__poster--still .work__poster-media { background: transparent; }
-.work__poster-cap {
-  display: inline-block;
+/* stills that are not links keep the page's white behind them */
+.plate--still { background: transparent; }
+
+.work__plate-cap {
+  display: block;
   margin-top: 0.55rem;
+  /* the caption must not widen the auto-sized plate column, or a long link
+     line pushes the track out and the plate stops hanging flush right with
+     its neighbours. zero intrinsic width, then fill and wrap. */
+  width: 0;
+  min-width: 100%;
   font-size: 0.85rem;
   font-weight: 600;
+  color: var(--muted);
   letter-spacing: -0.01em;
 }
-.work__poster-cap strong { color: var(--ink); font-weight: 700; }
-a.work__poster:hover .work__poster-cap,
-a.work__poster:hover .work__poster-cap strong { color: var(--accent); }
+.work__plate-cap strong { color: var(--ink); font-weight: 700; }
+.work__plate-cap a { display: block; margin-top: 0.3rem; }
+.work__plate-cap a:hover,
+.work__plate-cap a:hover strong { color: var(--accent); }
+
+/* --- the deck: a plate that opens into a paged reader --- */
+.deck {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--muted);
+  cursor: pointer;
+  position: relative;
+}
+.deck .plate { transition: opacity 0.2s ease; }
+/* the stacked-paper edge: two thin slivers behind the top card */
+.deck::before, .deck::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto auto;
+  height: var(--plate-h);
+  aspect-ratio: 1080 / 1350;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  z-index: -1;
+}
+.deck::before { transform: translate(6px, 6px); }
+.deck::after  { transform: translate(12px, 12px); }
+.deck__cue {
+  position: absolute;
+  left: 0; bottom: 0;
+  padding: 0.5rem 0.7rem;
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  transition: background 0.2s ease;
+}
+.deck:hover .deck__cue,
+.deck:focus-visible .deck__cue { background: var(--accent); }
+.deck:hover .plate { opacity: 0.9; }
+.deck:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 
 /* full-version trigger: quiet text button, green wipe on interaction */
 .work__fulllink {
@@ -833,6 +883,55 @@ a.work__poster:hover .work__poster-cap strong { color: var(--accent); }
 }
 .lightbox__close:hover,
 .lightbox__close:focus-visible { color: var(--accent); border-color: var(--accent); outline: none; }
+/* --- cardnews reader inside the lightbox --- */
+/* you linger over nine cards, so the room goes darker than the video's */
+.lightbox--deck { background: rgba(0, 0, 0, 0.975); }
+.lightbox--deck .lightbox__stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.deck-stage__frame {
+  /* the card is 4:5 and portrait, so height is the binding constraint on a
+     laptop; cap against the viewport, not the stage's width */
+  max-height: min(78vh, 900px);
+  aspect-ratio: 1080 / 1350;
+  background: #fff;
+  line-height: 0;
+}
+.deck-stage__img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.deck-stage__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  color: #fff;
+}
+.deck-nav, .deck-theme__btn {
+  padding: 0.45rem 0.85rem;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.deck-nav:hover, .deck-theme__btn:hover,
+.deck-nav:focus-visible, .deck-theme__btn:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent);
+  outline: none;
+}
+.deck-theme { display: flex; gap: 0.4rem; margin-left: 0.6rem; }
+.deck-theme__btn.is-on { background: #fff; color: #0a0a0a; border-color: #fff; }
+.deck-count { font-size: 0.9rem; font-weight: 600; min-width: 4.5em; text-align: center; }
+.deck-count__i { font-weight: 800; font-variant-numeric: tabular-nums; }
+
 @media (prefers-reduced-motion: reduce) {
   .lightbox, .lightbox__stage { transition: none; }
 }
@@ -889,7 +988,11 @@ a.work__poster:hover .work__poster-cap strong { color: var(--accent); }
      above already covers this width in Chrome 105+ / Safari 16+ / Firefox 110+ */
   .work__split { grid-template-columns: 1fr; }
   .cv-item__desc { padding-right: 0; }
-  .figure, .work__poster, .work__media { max-width: var(--measure); }
+  .figure, .work__media { max-width: var(--measure); }
+  .work__media .plate { height: auto; width: 100%; }
+  /* the paper-stack slivers are sized off --plate-h; once the plate goes
+     width-driven they have to follow it or they float loose at the corner */
+  .deck::before, .deck::after { height: 100%; width: 100%; aspect-ratio: auto; }
   .figure { float: none; width: auto; margin: 1.6rem 0 0; }
   .work { grid-template-columns: 40px 1fr; }
   .work__year { display: none; }

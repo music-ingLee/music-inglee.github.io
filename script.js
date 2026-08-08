@@ -116,3 +116,67 @@ document.querySelectorAll('[data-lightbox]').forEach((trigger) => {
     if (e.key === 'Escape' && !box.hidden) close();
   });
 });
+
+// ---- cardnews deck: a lightbox you page through, in either theme ----
+document.querySelectorAll('[data-cardnews]').forEach((trigger) => {
+  const box = document.getElementById(trigger.dataset.cardnews);
+  if (!box) return;
+  const img = box.querySelector('.deck-stage__img');
+  const counter = box.querySelector('.deck-count__i');
+  const closeBtn = box.querySelector('.lightbox__close');
+  const total = Number(box.dataset.count) || 1;
+  const path = box.dataset.path;
+  let i = 1;
+  let theme = 'light';
+  let lastFocus = null;
+
+  const src = (n, t) => `${path}/${t}/${String(n).padStart(2, '0')}.png`;
+  const render = () => {
+    img.src = src(i, theme);
+    img.alt = `Thinket 카드뉴스 ${i} / ${total}`;
+    counter.textContent = i;
+    // warm the neighbours so paging doesn't flash a blank frame
+    [i - 1, i + 1].forEach((n) => {
+      if (n >= 1 && n <= total) new Image().src = src(n, theme);
+    });
+  };
+  const step = (d) => { i = ((i - 1 + d + total) % total) + 1; render(); };
+
+  const open = () => {
+    lastFocus = trigger;
+    render();
+    box.hidden = false;
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => box.classList.add('open'));
+    closeBtn?.focus();
+  };
+  const close = () => {
+    box.classList.remove('open');
+    document.body.style.overflow = '';
+    const done = () => { box.hidden = true; box.removeEventListener('transitionend', done); };
+    if (reduce) done(); else box.addEventListener('transitionend', done);
+    lastFocus?.focus();
+  };
+
+  trigger.addEventListener('click', open);
+  closeBtn?.addEventListener('click', close);
+  box.addEventListener('click', (e) => { if (e.target === box) close(); });
+  box.querySelectorAll('.deck-nav').forEach((b) =>
+    b.addEventListener('click', () => step(Number(b.dataset.step))));
+  box.querySelectorAll('.deck-theme__btn').forEach((b) =>
+    b.addEventListener('click', () => {
+      theme = b.dataset.theme;
+      box.querySelectorAll('.deck-theme__btn').forEach((o) => {
+        const on = o === b;
+        o.classList.toggle('is-on', on);
+        o.setAttribute('aria-pressed', String(on));
+      });
+      render();
+    }));
+  document.addEventListener('keydown', (e) => {
+    if (box.hidden) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
+  });
+});
