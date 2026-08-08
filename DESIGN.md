@@ -20,17 +20,22 @@ color on touch.
 - **Color**: black on white; neutral (not warm) grays; green only as interaction pop.
 - **Grid**: two-column scaffold (sticky rail label + body); sections divided by strong
   1–2px black rules — modernist, graphic, confident.
-- **Measure**: one token, `--measure: 34.4em`, caps every body text block at 40 Hangul
-  characters a line. A Hangul glyph in Pretendard is a flat 0.86em wide at any size, and
-  `em` resolves against the element that uses it, so the same value gives the 16px works
-  copy and the 23px About lede the same rhythm. Nothing sets its own max-width.
+- **Measure**: `--measure: 34.4em` caps body text at 40 Hangul characters a line. A Hangul
+  glyph in Pretendard is a flat 0.86em wide at any size and `em` resolves at the point of
+  use, so one token serves every text size. About takes `--measure-wide: 41em` (48
+  characters) instead — the portrait floats *inside* those paragraphs, and at 40 the text's
+  right edge landed 15px from the photo's left edge, so the lines below the photo were no
+  wider than the lines beside it and the wrap read as a rectangle. The wider cap restores
+  the step. A float needs slack the way a grid column does not.
 - **Works**: exhibition index with big bold titles; a green underline wipes in on hover.
   Every entry is the same object: copy left, one **plate** right, the project's own app
-  icon (32px) opening the kind line. Plates share a *height* (`--plate-h`), not a width —
-  each carries its own `--ratio`, so a 4:5 card deck, a 1.19 calendar and a 1.34 video
-  stand equally tall and hang flush to the column's right edge. Matching widths instead
-  would put a 200px void under 001's copy; matching heights is what makes the three read
-  as one shelf.
+  icon (32px) opening the kind line. The copy track **is** the measure, not a `1fr` that
+  stretches past it — with `1fr` the text stopped at 550px inside a 900px track and the
+  plate hung off at the far edge, leaving a 300px hole down the middle of every entry.
+  Sized to the measure, the plate sits directly against the text (45px gap) and the plates'
+  left edges line up down the whole section. `--plate-h` is then chosen so the widest ratio
+  still fits in what is left, which also lands every plate within ~90px of its copy's
+  baseline. Heights are not identical and do not need to be; the seam is what the eye reads.
 - **Deck**: 001's plate is the Thinket cardnews, stacked-paper edge and all, opening a
   paged reader (9 cards, light/dark, arrow keys, Esc). The research poster stays as a
   caption link — at plate size its text was never legible anyway, and it is a PDF.

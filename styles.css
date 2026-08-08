@@ -36,10 +36,16 @@
      the 16px work copy and the 23px About lede the same 40-character rhythm.
      40 is the ceiling: past it the eye loses the next line's start on return. */
   --measure: 34.4em;
-  /* how tall every works plate stands. Fixing the height (not the width) is
-     what makes a 4:5 card deck, a 1.19 calendar and a 1.34 video read as one
-     row of objects instead of three unrelated shapes. */
-  --plate-h: clamp(15rem, 26vw, 23rem);
+  /* how tall every works plate stands. Sized so the widest ratio (the 1.34
+     video) still fits in what is left beside a full measure of copy — that is
+     what lets the plate sit right against the text instead of across a hole.
+     At this height every plate also lands within ~40px of its copy's baseline. */
+  --plate-h: clamp(12rem, 19.5vw, 18.5rem);
+  /* About's paragraphs run wider than the works copy on purpose: the portrait
+     floats inside them, and a 40-character cap put the text's right edge 15px
+     from the photo's left edge, which killed the wrap. 48 characters leaves a
+     visible step between the lines beside the photo and the lines below it. */
+  --measure-wide: 41em;
   /* Jost carries Latin; Pretendard Variable (loaded via CDN) carries Hangul.
      Jost has no Hangul glyphs, so every Korean run falls through to Pretendard
      glyph-by-glyph, and mixed script stays clean. Futura/Avenir Next stand in
@@ -317,7 +323,7 @@ a { color: inherit; text-decoration: none; }
   font-size: clamp(1.1rem, 2vw, 1.45rem);
   line-height: 1.5;
   color: var(--text);
-  max-width: var(--measure);
+  max-width: var(--measure-wide);
   font-weight: 500;
   letter-spacing: -0.015em;
 }
@@ -696,9 +702,13 @@ a { color: inherit; text-decoration: none; }
    edge. Different pictures, one shelf. */
 .work__split {
   display: grid;
-  /* the copy takes the slack (its text still stops at the measure) and the
-     plate track is sized by the picture, so the right edge never moves */
-  grid-template-columns: minmax(0, 1fr) auto;
+  /* The copy track IS the measure — not a 1fr that stretches past it. With
+     1fr the text stopped at 550px inside a 900px track and the plate hung far
+     off at the right edge, leaving a 300px hole down the middle of every
+     entry. Sized to the measure, the plate sits directly against the text and
+     the two read as one block. */
+  grid-template-columns: minmax(0, var(--measure)) auto;
+  justify-content: start;
   gap: clamp(1.5rem, 3vw, 3rem);
   align-items: start;
   margin-top: 1rem;
@@ -748,11 +758,11 @@ a { color: inherit; text-decoration: none; }
 .work__plate-cap {
   display: block;
   margin-top: 0.55rem;
-  /* the caption must not widen the auto-sized plate column, or a long link
-     line pushes the track out and the plate stops hanging flush right with
-     its neighbours. zero intrinsic width, then fill and wrap. */
-  width: 0;
+  /* fills the plate at minimum, and may widen the column a little when the
+     plate is narrow — otherwise 001's poster link breaks over three lines
+     under a 237px card. Past this it would drag the plate away from the text. */
   min-width: 100%;
+  max-width: 22rem;
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--muted);
@@ -786,8 +796,11 @@ a { color: inherit; text-decoration: none; }
   background: var(--bg);
   z-index: -1;
 }
-.deck::before { transform: translate(6px, 6px); }
-.deck::after  { transform: translate(12px, 12px); }
+/* fan the pages sideways only. Offsetting them downward too left two little
+   corner brackets poking out under the plate, which read as stray marks
+   rather than paper, and crowded the caption. */
+.deck::before { transform: translateX(6px); }
+.deck::after  { transform: translateX(12px); }
 .deck__cue {
   position: absolute;
   left: 0; bottom: 0;
