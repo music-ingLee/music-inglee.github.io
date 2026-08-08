@@ -43,3 +43,15 @@
 - **죽은 규칙 삭제** — HTML에서 미사용이던 `.eyebrow`, `.hero__eyebrow` 제거.
 - **cv.pdf 재생성** — 헤드리스 Chrome, 한 장 유지 확인. DESIGN.md Type 항목을 새 타이포 규칙으로 갱신.
 - **광학 좌측 정렬(optical margin alignment)** — 사용자 지적: 큰 제목과 위 레일 레이블의 시작점이 미세하게 안 맞음. 원인은 첫 글리프의 좌측 사이드 베어링(잉크가 글리프 박스보다 안쪽에서 시작). 2x 렌더로 실측: 이윤태 +6px, musicking +4px, 섹션 제목 ±0.5~1.5px(글리프별 상이: 소 0.021em · 이 0.042em · 작 0 · 연 0.031em). 보정: hero `-0.04em`, lexicon word `-0.045em`, 섹션 제목은 **#about/#cv/#works/#contact별 개별 nudge**, contact 이메일 `-0.023em`, work 제목 `-0.012em`, CV 이름 `-0.03em`. 재측정으로 전 쌍 0.5 CSS px 이내 확인. cv.pdf 재생성.
+
+## 2026-08-08 (Friday)
+
+daily-todo가 쓰는 폰트 자산을 이 페이지에도 그대로 옮겨, 두 프로젝트가 한 목소리를 내게 한 세션.
+
+- **라틴 서체 교체: Inter → Jost** — daily-todo(`src/fonts/Jost-var.ttf`, SIL OFL)가 쓰는 오픈소스 Futura 후계 가변폰트를 `assets/fonts/`로 복사해 **번들**. Google Fonts의 Inter CDN 링크는 index.html·cv.html에서 제거. 한글은 그대로 Pretendard Variable(jsdelivr) 담당 — Jost에 한글 글리프가 없어 글자 단위로 자동 폴백된다. 스택: `Jost → Futura → Avenir Next → Century Gothic → Pretendard Variable → …`
+- **woff2 변환** — fontTools로 가변 TTF(135KB) → woff2(50KB). `woff2-variations` 우선, 원본 TTF는 폴백. `<link rel=preload>`로 선로딩. Google Fonts 왕복이 사라져 외부 폰트 요청은 Pretendard 하나만 남음.
+- **라틴 디스플레이 자간 완화** — Jost는 볼이 정원(正圓)이라 Inter의 그로테스크보다 훨씬 일찍 충돌한다. lexicon word −0.045→−0.02em, work 제목 −0.035→−0.015em, contact 이메일 −0.04→−0.015em. 한글 슬롯(hero name, 섹션 제목)은 Pretendard가 그리므로 손대지 않음.
+- **광학 좌측 정렬 재측정** — 7/15의 보정값은 Inter의 사이드 베어링 기준이라 무효. fontTools로 Jost를 wght=800에 인스턴싱해 실측: `m` 0.0548em · `d`/`S` 0.031em · `q` 0.031em. 각각 lexicon word `-0.055em`, work 제목 `-0.03em`, contact 이메일 `-0.031em`로 교체.
+- **cv.pdf 재생성** — 헤드리스 Chrome, 한 장 유지 확인. DESIGN.md Type 항목 갱신. styles.css 캐시버전 v45→v46.
+- **cv.html 화면 렌더 고정(폰트 교체와 무관한 기존 버그)** — 전체화면으로 열어보니 좌우 여백 0에 창 너비만큼 늘어남. `@page { size: A4; margin: 14mm 16mm }`는 인쇄에만 적용되고 브라우저 창에는 아무 말도 하지 않는데, 화면용 폭 규칙이 처음부터 없었다(`git show HEAD:cv.html`로 대조 확인 — 회귀 아님). `@media screen`으로 A4(210×297mm)를 같은 여백과 함께 재진술해 회색 바탕 위 종이 한 장으로 렌더. 인쇄 경로는 손대지 않았고 PDF 한 장 유지 확인.
+- **소개 3·4문단 재구성** — 연구실 지원 에세이 원문(존댓말)을 사이트 평서체로 되살리며 압축을 풂. 되살린 것: Transformer가 LLM의 초석이 됐다는 구체 예시, 심층신경망, "음악신경과학의 진전 → 음악정보학의 발전" 방향 진술, 신경과학 "전반". **여는 문장에서 `믿는다`를 뗌** — 신경망·Transformer 계보는 사실인데 판단과 한 문장에 뭉개져 사실은 약해 보이고 판단은 근거 없이 세 보였다. 믿음은 진짜 판단인 곳("음악정보학도 같은 길을 따르리라")에만 남김. **개인별 맞춤형 생성이라는 비전 문장 삭제** — 자기선언 어투가 걸린다는 사용자 판단. **컴퓨터 은유 한 문장 추가** — `그러려면` 사슬 *뒤*에 붙여 `그러려면 → 그래서 → 위해서다` 추진력을 끊지 않게 함(사슬 한가운데 끼우면 글이 겉돈다는 게 이 문단의 핵심 교훈). 마지막 문장의 탐구 범위를 **음악 생성 모델 → 음악정보학 전반**으로 확장(사슬이 이미 생성보다 넓어 앞부분 수정 불필요). 영문 `music generation model` → 한글 `음악 생성 모델`.
