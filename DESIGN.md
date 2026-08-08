@@ -20,7 +20,19 @@ color on touch.
 - **Color**: black on white; neutral (not warm) grays; green only as interaction pop.
 - **Grid**: two-column scaffold (sticky rail label + body); sections divided by strong
   1–2px black rules — modernist, graphic, confident.
+- **Measure**: one token, `--measure: 34.4em`, caps every body text block at 40 Hangul
+  characters a line. A Hangul glyph in Pretendard is a flat 0.86em wide at any size, and
+  `em` resolves against the element that uses it, so the same value gives the 16px works
+  copy and the 23px About lede the same rhythm. Nothing sets its own max-width.
 - **Works**: exhibition index with big bold titles; a green underline wipes in on hover.
+  An entry's media picks its own layout by aspect ratio — landscape (calendar, video) sits
+  beside the copy, portrait (the research poster) stacks below it at the measure's width,
+  sharing the text's left and right edge. Pairing a 0.7-ratio plate with two short
+  paragraphs can only buy a void under the text, so it isn't attempted.
+- **Reflow**: both columns of a side-by-side entry are `fr` tracks, and the pair collapses
+  on a container query over the entry's own width (`46rem`), not the viewport's. Fixed px
+  media tracks are banned: one made the text absorb every pixel of shrink, down to three
+  characters a line at 860px. The 760px media query survives only as a fallback.
 - **Motion**: smooth scroll + IntersectionObserver fade-up (`.reveal`); nav underline
   grow; active-section tracking. Honors `prefers-reduced-motion`.
 - **Imagery**: portrait as a hard-framed B&W figure (not a circular avatar).
