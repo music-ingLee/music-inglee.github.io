@@ -8,9 +8,13 @@ and as small section numbers, so the page reads black-and-white at rest and reve
 color on touch.
 
 ## Key characteristics
-- **Type**: Inter (Latin) + Pretendard Variable (Hangul, jsdelivr CDN) at heavy weights
-  (700–800). Oversized bold hero name; Hangul display tracking capped at `-0.02em`
-  (Inter-grade `-0.045em` is Latin-only). **No tracked-out uppercase anywhere** — labels
+- **Type**: Jost (Latin, bundled variable font in `assets/fonts/`, SIL OFL) + Pretendard
+  Variable (Hangul, jsdelivr CDN) at heavy weights (700–800). Jost is the open-source
+  Futura successor daily-todo ships, so both projects speak one geometric voice.
+  Oversized bold hero name; display tracking capped at `-0.02em` on both scripts, since
+  Jost's circular bowls collide where Inter's grotesque forms tolerated `-0.045em`.
+  Optical left offsets are Jost's own side bearings at weight 800 (m `.055em`,
+  d/S `.031em`, q `.031em`). **No tracked-out uppercase anywhere** — labels
   (rail, def keys, work kinds, lexicon, CV) speak through weight, size, and green, in
   written case with normal letter-spacing.
 - **Color**: black on white; neutral (not warm) grays; green only as interaction pop.
