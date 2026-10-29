@@ -1014,3 +1014,8 @@ a { color: inherit; text-decoration: none; }
   .work { grid-template-columns: 40px 1fr; }
   .work__year { display: none; }
 }
+
+/* a link inside running text or a CV title: the same quiet underline as the
+   hero's links, green on hover */
+.work__desc a, .cv-item__name a { border-bottom: 2px solid var(--line-2); transition: color 0.2s, border-color 0.2s; }
+.work__desc a:hover, .cv-item__name a:hover { color: var(--accent); border-color: var(--accent); }
