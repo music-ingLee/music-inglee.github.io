@@ -15,7 +15,7 @@
     font-style: normal;
     font-display: swap;
   }
-  @page { size: A4; margin: 14mm 16mm; }
+  @page { size: A4; margin: 12mm 16mm; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: "Jost", "Futura", "Avenir Next", "Century Gothic",
@@ -27,7 +27,7 @@
 
   /* Screen only. @page owns the sheet when printing, but it says nothing to a
      browser window, so on screen the document used to run the full viewport
-     width with no margins. Restate A4 (210×297mm, the same 14/16mm margins)
+     width with no margins. Restate A4 (210×297mm, the same 12/16mm margins)
      as a centered sheet on a gray desk, so what you read here is what prints.
      max-width keeps it from overflowing a phone. Print is untouched. */
   @media screen {
@@ -37,7 +37,7 @@
       max-width: 100%;
       min-height: 297mm;
       margin: 24px auto;
-      padding: 14mm 16mm;
+      padding: 12mm 16mm;
       background: #fff;
       box-shadow: 0 1px 5px rgba(0, 0, 0, 0.18);
     }
@@ -57,7 +57,7 @@
 
   /* section: label-left / content-right */
   .section {
-    display: grid; grid-template-columns: 27mm 1fr; gap: 7mm;
+    display: grid; grid-template-columns: 24mm 1fr; gap: 6mm;
     padding: 7px 0; border-top: 1px solid #ececec;
   }
   .label {
@@ -81,7 +81,7 @@
   .fields .line-end::after { content: none !important; }
 
   /* dense block (Collectives) folds into two columns, matching the web CV */
-  .cols2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10mm; }
+  .cols2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 8mm; }
   .cols2 .entry + .entry { margin-top: 0; }
 </style>
 </head>
@@ -99,7 +99,7 @@
   <div class="section">
     <div class="label">Education</div>
     <div>
-      <div class="entry"><div><div class="main">Seoul National University</div><div class="sub">B.A. Psychology · Main Major</div><div class="sub">B.E. Music Informatics · Student Design Major</div></div><div class="when">2021 – present</div></div>
+      <div class="entry"><div><div class="main">Seoul National University</div><div class="sub">B.A. Psychology&nbsp;· Main Major</div><div class="sub">B.E. Music Informatics&nbsp;· Student Design Major</div></div><div class="when">2021 – present</div></div>
     </div>
   </div>
 
@@ -116,7 +116,8 @@
   <div class="section">
     <div class="label">Experience</div>
     <div>
-      <div class="entry"><div><div class="main">Science of Learning · Team SoLT</div><div class="sub">Undergraduate Researcher · SNU Student-Directed Education Undergraduate Research Program · ₩7,000,000 grant</div></div><div class="when">2026.05 – 2026.12</div></div>
+      <div class="entry"><div><div class="main">Interdisciplinary Understanding of Machine Intelligence</div><div class="sub">Co-organizer, team of three&nbsp;· SNU Student-Directed Seminar (1 credit)</div></div><div class="when">2026.08 – 2026.12</div></div>
+      <div class="entry"><div><div class="main">Science of Learning · Team SoLT</div><div class="sub">Undergraduate Researcher&nbsp;· SNU Student-Directed Education Undergraduate Research Program&nbsp;· ₩7,000,000 grant</div></div><div class="when">2026.05 – 2026.12</div></div>
       <div class="entry"><div><div class="main">SNU Connectome Lab</div><div class="sub">Undergraduate Research Intern</div></div><div class="when">2025.12 – 2026.02</div></div>
       <div class="entry"><div><div class="main">Republic of Korea Air Force</div><div class="sub">Military service</div></div><div class="when">2023.10 – 2025.07</div></div>
     </div>
@@ -125,21 +126,21 @@
   <div class="section">
     <div class="label">Collectives</div>
     <div class="cols2">
-      <div class="entry"><div><div class="main">JAME</div><div class="sub">College of Humanities band · Vocal · 19th-gen Leader</div></div><div class="when">2021.03 – 2023.02</div></div>
-      <div class="entry"><div><div class="main">Rgorhythm</div><div class="sub">Psychology dept. band · Vocal · Founder</div></div><div class="when">2022.03 – present</div></div>
+      <div class="entry"><div><div class="main">JAME</div><div class="sub">College of Humanities band&nbsp;· Vocal&nbsp;· 19th-gen Leader</div></div><div class="when">2021.03 – 2023.02</div></div>
+      <div class="entry"><div><div class="main">Rgorhythm</div><div class="sub">Psychology dept. band&nbsp;· Vocal&nbsp;· Founder</div></div><div class="when">2022.03 – present</div></div>
       <div class="entry"><div><div class="main">Soundream</div><div class="sub">Composition club</div></div><div class="when">2022.09 – 2023.02</div></div>
-      <div class="entry"><div><div class="main">Triple H</div><div class="sub">Vocal &amp; hip-hop club · Vocal</div></div><div class="when">2023.03 – 2026.02</div></div>
-      <div class="entry"><div><div class="main">AERG</div><div class="sub">Drama society, College of Fine Arts · Sound team</div></div><div class="when">2023.03 – 2023.08</div></div>
-      <div class="entry"><div><div class="main">BAB</div><div class="sub">College of Liberal Studies acoustic band · Vocal</div></div><div class="when">2025.09 – 2026.08</div></div>
+      <div class="entry"><div><div class="main">Triple H</div><div class="sub">Vocal &amp; hip-hop club&nbsp;· Vocal</div></div><div class="when">2023.03 – 2026.02</div></div>
+      <div class="entry"><div><div class="main">AERG</div><div class="sub">Drama society, College of Fine Arts&nbsp;· Sound team</div></div><div class="when">2023.03 – 2023.08</div></div>
+      <div class="entry"><div><div class="main">BAB</div><div class="sub">College of Liberal Studies acoustic band&nbsp;· Vocal</div></div><div class="when">2025.09 – 2026.08</div></div>
     </div>
   </div>
 
   <div class="section">
     <div class="label">Honors</div>
     <div>
-      <div class="entry"><div><div class="main">Hanjae Foundation Full Scholarship</div><div class="sub">full tuition + ₩1,000,000 / month stipend · admission to graduation</div></div><div class="when"></div></div>
-      <div class="entry"><div><div class="main">Grand Prize · 5th SNU Computing Competition</div><div class="sub">Seoul National University · studyForest (now Thinket)</div></div><div class="when">2026.10</div></div>
-      <div class="entry"><div><div class="main">Top Project · Computer Programming</div><div class="sub">Dept. of Computer Science &amp; Engineering, SNU · studyForest (now Thinket)</div></div><div class="when">2026.06</div></div>
+      <div class="entry"><div><div class="main">Hanjae Foundation Full Scholarship</div><div class="sub">full tuition + ₩1,000,000 / month stipend&nbsp;· admission to graduation</div></div><div class="when"></div></div>
+      <div class="entry"><div><div class="main">Grand Prize · 5th SNU Computing Competition</div><div class="sub">Seoul National University&nbsp;· studyForest (now Thinket)</div></div><div class="when">2026.10</div></div>
+      <div class="entry"><div><div class="main">Top Project · Computer Programming</div><div class="sub">Dept. of Computer Science &amp; Engineering, SNU&nbsp;· studyForest (now Thinket)</div></div><div class="when">2026.06</div></div>
       <div class="entry"><div><div class="main">Best Undergraduate Research Award</div><div class="sub">Korea Brain &amp; Cognitive Sciences Community</div></div><div class="when">2022.02</div></div>
     </div>
   </div>
@@ -147,15 +148,15 @@
   <div class="section">
     <div class="label">Talks</div>
     <div>
-      <div class="entry"><div><div class="main">“테크놀로지와 음악의 새로운 만남”</div><div class="sub">Speaker (Part II) · 74th Seminar, Music Aesthetics Society (음악미학연구회)</div></div><div class="when">2023.06</div></div>
+      <div class="entry"><div><div class="main">“테크놀로지와 음악의 새로운 만남”</div><div class="sub">Speaker (Part II)&nbsp;· 74th Seminar, Music Aesthetics Society (음악미학연구회)</div></div><div class="when">2023.06</div></div>
     </div>
   </div>
 
   <div class="section">
     <div class="label">Projects</div>
     <div>
-      <div class="entry"><div><div class="main">Thinket <span class="was">(formerly studyForest)</span></div><div class="sub">Tree-structured LLM learning tool · path-scoped context · FastAPI + PostgreSQL · <a href="https://thinket.ai">thinket.ai</a>, invite-only beta</div></div><div class="when">2026</div></div>
-      <div class="entry"><div><div class="main">맨날 Maennal <span class="was">(formerly daily-todo)</span></div><div class="sub">Todo app weighted on the present: the past is frozen, the future left unjudged, only today open to write · React, Electron, PWA · <a href="https://maennal.com">maennal.com</a></div></div><div class="when">2026</div></div>
+      <div class="entry"><div><div class="main">Thinket <span class="was">(formerly studyForest)</span></div><div class="sub">Tree-structured LLM learning tool&nbsp;· path-scoped context&nbsp;· FastAPI + PostgreSQL&nbsp;· <a href="https://thinket.ai">thinket.ai</a>, invite-only beta</div></div><div class="when">2026</div></div>
+      <div class="entry"><div><div class="main">맨날 Maennal <span class="was">(formerly daily-todo)</span></div><div class="sub">Todo app weighted on the present: the past is frozen, the future left unjudged, only today open to write&nbsp;· React, Electron, PWA&nbsp;· <a href="https://maennal.com">maennal.com</a></div></div><div class="when">2026</div></div>
     </div>
   </div>
 </body>
