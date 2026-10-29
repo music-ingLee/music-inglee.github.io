@@ -42,6 +42,9 @@
      (consequent) answers with the first phrase's opening intervals and closes on I,
      through re or ti, with a sixth beneath. Only then does it breathe. Periods return
      as A, A′, B, A′: A′ opens with A's motif, B moves higher and starts away from home.
+     A phrase is eight or nine chords of two beats: four that set out the key, then four
+     or five that approach the cadence. The answer repeats the question's first four
+     (B's answer comes home instead), so the two halves of a period are heard as a pair.
      Each chord holds two or three notes with a rhythm. Each note is weighed by how
      stable it sounds in the key (Krumhansl & Kessler), how close it is to the last
      note, whether it belongs to the chord (more so on the chord's first note), how
@@ -50,6 +53,8 @@
     I: { root: 0, pcs: [0, 4, 7] }, ii: { root: 2, pcs: [2, 5, 9] }, iii: { root: 4, pcs: [4, 7, 11] },
     IV: { root: 5, pcs: [5, 9, 0] }, V: { root: 7, pcs: [7, 11, 2] }, vi: { root: 9, pcs: [9, 0, 4] },
   };
+  const OPEN = [['I', 'V', 'vi', 'IV'], ['I', 'IV', 'I', 'V'], ['I', 'vi', 'IV', 'V'], ['I', 'iii', 'IV', 'V'], ['I', 'IV', 'vi', 'V']];
+  const OPEN_B = [['vi', 'iii', 'IV', 'I'], ['IV', 'V', 'iii', 'vi'], ['ii', 'V', 'iii', 'vi'], ['vi', 'IV', 'ii', 'iii']];
   const ANTE = [['I', 'IV', 'ii', 'V'], ['I', 'vi', 'IV', 'V'], ['vi', 'IV', 'I', 'V'], ['I', 'iii', 'vi', 'V'], ['IV', 'I', 'ii', 'V'], ['I', 'vi', 'ii', 'IV', 'V']];
   const ANTE_B = [['vi', 'iii', 'IV', 'V'], ['IV', 'iii', 'ii', 'V'], ['ii', 'vi', 'IV', 'V'], ['vi', 'ii', 'iii', 'IV', 'V']];
   const CONS = [['I', 'IV', 'V', 'I'], ['vi', 'ii', 'V', 'I'], ['IV', 'ii', 'V', 'I'], ['I', 'vi', 'ii', 'V', 'I'], ['iii', 'vi', 'ii', 'V', 'I']];
@@ -105,13 +110,16 @@
       });
       return out;
     }
+    // an opening and a way to the cadence, never the same chord twice across the seam
+    const join = (open, ends) => { let end; do end = one(ends); while (end[0] === open[open.length - 1]); return [...open, ...end]; };
     function period() {
       const kind = ['A', 'A2', 'B', 'A2'][form++ % 4];
       center = kind === 'B' ? 74 : 70;
-      const ante = phrase(one(kind === 'B' ? ANTE_B : ANTE), kind === 'A2' ? theme : null, 'half');
+      const open = one(kind === 'B' ? OPEN_B : OPEN);
+      const ante = phrase(join(open, kind === 'B' ? ANTE_B : ANTE), kind === 'A2' ? theme : null, 'half');
       if (kind === 'A') theme = motifOf(ante);
       center = 70;
-      const cons = phrase(one(CONS), rnd() < 0.85 ? motifOf(ante) : null, 'full');
+      const cons = phrase(join(kind === 'B' ? one(OPEN) : open, CONS), rnd() < 0.85 ? motifOf(ante) : null, 'full');
       return [...ante, ...cons];
     }
     return {
@@ -135,6 +143,8 @@
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return null;
     if (!ctx) {
+      // iPhones mute web audio under the silent switch unless the page says it plays media
+      try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
       ctx = new AC();
       master = ctx.createGain();
       master.gain.value = 0.5;
@@ -535,9 +545,17 @@
     soundBtn.setAttribute('aria-pressed', 'true');
     $('.sound__label', soundBtn).textContent = '소리 끄기';
     document.documentElement.classList.add('sound-armed');
+    // A finger's pointerdown, or a touch that becomes a scroll, does not let a page sound,
+    // so every press tries, and the music begins only once the audio is really running.
+    // (Before, the first touch on a phone used up the switch while the audio stayed locked.)
     const go = (e) => {
-      if (!armed || (e.target.closest && e.target.closest('#sound'))) return;
-      setSound(true);
+      if (!armed || (e.target.closest && e.target.closest('#sound')) || !audio()) return;
+      const src = ctx.createBufferSource();   // older iPhones open the audio only when something plays inside the touch
+      src.buffer = ctx.createBuffer(1, 1, 22050);
+      src.connect(ctx.destination);
+      src.start(0);
+      if (ctx.state === 'running') setSound(true);
+      else ctx.resume().then(() => { if (armed && ctx.state === 'running') setSound(true); }).catch(() => {});
     };
     ['pointerdown', 'mousedown', 'keydown', 'touchend', 'click'].forEach((t) => addEventListener(t, go, { passive: true, capture: true }));
     // if this browser lets the page sound without a touch (a site allowed to autoplay), play at once
