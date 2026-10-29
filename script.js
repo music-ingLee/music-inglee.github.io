@@ -536,7 +536,7 @@
     $('.sound__label', soundBtn).textContent = '소리 끄기';
     document.documentElement.classList.add('sound-armed');
     const go = (e) => {
-      if (!armed || (e.target.closest && e.target.closest('#sound, #nudge'))) return;
+      if (!armed || (e.target.closest && e.target.closest('#sound'))) return;
       setSound(true);
     };
     ['pointerdown', 'mousedown', 'keydown', 'touchend', 'click'].forEach((t) => addEventListener(t, go, { passive: true, capture: true }));
@@ -579,18 +579,16 @@
 
 
   /* ---------- the turn ----------
-     The hero holds still for a stretch of scrolling (the runway). Over that stretch a
-     fixed layer carries the hero's name onto the score's root label and its five
-     straight lines into the fanned staff, landing exactly where the score panel will
-     rest beside the text; the clef, time signature and notes arrive as the lines
-     settle. Then the page moves on: the text rises beside the score, and when the real
-     panel reaches its resting place the layer hands over to it. Scroll position alone
-     sets every frame, so scrolling back plays it backwards. */
+     As the page scrolls, a fixed layer carries the hero's name onto the score's root
+     label and its five straight lines into the fanned staff. The score rides up with the
+     intro beside it, so the two arrive together: the turn ends the moment the score
+     panel reaches its resting place, and the layer hands over to it. The clef, time
+     signature and notes arrive as the lines settle. Scroll position alone sets every
+     frame, so scrolling back plays it backwards. */
   const html = document.documentElement;
   const wideEnough = matchMedia('(min-width: 1000px)');
   const morphLines = $('#morphLines'), morphScore = $('#morphScore'), morphName = $('#morphName');
   const heroName = $('.hero__name'), heroLines = $$('.hero__staff i'), heroText = $$('.hero__aka, .hero__role, .hero__meta');
-  const runway = $('.runway');
   const VB_W = W, VB_H = BOT + 54;
   let paths = [], fades = [], rootLabel = null, turnOn = false;
 
@@ -623,7 +621,6 @@
   }
 
   const clamp01 = (x) => Math.max(0, Math.min(1, x));
-  const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
   const mix = (a, b, t) => a + (b - a) * t;
   // the score's line i in viewBox units: root, two fan handles, fan end, line end
   const scorePts = (i) => [[ROOT_X, MID], [ROOT_X + 30, MID], [FAN_END - 30, lineY(i)], [FAN_END, lineY(i)], [X1, lineY(i)]];
@@ -635,15 +632,18 @@
     heroText.forEach((n) => { n.style.opacity = 1 - clamp01(s / (0.2 * vh)); });
     html.classList.toggle('morph-away', s > 0);
 
-    // where the score will rest: the panel's sticky top plus the score's offset inside it
+    // the score as it is now (rising with the intro) and where it will rest: the panel's sticky top
     const panel = $('.score'), pr = panel.getBoundingClientRect(), sr = svg.getBoundingClientRect();
     const rest = parseFloat(getComputedStyle(panel).top) || 0;
     const landed = pr.top <= rest + 0.5;
     if (s <= 0 || landed) { html.classList.remove('morph-run'); return; }
     html.classList.add('morph-run');
 
-    const R = { x: sr.left, y: rest + (sr.top - pr.top), k: sr.width / VB_W };
-    const p = ease(clamp01(s / runway.offsetHeight)), f = clamp01((p - 0.6) / 0.4);
+    // the turn takes exactly the scroll the panel needs to land (its top now, plus what has been
+    // scrolled, less its rest). Linear: both ends already move with the page, and an eased
+    // curve would make the name dip before it rises
+    const R = { x: sr.left, y: sr.top, k: sr.width / VB_W };
+    const p = clamp01(s / (s + pr.top - rest)), f = clamp01((p - 0.6) / 0.4);
     morphScore.style.transform = `translate(${R.x}px, ${R.y}px) scale(${R.k})`;
     fades.forEach((n) => { n.style.opacity = f; });
 
@@ -673,22 +673,6 @@
   addEventListener('resize', () => { setupTurn(); });
   wideEnough.addEventListener('change', setupTurn);
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(setupTurn);
-
-  /* the nudge: the one call to keep reading, shown until the text has risen to the top third.
-     Pressing it resolves the leading tone in its little staff, ti to do, and (being a
-     press) lets the music begin right after. */
-  const nudgeEl = $('#nudge'), aboutBlock = $('#about');
-  function nudge() {
-    document.documentElement.classList.toggle('nudge-on', aboutBlock.getBoundingClientRect().top > innerHeight * 0.35);
-  }
-  addEventListener('scroll', () => requestAnimationFrame(nudge), { passive: true });
-  addEventListener('resize', nudge);
-  setTimeout(nudge, 900);
-  nudgeEl.addEventListener('click', () => {
-    nudgeEl.classList.add('is-resolved');
-    if (armed) { if (audio()) { pluck(71, 0.9); pluck(72, 0.95, 0.34); low(48, 0.7, 0.34); setSound(true, 0.95); } }
-    else if (soundOn) { pluck(71, 0.8); pluck(72, 0.85, 0.34); }
-  });
 
   /* hovering a work or a CV row lights it and its note, as reading does */
   $$('[data-note]').forEach((n) => {

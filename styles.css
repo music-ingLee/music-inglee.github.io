@@ -323,10 +323,6 @@ a { color: inherit; }
 /* ---------- the turn: name and staff become the score, the score settles beside the text ---------- */
 .morph { display: none; position: fixed; inset: 0; z-index: 30; pointer-events: none; visibility: hidden; }
 .morph-on .morph { display: block; }
-/* the hero holds still for a while the name and staff turn into the score */
-.morph-on .hero { position: sticky; top: var(--nav-h); }
-.runway { display: none; }
-.morph-on .runway { display: block; height: 70svh; }
 .morph-away .hero__name, .morph-away .hero__staff { visibility: hidden; }
 .morph-run .morph { visibility: visible; }
 .morph-run .score { visibility: hidden; }
@@ -351,25 +347,3 @@ a { color: inherit; }
 
 /* a CV row lights under the pointer too */
 .row:hover { background: var(--green-wash); }
-
-/* the one call: keep reading. Inside it a leading tone leans toward its resolution;
-   the press resolves it (ti to do), and the music begins */
-.nudge {
-  position: fixed; left: 50%; bottom: 28px; z-index: 35;
-  display: inline-flex; align-items: center; gap: 0.6rem;
-  padding: 0.62rem 1.2rem 0.62rem 0.95rem; border-radius: 999px;
-  background: var(--ink); color: #fff; font-size: 0.92rem; font-weight: 600; text-decoration: none;
-  opacity: 0; pointer-events: none; transform: translate(-50%, 10px);
-  transition: opacity 0.35s var(--ease-out), transform 0.35s var(--ease-out), background-color 0.2s;
-}
-.nudge-on .nudge { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
-.nudge:active { transform: translate(-50%, 0) scale(0.97); }
-.nudge__staff { width: 30px; height: 20px; overflow: visible; }
-.nudge__staff path { stroke: rgba(255, 255, 255, 0.55); stroke-width: 1; fill: none; }
-.nudge__note { fill: #fff; transform-box: fill-box; transform-origin: center; rotate: -20deg; animation: lean 2.6s cubic-bezier(0.3, 0, 0.3, 1) infinite; transition: fill 0.2s; }
-@keyframes lean { 0%, 62%, 100% { translate: 0 0; } 74% { translate: 0 -1.4px; } 86% { translate: 0 -0.3px; } }
-.nudge:hover .nudge__note { animation: none; translate: 0 -1.2px; fill: #8fd3ad; transition: translate 0.25s var(--ease-out), fill 0.2s; }
-.nudge.is-resolved .nudge__note { animation: none; translate: 0 -2px; fill: #8fd3ad; transition: translate 0.3s var(--ease-out); }
-.nudge__arrow { opacity: 0.7; }
-@media (prefers-reduced-motion: reduce) { .nudge__note { animation: none; } }
-
