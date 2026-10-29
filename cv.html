@@ -15,7 +15,7 @@
     font-style: normal;
     font-display: swap;
   }
-  @page { size: A4; margin: 14mm 16mm; }
+  @page { size: A4; margin: 13mm 16mm; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: "Jost", "Futura", "Avenir Next", "Century Gothic",
@@ -27,7 +27,7 @@
 
   /* Screen only. @page owns the sheet when printing, but it says nothing to a
      browser window, so on screen the document used to run the full viewport
-     width with no margins. Restate A4 (210×297mm, the same 14/16mm margins)
+     width with no margins. Restate A4 (210×297mm, the same 13/16mm margins)
      as a centered sheet on a gray desk, so what you read here is what prints.
      max-width keeps it from overflowing a phone. Print is untouched. */
   @media screen {
@@ -37,7 +37,7 @@
       max-width: 100%;
       min-height: 297mm;
       margin: 24px auto;
-      padding: 14mm 16mm;
+      padding: 13mm 16mm;
       background: #fff;
       box-shadow: 0 1px 5px rgba(0, 0, 0, 0.18);
     }
@@ -85,7 +85,9 @@
   /* the field before a forced line break gets no trailing separator */
   .fields .line-end::after { content: none !important; }
 
-  /* dense block (Collectives) folds into two columns, matching the web CV */
+  /* dense block (Collectives) folds into two columns, one line per group:
+     name and role only, so the CV stays on one page (the web CV keeps the
+     longer descriptions) */
   .cols2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 8mm; }
   .cols2 .entry + .entry { margin-top: 0; }
 </style>
@@ -122,6 +124,8 @@
     <div class="label">Experience</div>
     <div>
       <div class="entry"><div><div class="main">Interdisciplinary Seminar on Machine Intelligence · ISMI</div><div class="sub">Co-organizer&nbsp;· Student-Directed Seminar, SNU Student-Directed Education (SDE)&nbsp;· ₩500,000&nbsp;grant</div></div><div class="when">2026.08 – 2026.12</div></div>
+      <div class="entry"><div><div class="main">KAIST Music and Brain Lab · MuBL</div><div class="sub">Undergraduate Research Intern&nbsp;· Melodic Expectation at the Boundary of Vocal Range</div></div><div class="when">2026.07 – 2026.08</div></div>
+      <div class="entry"><div><div class="main">Hanjae Connect · Hanjae Foundation</div><div class="sub">Developer&nbsp;· internal app for scholars and alumni&nbsp;· React Native, Next.js, Supabase</div></div><div class="when">2026.07 – 2026.08</div></div>
       <div class="entry"><div><div class="main">The Effect of Providing Social Presence on University Students’ Cognitive Disengagement in Learning with Socratic AI</div><div class="sub">Undergraduate Researcher&nbsp;· Independent Research, SNU Student-Directed Education (SDE)&nbsp;· ₩7,000,000&nbsp;grant</div></div><div class="when">2026.05 – 2026.12</div></div>
       <div class="entry"><div><div class="main">SNU Connectome Lab</div><div class="sub">Undergraduate Research Intern</div></div><div class="when">2025.12 – 2026.02</div></div>
       <div class="entry"><div><div class="main">Republic of Korea Air Force</div><div class="sub">Military service</div></div><div class="when">2023.10 – 2025.07</div></div>
@@ -131,12 +135,12 @@
   <div class="section">
     <div class="label">Collectives</div>
     <div class="cols2">
-      <div class="entry"><div><div class="main">JAME</div><div class="sub">College of Humanities band&nbsp;· Vocal&nbsp;· 19th-gen Leader</div></div><div class="when">2021.03 – 2023.02</div></div>
-      <div class="entry"><div><div class="main">Rgorhythm</div><div class="sub">Psychology dept. band&nbsp;· Vocal&nbsp;· Founder</div></div><div class="when">2022.03 – present</div></div>
-      <div class="entry"><div><div class="main">Soundream</div><div class="sub">Composition club</div></div><div class="when">2022.09 – 2023.02</div></div>
-      <div class="entry"><div><div class="main">Triple H</div><div class="sub">Vocal &amp; hip-hop club&nbsp;· Vocal</div></div><div class="when">2023.03 – 2026.02</div></div>
-      <div class="entry"><div><div class="main">AERG</div><div class="sub">Drama society, College of Fine Arts&nbsp;· Sound team</div></div><div class="when">2023.03 – 2023.08</div></div>
-      <div class="entry"><div><div class="main">BAB</div><div class="sub">College of Liberal Studies acoustic band&nbsp;· Vocal</div></div><div class="when">2025.09 – 2026.08</div></div>
+      <div class="entry"><div><div class="main">JAME <span class="was">Vocal&nbsp;· 19th-gen Leader</span></div></div><div class="when">2021 – 2023</div></div>
+      <div class="entry"><div><div class="main">Rgorhythm <span class="was">Vocal&nbsp;· Founder</span></div></div><div class="when">2022 – present</div></div>
+      <div class="entry"><div><div class="main">Soundream <span class="was">Composition</span></div></div><div class="when">2022 – 2023</div></div>
+      <div class="entry"><div><div class="main">Triple H <span class="was">Vocal</span></div></div><div class="when">2023 – 2026</div></div>
+      <div class="entry"><div><div class="main">AERG <span class="was">Sound team</span></div></div><div class="when">2023</div></div>
+      <div class="entry"><div><div class="main">BAB <span class="was">Vocal</span></div></div><div class="when">2025 – 2026</div></div>
     </div>
   </div>
 
