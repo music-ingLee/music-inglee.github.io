@@ -396,7 +396,7 @@
   let readIO = null;
   function watchReading(top) {
     if (readIO) readIO.disconnect();
-    const room = innerHeight - top;
+    const room = Math.max(0, innerHeight - top);
     readIO = new IntersectionObserver((es) => {
       es.forEach((e) => {
         if (!e.isIntersecting) return;
@@ -646,11 +646,58 @@
   // and tells the page how tall it stands (anchors land below it)
   const panelEl = $('.score');
   function fitScore() {
+    placePlates();
     svg.setAttribute('viewBox', wideEnough.matches ? `0 0 ${W} ${BOT + 54}` : `0 50 ${W} ${BOT + 44 - 50}`);
     html.style.setProperty('--score-h', wideEnough.matches ? '0px' : `${panelEl.offsetHeight}px`);
     watchReading(wideEnough.matches ? 0 : parseFloat(getComputedStyle(panelEl).top) + panelEl.offsetHeight);
   }
   new ResizeObserver(fitScore).observe(panelEl);
+
+  /* the four field pictures: under the score beside the intro on wide screens, at the end of
+     the intro on phones. A picture and its field word light each other (the pictures are
+     fields too, so the line lights as well); a press opens the picture large. On wide
+     screens they wait until the score has landed and step away once the intro is read. */
+  const plates = $('.plates'), aboutEl = $('#about');
+  function placePlates() {
+    if (!plates) return;
+    if (wideEnough.matches) { if (plates.parentNode !== panelEl) $('.score__cap').after(plates); }
+    else if (plates.parentNode !== aboutEl) $('.define', aboutEl).before(plates);
+  }
+  if (plates) {
+    const all = $$('.plate', plates);
+    const glow = (t) => {
+      plates.classList.toggle('has-on', t != null);
+      all.forEach((p) => p.classList.toggle('is-on', t != null && p.dataset.thread === t));
+    };
+    $$('.field').forEach((f) => {
+      f.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') glow(f.dataset.thread); });
+      f.addEventListener('pointerleave', () => glow(null));
+    });
+    const lb = document.createElement('dialog');
+    lb.className = 'lb';
+    lb.innerHTML = '<figure><img alt=""><figcaption><b></b><span class="lb__t"></span><span class="lb__n"></span><small></small></figcaption></figure><button class="lb__x" type="button" aria-label="닫기">×</button>';
+    document.body.append(lb);
+    all.forEach((p) => p.addEventListener('click', (e) => {
+      if (!lb.showModal) return;   // no dialog support: the link opens the picture itself
+      e.preventDefault();
+      const img = $('img', lb);
+      img.src = p.getAttribute('href');
+      img.alt = p.dataset.title;
+      $('b', lb).textContent = $('.plate__cap b', p).textContent;
+      $('.lb__t', lb).textContent = p.dataset.title;
+      $('.lb__n', lb).textContent = p.dataset.caption;
+      $('small', lb).textContent = p.dataset.credit;
+      lb.showModal();
+    }));
+    lb.addEventListener('click', (e) => { if (e.target === lb || e.target.closest('.lb__x')) lb.close(); });
+    const away = () => {
+      const landed = panelEl.getBoundingClientRect().top <= (parseFloat(getComputedStyle(panelEl).top) || 0) + 0.5;
+      html.classList.toggle('plates-away', wideEnough.matches && ((turnOn && !landed) || aboutEl.getBoundingClientRect().bottom < innerHeight * 0.42));
+    };
+    addEventListener('scroll', () => requestAnimationFrame(away), { passive: true });
+    addEventListener('resize', away);
+    away();
+  }
 
   function setupTurn() {
     fitScore();
