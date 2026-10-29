@@ -40,12 +40,13 @@
      Music is written a period at a time: two phrases that belong together. The first
      (antecedent) walks a chord progression and stops, half open, on V. The second
      (consequent) answers with the first phrase's opening intervals and closes on I,
-     through re or ti, with a sixth beneath. Only then does it breathe. Periods return
+     through re or ti, with a sixth beneath, held for the last half bar. Periods return
      as A, A′, B, A′: A′ opens with A's motif, B moves higher and starts away from home.
-     A phrase is eight or nine chords of two beats: four that set out the key, then four
-     or five that approach the cadence. The answer repeats the question's first four
-     (B's answer comes home instead), so the two halves of a period are heard as a pair.
-     Each chord holds two or three notes with a rhythm. Each note is weighed by how
+     A phrase is four bars of 4/4, eight chords of two beats: an opening that sets out
+     the key, then four or five chords that approach the cadence. The answer repeats the
+     question's opening (B's answer comes home instead), so the two halves of a period
+     are heard as a pair, and every phrase and period begins on a downbeat.
+     Each chord holds two or three notes in a rhythm that fills its two beats. Each note is weighed by how
      stable it sounds in the key (Krumhansl & Kessler), how close it is to the last
      note, whether it belongs to the chord (more so on the chord's first note), how
      near it stays to the middle of the voice, and, after a leap, a turn back. */
@@ -58,7 +59,7 @@
   const ANTE = [['I', 'IV', 'ii', 'V'], ['I', 'vi', 'IV', 'V'], ['vi', 'IV', 'I', 'V'], ['I', 'iii', 'vi', 'V'], ['IV', 'I', 'ii', 'V'], ['I', 'vi', 'ii', 'IV', 'V']];
   const ANTE_B = [['vi', 'iii', 'IV', 'V'], ['IV', 'iii', 'ii', 'V'], ['ii', 'vi', 'IV', 'V'], ['vi', 'ii', 'iii', 'IV', 'V']];
   const CONS = [['I', 'IV', 'V', 'I'], ['vi', 'ii', 'V', 'I'], ['IV', 'ii', 'V', 'I'], ['I', 'vi', 'ii', 'V', 'I'], ['iii', 'vi', 'ii', 'V', 'I']];
-  const RHY = { 2: [[1, 1], [1.5, 0.5], [1, 1], [0.5, 1.5]], 3: [[1, 0.5, 0.5], [0.5, 0.5, 1], [1, 1, 1], [1.5, 0.5, 1]] };
+  const RHY = { 2: [[1, 1], [1.5, 0.5], [1, 1], [0.5, 1.5]], 3: [[1, 0.5, 0.5], [0.5, 0.5, 1], [0.5, 1, 0.5]] };   // each fills two beats
   const bassOf = (root) => (root >= 7 ? 36 : 48) + root;
 
   function melody(seed) {
@@ -110,8 +111,13 @@
       });
       return out;
     }
-    // an opening and a way to the cadence, never the same chord twice across the seam
-    const join = (open, ends) => { let end; do end = one(ends); while (end[0] === open[open.length - 1]); return [...open, ...end]; };
+    // an opening and a way to the cadence, eight chords in all (a five-chord way takes three
+    // of the opening), never the same chord twice across the seam
+    const join = (open, ends) => {
+      let end, head;
+      do { end = one(ends); head = open.slice(0, 8 - end.length); } while (end[0] === head[head.length - 1]);
+      return [...head, ...end];
+    };
     function period() {
       const kind = ['A', 'A2', 'B', 'A2'][form++ % 4];
       center = kind === 'B' ? 74 : 70;
@@ -444,16 +450,39 @@
     strip.replaceChildren();
     for (let i = 0; i < 5; i++) el('line', { x1: 0, x2: '100%', y1: 6 + i * 5, y2: 6 + i * 5 }, strip);
   }
-  function stripNote(m, small) {
+  // everything written on the strip enters at the right edge and drifts left as it fades
+  function drift(g) {
+    const w = strip.clientWidth, travel = reduce ? 0 : -w * 0.78;
+    g.animate([{ transform: 'translateX(0)', opacity: 1 }, { transform: `translateX(${travel}px)`, opacity: 0 }],
+      { duration: reduce ? 1400 : 9000, easing: 'linear', fill: 'forwards' }).onfinish = () => g.remove();
+  }
+  // a note as it is written: hollow for a half, dotted for a dotted value, a stem (down from
+  // the middle line up, up below it) and a flag for each eighth or sixteenth
+  function stripNote(m, small, dur) {
     const w = strip.clientWidth;
     const p = stepOf(m), y = 26 - p * 2.5, x = w - 14;
     const g = el('g', { class: small ? 'sn sn--orn' : 'sn' }, strip);
     if (p <= -2) el('line', { x1: x - 6, x2: x + 6, y1: 31, y2: 31 }, g);
     if (p >= 10) el('line', { x1: x - 6, x2: x + 6, y1: 1, y2: 1 }, g);
-    el('ellipse', { cx: x, cy: y, rx: small ? 2.3 : 3.4, ry: small ? 1.7 : 2.5, transform: `rotate(-20 ${x} ${y})` }, g);
-    const travel = reduce ? 0 : -w * 0.78;
-    g.animate([{ transform: 'translateX(0)', opacity: 1 }, { transform: `translateX(${travel}px)`, opacity: 0 }],
-      { duration: reduce ? 1400 : 9000, easing: 'linear', fill: 'forwards' }).onfinish = () => g.remove();
+    const rx = small ? 2.3 : 3.4, ry = small ? 1.7 : 2.5;
+    const head = el('ellipse', { cx: x, cy: y, rx, ry, transform: `rotate(-20 ${x} ${y})` }, g);
+    if (dur >= 2) head.setAttribute('class', 'open');
+    if (dur === 1.5) el('circle', { class: 'dot', cx: x + rx + 2.4, cy: p % 2 ? y : y - 2.5, r: 0.9 }, g);   // a dot sits in a space
+    const up = p < 4, side = up ? 1 : -1, len = small ? 9 : 13;
+    const sx = x + side * (rx - 0.5), y0 = y - side * 0.6, tip = y - side * len;
+    el('line', { class: 'stem', x1: sx, x2: sx, y1: y0, y2: tip }, g);
+    const flags = dur <= 0.25 ? 2 : dur <= 0.5 ? 1 : 0;
+    for (let i = 0; i < flags; i++) {
+      const fy = tip + side * i * 3.2;
+      el('path', { class: 'flag', d: `M${sx} ${fy}c0.4 ${side * 2.6} 4 ${side * 3.2} 3.6 ${side * 7}` }, g);
+    }
+    drift(g);
+  }
+  function stripBar() {
+    const x = strip.clientWidth - 23;
+    const g = el('g', {}, strip);
+    el('line', { class: 'bar', x1: x, x2: x, y1: 6, y2: 26 }, g);
+    drift(g);
   }
   const at = (t) => Math.max(0, t - ctx.currentTime - 0.02);   // audio time → the offset pluck() takes
   const show = (t, fn) => setTimeout(fn, Math.max(0, (t - ctx.currentTime) * 1000));
@@ -497,6 +526,7 @@
   }
 
   let timer = 0, cur = null, nxt = null, tCur = 0, slot = 1, fig8 = [], fig16 = [], pending = [];
+  let beat = 0;   // where the music stands in the bar (beats since it began)
   const nextMain = () => (pending.length ? pending.shift() : gen.next());
   function begin(ev, t) {
     cur = ev; tCur = t; slot = 1;
@@ -505,13 +535,15 @@
     fig8 = figure(ev.m, nxt.m, Math.round(2 * room) - 1);
     fig16 = figure(ev.m, nxt.m, Math.round(4 * room) - 1);
     sound(ev, 0.75, at(t));
-    show(t, () => stripNote(ev.m, false));
+    const downbeat = beat % 4 === 0;
+    beat += ev.dur;
+    show(t, () => { if (downbeat) stripBar(); stripNote(ev.m, false, ev.dur); });
   }
   function schedule() {
     if (!soundOn) return;
     const horizon = ctx.currentTime + 0.12;
     for (;;) {
-      const end = tCur + (cur.dur + (cur.end ? 1 : 0)) * BEAT;
+      const end = tCur + cur.dur * BEAT;
       const tSlot = tCur + slot * SUB;
       if (slot < Math.round(4 * cur.dur) && tSlot < end - 1e-4) {
         if (tSlot > horizon) break;
@@ -522,7 +554,7 @@
         else if (lv === 1 && eighth) m = fig8[slot / 2 - 1];
         if (m != null) {
           pluck(m, eighth ? 0.5 : 0.4, at(tSlot));
-          show(tSlot, () => stripNote(m, true));
+          show(tSlot, () => stripNote(m, true, lv === 2 ? 0.25 : 0.5));
         }
         slot++;
       } else {

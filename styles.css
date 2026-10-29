@@ -97,6 +97,10 @@ a { color: inherit; }
 .strip line { stroke: var(--green); stroke-width: 1; opacity: 0.55; }
 .strip .sn { fill: var(--ink); }
 .strip .sn--orn { fill: var(--green); }
+.strip .sn .stem, .strip .sn .flag { fill: none; stroke: var(--ink); stroke-width: 1; opacity: 1; }
+.strip .sn .open { fill: none; stroke: var(--ink); stroke-width: 1.1; }
+.strip .sn--orn .stem, .strip .sn--orn .flag { stroke: var(--green); stroke-width: 0.8; }
+.strip .bar { stroke: var(--ink); stroke-width: 1; opacity: 0.45; }
 
 /* ---------- hero ---------- */
 .hero {
