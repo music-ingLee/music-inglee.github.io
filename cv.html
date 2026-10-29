@@ -15,7 +15,7 @@
     font-style: normal;
     font-display: swap;
   }
-  @page { size: A4; margin: 12mm 16mm; }
+  @page { size: A4; margin: 14mm 16mm; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: "Jost", "Futura", "Avenir Next", "Century Gothic",
@@ -27,7 +27,7 @@
 
   /* Screen only. @page owns the sheet when printing, but it says nothing to a
      browser window, so on screen the document used to run the full viewport
-     width with no margins. Restate A4 (210×297mm, the same 12/16mm margins)
+     width with no margins. Restate A4 (210×297mm, the same 14/16mm margins)
      as a centered sheet on a gray desk, so what you read here is what prints.
      max-width keeps it from overflowing a phone. Print is untouched. */
   @media screen {
@@ -37,7 +37,7 @@
       max-width: 100%;
       min-height: 297mm;
       margin: 24px auto;
-      padding: 12mm 16mm;
+      padding: 14mm 16mm;
       background: #fff;
       box-shadow: 0 1px 5px rgba(0, 0, 0, 0.18);
     }
@@ -65,7 +65,12 @@
     color: #1e6e43; font-weight: 700; padding-top: 2px;
   }
 
-  .entry { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+  /* the date sits on the title line only, so it is pinned there and the
+     description below runs the full width, under the date too */
+  .entry { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; position: relative; }
+  .entry > div:first-child { flex: 1 1 auto; min-width: 0; }
+  .entry .main { padding-right: 27mm; }
+  .cols2 .entry .main { padding-right: 24mm; }
   .entry + .entry { margin-top: 7px; }
   .entry .main { font-weight: 600; }
   .entry .sub { color: #6a6a6a; font-weight: 400; font-size: 9pt; margin-top: 1px; }
@@ -73,7 +78,7 @@
      clicked in the PDF, not to shout */
   .entry .sub a { color: inherit; text-decoration: none; }
   .entry .main .was { color: #6a6a6a; font-weight: 400; }
-  .entry .when { color: #6a6a6a; font-size: 8.6pt; white-space: nowrap; text-align: right; flex: 0 0 auto; font-variant-numeric: tabular-nums; }
+  .entry .when { color: #6a6a6a; font-size: 8.6pt; white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; position: absolute; top: 0; right: 0; line-height: inherit; padding-top: 0.12em; }
 
   .fields { font-weight: 600; }
   .fields span:not(:last-child)::after { content: "  ·  "; color: #b3b3b3; font-weight: 400; }
@@ -116,8 +121,8 @@
   <div class="section">
     <div class="label">Experience</div>
     <div>
-      <div class="entry"><div><div class="main">Interdisciplinary Seminar on Machine Intelligence · ISMI</div><div class="sub">Co-organizer&nbsp;· SNU Student-Directed Education (SDE) Regular Program</div></div><div class="when">2026.08 – 2026.12</div></div>
-      <div class="entry"><div><div class="main">Science of Learning · Team SoLT</div><div class="sub">Undergraduate Researcher&nbsp;· SNU Student-Directed Education Undergraduate Research Program&nbsp;· ₩7,000,000 grant</div></div><div class="when">2026.05 – 2026.12</div></div>
+      <div class="entry"><div><div class="main">Interdisciplinary Seminar on Machine Intelligence · ISMI</div><div class="sub">Co-organizer&nbsp;· Student-Directed Seminar, SNU Student-Directed Education (SDE)&nbsp;· ₩500,000&nbsp;grant</div></div><div class="when">2026.08 – 2026.12</div></div>
+      <div class="entry"><div><div class="main">The Effect of Providing Social Presence on University Students’ Cognitive Disengagement in Learning with Socratic AI</div><div class="sub">Undergraduate Researcher&nbsp;· Independent Research, SNU Student-Directed Education (SDE)&nbsp;· ₩7,000,000&nbsp;grant</div></div><div class="when">2026.05 – 2026.12</div></div>
       <div class="entry"><div><div class="main">SNU Connectome Lab</div><div class="sub">Undergraduate Research Intern</div></div><div class="when">2025.12 – 2026.02</div></div>
       <div class="entry"><div><div class="main">Republic of Korea Air Force</div><div class="sub">Military service</div></div><div class="when">2023.10 – 2025.07</div></div>
     </div>
