@@ -1,1021 +1,339 @@
-/* ============================================================
-   MoMA-inspired · stark white/black · bold grotesque · grid
-   studyForest green kept as a single interaction accent
-   ============================================================ */
+/* 녹색 오선 · one motif: the staff. White page, black type, green lines. */
 
-/* Jost (SIL OFL, bundled — assets/fonts/Jost-OFL.txt), the same face
-   daily-todo ships: an open-source Futura successor, so the geometric
-   look survives on machines without Futura. One variable file, 100–900.
-   woff2 first (50 KB); the raw variable TTF is the fallback. */
 @font-face {
   font-family: "Jost";
   src: url("assets/fonts/Jost-var.woff2") format("woff2-variations"),
-       url("assets/fonts/Jost-var.ttf") format("truetype-variations");
+       url("assets/fonts/Jost-var.woff2") format("woff2");
   font-weight: 100 900;
-  font-style: normal;
   font-display: swap;
 }
 
 :root {
-  --bg:        #ffffff;   /* pure white */
-  --panel:     #fafafa;
-  --text:      #0a0a0a;   /* near-black */
-  --ink:       #000000;   /* headings */
-  --muted:     #585858;   /* neutral gray */
-  --faint:     #8c8c8c;
-  --line:      #e4e4e4;   /* light hairline — quiet row dividers */
-  --line-2:    #9a9a9a;   /* link underline — present, not loud */
-  --rule:      #111111;   /* strong graphic rule */
-  --accent:    #2f8f5b;   /* studyForest green — interaction only */
-  --accent-ink:#1e6e43;
-  --maxw: 1400px;
-  --gutter: clamp(1.5rem, 7vw, 4rem);
-  /* One reading measure for the whole site. A Hangul glyph in Pretendard is a
-     flat 0.86em wide at every size, so 40 characters is 34.4em — and because
-     em resolves against whatever element uses the token, the same value gives
-     the 16px work copy and the 23px About lede the same 40-character rhythm.
-     40 is the ceiling: past it the eye loses the next line's start on return. */
-  --measure: 34.4em;
-  /* how tall every works plate stands. Sized so the widest ratio (the 1.34
-     video) still fits in what is left beside a full measure of copy — that is
-     what lets the plate sit right against the text instead of across a hole.
-     At this height every plate also lands within ~40px of its copy's baseline. */
-  --plate-h: clamp(12rem, 19.5vw, 18.5rem);
-  /* Jost carries Latin; Pretendard Variable (loaded via CDN) carries Hangul.
-     Jost has no Hangul glyphs, so every Korean run falls through to Pretendard
-     glyph-by-glyph, and mixed script stays clean. Futura/Avenir Next stand in
-     if the bundled file fails to load. */
-  --font-sans: "Jost", "Futura", "Avenir Next", "Century Gothic",
-               "Pretendard Variable", "Pretendard", -apple-system,
-               BlinkMacSystemFont, "Apple SD Gothic Neo", "Helvetica Neue",
-               Arial, sans-serif;
+  --bg: #ffffff;
+  --ink: #111311;
+  --text: #1b1d1b;
+  --muted: #5f6661;
+  --green: #2f8f5b;        /* the site's own green, now its one colour */
+  --green-deep: #1f6b43;   /* green that reads as text on white */
+  --green-wash: #eef6f1;
+  --plate: #0f1411;
+  --measure: 34.4em;       /* 40 Hangul characters */
+  --gutter: clamp(20px, 5vw, 72px);
+  --nav-h: 60px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  font-family: "Jost", "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+               "Apple SD Gothic Neo", "Helvetica Neue", Arial, sans-serif;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 88px;
-  -webkit-text-size-adjust: 100%;
-}
-
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 24px); }
 body {
-  font-family: var(--font-sans);
-  background: var(--bg);
-  color: var(--text);
-  overflow-x: clip;        /* contain the hero staff's full-bleed right edge */
-  line-height: 1.5;
-  font-weight: 400;
-  letter-spacing: -0.005em;
+  background: var(--bg); color: var(--text);
+  font-size: 1.0625rem; line-height: 1.7;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+  word-break: keep-all; overflow-wrap: break-word;   /* Korean breaks between words */
+  overflow-x: clip;
 }
+img, svg, video { display: block; max-width: 100%; }
+a { color: inherit; }
+::selection { background: var(--green); color: #fff; }
+:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; border-radius: 2px; }
 
-a { color: inherit; text-decoration: none; }
-/* green text-selection — the page's signature.
-   Use a literal color: var() is unreliable inside ::selection. */
-::selection { background: #2f8f5b; color: #fff; }
-::-moz-selection { background: #2f8f5b; color: #fff; }
+.wrap { width: 100%; max-width: 1400px; margin-inline: auto; padding-inline: var(--gutter); }
 
-/* ---------- shared ---------- */
-.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); }
+/* ---------- nav ---------- */
+.nav { position: sticky; top: 0; z-index: 40; background: var(--bg); }
+.nav__inner { height: var(--nav-h); display: flex; align-items: center; gap: 2rem; }
+.nav__brand { font-weight: 700; font-size: 1rem; text-decoration: none; color: var(--ink); margin-right: auto; }
+.nav__links { display: flex; gap: 1.6rem; }
+.nav__links a { font-size: 0.95rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.nav__links a:hover { color: var(--green-deep); }
 
-/* ---------- top inversion band ("shredder") ----------
-   a fixed dark zone over the top ~1/5 of the viewport. always fully
-   inverted: anything that scrolls up past this line flips to black bg /
-   white text. constant — independent of scroll depth. the bottom edge is
-   masked so the blade fades softly instead of a hard line.
-   sits ABOVE the nav (z 60 > 50) so the banner inverts (stays black); the
-   photo is clipped at the nav line (script.js) so it still slides under it.
-   pointer-events: none keeps the menu clickable. */
-.invert-band {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 200px;          /* between the earlier 220px (too long) and 176px (too short) */
-  z-index: 60;
-  pointer-events: none;
-  backdrop-filter: invert(1);
-  -webkit-backdrop-filter: invert(1);
-  /* eased fade: small solid cap, then an ease-out tail that approaches 0
-     gradually so there's no Mach-band "line" where the gradient ends */
-  -webkit-mask-image: linear-gradient(to bottom,
-      rgba(0,0,0,1) 0%, rgba(0,0,0,1) 8%, rgba(0,0,0,0.93) 22%,
-      rgba(0,0,0,0.68) 42%, rgba(0,0,0,0.35) 62%, rgba(0,0,0,0.12) 80%,
-      rgba(0,0,0,0.03) 92%, rgba(0,0,0,0) 100%);
-          mask-image: linear-gradient(to bottom,
-      rgba(0,0,0,1) 0%, rgba(0,0,0,1) 8%, rgba(0,0,0,0.93) 22%,
-      rgba(0,0,0,0.68) 42%, rgba(0,0,0,0.35) 62%, rgba(0,0,0,0.12) 80%,
-      rgba(0,0,0,0.03) 92%, rgba(0,0,0,0) 100%);
+.sound {
+  display: none; align-items: center; gap: 0.5rem;
+  font: inherit; font-size: 0.92rem; font-weight: 600; color: var(--ink);
+  background: none; border: 0; padding: 0.55rem 0; cursor: pointer;
 }
-@media (prefers-reduced-motion: reduce) { .invert-band { display: none; } }
+.js .sound { display: inline-flex; }
+.sound__dot {
+  width: 0.62rem; height: 0.46rem; border-radius: 50%;
+  border: 1.6px solid var(--green); transform: rotate(-20deg);
+  transition: background-color 0.2s;
+}
+.sound[aria-pressed="true"] .sound__dot { background: var(--green); }
+/* armed: on, waiting for the first touch to be allowed to sound */
+.sound-armed .sound__dot { animation: breathe 1.8s ease-in-out infinite; }
+@keyframes breathe { 50% { opacity: 0.35; } }
+@media (prefers-reduced-motion: reduce) { .sound-armed .sound__dot { animation: none; } }
+.sound:active { transform: scale(0.97); }
 
-/* labels speak through weight and color, not tracked-out uppercase */
-.rail {
-  font-size: 0.8rem;
-  color: var(--ink);
-  font-weight: 700;
-}
-.rail .num { color: var(--accent); }
-
-/* ---------- navigation ---------- */
-.nav {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  /* solid (no backdrop-filter blur): the top invert-band is the one effect
-     worth its compositing cost — the nav's frosted blur was a second
-     per-frame backdrop-filter and the main removable source of scroll lag */
-  background: var(--bg);
-}
-/* inner shares the content max-width so the brand lines up with the body's
-   left edge and the links with its right edge — nav and content read as one */
-.nav__inner {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 1rem var(--gutter);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-.nav__brand {
-  font-size: 1.05rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-.nav__links { display: flex; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
-.nav__links a {
-  font-size: 0.85rem;
-  color: var(--muted);
-  font-weight: 600;
-  position: relative;
-  padding-bottom: 3px;
-  transition: color 0.2s ease;
-}
-.nav__links a::after {
-  content: "";
-  position: absolute;
-  left: 0; bottom: 0;
-  width: 100%; height: 2px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.28s cubic-bezier(.2,.7,.2,1);
-}
-.nav__links a:hover, .nav__links a.active { color: var(--ink); }
-.nav__links a:hover::after, .nav__links a.active::after { transform: scaleX(1); }
+/* the melody's own staff, open only while the sound is on */
+/* it hangs below the nav instead of pushing the page down when it opens */
+.strip { position: absolute; left: 0; right: 0; top: 100%; background: var(--bg); height: 0; overflow: hidden; transition: height 0.35s var(--ease-out); }
+.sound-on .strip { height: 34px; }
+.strip svg { width: 100%; height: 34px; overflow: visible; }
+.strip line { stroke: var(--green); stroke-width: 1; opacity: 0.55; }
+.strip .sn { fill: var(--ink); }
+.strip .sn--orn { fill: var(--green); }
 
 /* ---------- hero ---------- */
 .hero {
-  min-height: 88vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  /* vertical only — keep .wrap's horizontal gutter so the hero
-     lines up with the nav instead of hugging the window edge */
-  padding-top: 6rem;
-  padding-bottom: 4rem;
+  /* the hero is a screen of its own: nothing below it shows while it is in view */
+  min-height: calc(100svh - var(--nav-h));
+  display: flex; flex-direction: column; justify-content: center;
+  padding-block: 2rem 4rem;
 }
-/* name + a plain 5-line staff running off to the right,
-   sized to the name's height (the 5 lines stretch to fill it) */
-.hero__namerow { display: flex; align-items: stretch; gap: clamp(1rem, 3vw, 2.6rem); }
-.hero__staff {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 0.07em 0;       /* nudge top/bottom lines inside the glyph height */
-  /* break out of the centered .wrap so the staff reaches the window's right edge */
-  margin-right: calc(50% - 50vw);
-}
-.hero__staff i { display: block; height: clamp(3px, 0.5vw, 6px); background: #000; }
+.hero__row { display: flex; align-items: stretch; gap: clamp(1rem, 3vw, 2.6rem); }
 .hero__name {
-  font-size: clamp(3rem, 13vw, 9.5rem);
-  font-weight: 800;
-  line-height: 0.92;
-  letter-spacing: -0.02em;   /* Hangul: set in Pretendard, unaffected by the Jost swap */
-  margin-left: -0.04em;      /* optical: 이's left side bearing, so ink (not the
-                                glyph box) lines up with the lines below */
-  color: var(--ink);
+  font-size: clamp(3.2rem, 11vw, 8.6rem); font-weight: 800; line-height: 0.92;
+  letter-spacing: -0.02em; margin-left: -0.04em; color: var(--ink); white-space: nowrap;
 }
-.hero__aka {
-  margin-top: 1.1rem;
-  font-size: clamp(1rem, 2vw, 1.3rem);
-  font-weight: 600;
-  color: var(--muted);
+.hero__staff {
+  position: relative; flex: 1;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 0.07em 0;
+  margin-right: calc(50% - 50vw);   /* run to the window's right edge */
 }
-.hero__role {
-  margin-top: 1.4rem;
-  font-size: clamp(1.05rem, 2.2vw, 1.5rem);
-  font-weight: 500;
-  color: var(--text);
-  max-width: 34ch;
-}
-.hero__meta {
-  margin-top: 3.5rem;
-  display: flex;
-  gap: 2.5rem;
-  flex-wrap: wrap;
-  font-size: 0.8rem;
-  color: var(--muted);
-  font-weight: 500;
-}
-.hero__meta a { color: var(--ink); border-bottom: 2px solid var(--line-2); padding-bottom: 1px; transition: border-color 0.2s; }
-.hero__meta a:hover { border-color: var(--ink); }
-.hero__meta a:hover { border-color: var(--accent); }
+.hero__staff i { display: block; height: clamp(3px, 0.42vw, 6px); background: var(--green); transform-origin: left; }
+.js .hero__staff i { animation: draw 900ms var(--ease-out) both; }
+.js .hero__staff i:nth-child(2) { animation-delay: 50ms; }
+.js .hero__staff i:nth-child(3) { animation-delay: 100ms; }
+.js .hero__staff i:nth-child(4) { animation-delay: 150ms; }
+.js .hero__staff i:nth-child(5) { animation-delay: 200ms; }
+@keyframes draw { from { transform: scaleX(0); } }
+.hero__notes { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+.hn__head { fill: none; stroke: var(--ink); transition: fill 0.15s, stroke 0.15s; }
+.hn__ledger { fill: var(--green); }
+.hn.is-on .hn__head { fill: var(--green); stroke: var(--green); }
+.js .hn { animation: pop 500ms var(--ease-out) both; }
+@keyframes pop { from { opacity: 0; transform: translateY(-6px); } }
 
-/* ---------- manifesto: musicking (museum wall-label) ---------- */
-.statement { padding: 5.5rem 0; border-top: 2px solid var(--rule); }
-.lexicon {
-  margin-top: 1.6rem;
-  max-width: 760px;
-  border-left: 3px solid var(--accent);
-  padding-left: clamp(1.2rem, 3vw, 2.4rem);
-}
-.lexicon__word {
-  font-size: clamp(2.4rem, 8vw, 5.5rem);
-  font-weight: 800;
-  /* Jost's bowls are true circles, so it collides far earlier than Inter did:
-     the old -0.045em is relaxed across every Latin display slot below. */
-  letter-spacing: -0.02em;
-  line-height: 0.95;
-  margin-left: -0.055em;     /* optical: Jost m's lsb @800 = 0.0548em */
-  color: var(--ink);
-}
-.lexicon__pron {
-  display: inline-block;
-  margin-left: 0.6em;
-  font-size: clamp(0.85rem, 1.6vw, 1.1rem);
-  font-weight: 500;
-  letter-spacing: 0;
-  color: var(--muted);
-  vertical-align: middle;
-}
-.lex__label {
-  margin-top: 1.8rem;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--accent-ink);
-}
-.lex__etym {
-  margin-top: 0.5rem;
-  font-size: clamp(1rem, 1.8vw, 1.12rem);
-  color: var(--muted);
-  font-weight: 400;
-}
-.lex__etym em { font-style: italic; color: var(--text); font-weight: 600; }
-.lex__headword {
-  margin-top: 0.5rem;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--ink);
-}
-.lex__gram { font-style: italic; font-weight: 400; color: var(--muted); font-size: 0.95rem; }
-.lexicon__def {
-  margin-top: 0.6rem;
-  font-size: clamp(1.15rem, 2.3vw, 1.6rem);
-  font-weight: 500;
-  line-height: 1.45;
-  letter-spacing: -0.015em;
-  color: var(--text);
-}
-.lexicon__by {
-  margin-top: 1.8rem;
-  font-size: 0.92rem;
-  color: var(--muted);
-  font-weight: 500;
-}
-.lexicon__by .name { color: var(--ink); font-weight: 800; }
+.hero__aka { margin-top: 1.4rem; font-size: clamp(1rem, 1.6vw, 1.2rem); font-weight: 500; color: var(--muted); }
+.hero__role { margin-top: 0.6rem; font-size: clamp(1.1rem, 1.9vw, 1.35rem); color: var(--ink); }
+.hero__meta { margin-top: 0.3rem; font-size: 0.95rem; color: var(--muted); }
 
-/* ---------- section scaffold ---------- */
-.section { padding: 4rem 0; border-top: 2px solid var(--rule); }
-.section__grid {
+/* ---------- reading column + the score beside it ---------- */
+.split {
   display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: clamp(1.25rem, 3vw, 3rem);
+  grid-template-columns: minmax(0, 33rem) minmax(0, 1fr);
+  column-gap: clamp(2.5rem, 4.5vw, 5rem);
+  padding-bottom: 7rem;
 }
-/* pin the sticky head below the inversion band (200px) so the big title
-   isn't sliced by the gradient seam */
-.section__head { position: sticky; top: 216px; align-self: start; }
-.section__title {
-  font-size: clamp(1.9rem, 4vw, 3rem);
-  font-weight: 800;
-  letter-spacing: -0.02em;   /* Hangul titles */
-  margin-top: 0.7rem;
-  color: var(--ink);
-  line-height: 1;
-}
-/* optical alignment to the rail's ink: each title's first glyph carries a
-   different left side bearing (소 0.021em · 이 0.042em · 작 0 · 연 0.031em),
-   so the nudge is tuned per section, not shared */
-#about   .section__title { margin-left: -0.010em; }
-#cv      .section__title { margin-left: -0.031em; }
-#works   .section__title { margin-left:  0.010em; }
-#contact .section__title { margin-left: -0.021em; }
-.section__body { min-width: 0; }
-.lede {
-  font-size: clamp(1.1rem, 2vw, 1.45rem);
-  line-height: 1.5;
-  color: var(--text);
-  /* Deliberately uncapped, unlike every other text block on the page. The
-     portrait floats inside these paragraphs, so the lines beside it are held
-     to ~39 characters by the float itself, and the lines below it are meant
-     to run out to the column edge — which is exactly where the photo's right
-     edge sits. Any cap here stops the text short of that edge and the wrap
-     stops reading as a wrap. The cost is a long measure below the photo. */
-  font-weight: 500;
-  letter-spacing: -0.015em;
-}
-.lede + .lede { margin-top: 1.1rem; }
-.muted { color: var(--muted); font-weight: 400; }
+.block { grid-column: 1; padding-top: clamp(4rem, 9vh, 6.5rem); }
+.label { font-size: 0.95rem; font-weight: 700; color: var(--green-deep); margin-bottom: 1.3rem; }
 
-/* About: reading focus — the paragraph nearest the reading line is
-   emphasized, the rest recede. .active is toggled in script.js */
-/* the measure stays — uncapping it here was what let the two full-width
-   paragraphs run to 54 characters a line while the floated ones sat at 37 */
-#about .lede { color: var(--faint); transition: color 0.5s ease; }
-#about .lede.active { color: var(--ink); }
-@media (prefers-reduced-motion: reduce) { #about .lede { transition: none; } }
+/* about */
+.prose { max-width: var(--measure); font-size: 1.125rem; line-height: 1.8; color: var(--text); }
+.prose + .prose { margin-top: 1.1rem; }
+.define { margin-top: 1.6rem; max-width: var(--measure); font-size: 0.95rem; line-height: 1.6; color: var(--muted); }
+.define b { color: var(--ink); font-weight: 600; margin-right: 0.35em; }
+.field {
+  font-weight: 600; color: var(--ink); text-decoration: none; white-space: nowrap;
+  border-bottom: 1.5px solid rgba(47, 143, 91, 0.45);
+  transition: border-color 0.2s, color 0.2s;
+}
+.field:hover, .field:focus-visible, .field.is-on { color: var(--green-deep); border-color: var(--green); }
+.field__img {
+  position: relative; display: inline-block;
+  width: 1.5em; height: 1.06em; margin-right: 0.28em; vertical-align: -0.16em;
+  border-radius: 50%; overflow: hidden; transform: rotate(-20deg);
+  transition: transform 0.35s var(--ease-out);
+}
+.field__img img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.05); }
+.field:hover .field__img, .field:focus-visible .field__img { transform: rotate(-20deg) scale(2.2); z-index: 2; }
 
-/* ---------- about: pull-quote + four fields ---------- */
-.pullquote {
-  margin: 2.8rem 0;
-  font-size: clamp(1.45rem, 3.2vw, 2.2rem);
-  font-weight: 700;
-  letter-spacing: -0.015em;  /* mixed Hangul/Latin */
-  line-height: 1.22;
-  color: var(--ink);
+/* works */
+.work { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 1.3rem; padding-block: 1.4rem; }
+.work + .work { margin-top: 0.4rem; }
+.work__plate {
+  position: relative; width: 76px; height: 76px; border-radius: 18px; overflow: hidden;
+  background: var(--plate); display: grid; place-items: center;
+  transition: transform 0.25s var(--ease-out);
 }
-.fourfields {
-  margin-top: 2.4rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 1.2rem;
-}
-.fourfields span {
-  font-size: 1.02rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-}
-.fourfields span:not(:last-child)::after {
-  content: "/";
-  color: var(--faint);
-  margin-left: 1.2rem;
-  font-weight: 400;
-}
+.work__plate img { width: 64%; height: 64%; object-fit: contain; transition: transform 0.4s var(--ease-out); }
+.work__plate--warm { background: #201c15; }
+.work__plate--warm img { width: 100%; height: 100%; }
+.work__plate--media img, .work__plate video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.work__plate video { opacity: 0; transition: opacity 0.3s; }
+.work__plate--media.is-playing video { opacity: 1; }
+.work__plate:hover { transform: translateY(-2px); }
+.work__plate:hover img { transform: scale(1.08) rotate(-4deg); }
+.work__plate--media:hover img { transform: none; }
+.work__plate:active { transform: scale(0.97); }
+.work.is-on .work__plate { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--green); }
 
-/* ---------- about figure ---------- */
-/* About: text and portrait sit side by side so the section reads wide,
-   not tall. text takes the fluid column; the portrait caps at 340px */
-/* pullquote spans full width; the portrait floats right so the first two
-   paragraphs wrap beside it and the rest run full-width below it */
-.about__body { display: block; }
-.about__body::after { content: ""; display: block; clear: both; }
-.about__body > .pullquote { margin-bottom: 1.4rem; }
-.about__layout { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
-/* portrait floats right of the opening paragraphs, natural aspect */
-.figure { float: right; width: 300px; max-width: none; margin: 0.4rem 0 1.2rem 2.5rem; }
-/* only the image sits above the band (z61) so it isn't color-inverted; the
-   caption stays in flow and inverts like other text. a viewport-locked black
-   shade darkens the image top-down to match the band; overflow clips it to
-   the image. script.js clips the top at the nav line so it slides under nav. */
-.figure__media { position: relative; z-index: 61; overflow: hidden; display: block; }
-.figure__shade {
-  position: absolute; left: 0; width: 100%;
-  pointer-events: none;
-  /* same eased curve as the band mask, as actual black (darkens, no invert).
-     top + height are locked to the band in script.js */
-  background-image: linear-gradient(to bottom,
-    rgba(0,0,0,1) 0%, rgba(0,0,0,1) 8%, rgba(0,0,0,0.93) 22%,
-    rgba(0,0,0,0.68) 42%, rgba(0,0,0,0.35) 62%, rgba(0,0,0,0.12) 80%,
-    rgba(0,0,0,0.03) 92%, rgba(0,0,0,0) 100%);
+.work__title { font-size: 1.3rem; font-weight: 700; color: var(--ink); line-height: 1.3; }
+.work__was { font-size: 0.95rem; font-weight: 500; color: var(--muted); margin-left: 0.2rem; }
+.work__meta { font-size: 0.92rem; color: var(--muted); margin-top: 0.15rem; }
+.work__body > p:not(.work__meta) { margin-top: 0.6rem; max-width: var(--measure); }
+.work__links { display: flex; flex-wrap: wrap; gap: 0.4rem 1.3rem; }
+.work__meta a, .row__n a { color: inherit; text-decoration: none; border-bottom: 1.5px solid rgba(47, 143, 91, 0.45); transition: color 0.2s, border-color 0.2s; }
+.work__meta a:hover, .row__n a:hover { color: var(--green-deep); border-color: var(--green); }
+.work__links a, .cv__pdf a, .contact__links a {
+  color: var(--green-deep); font-weight: 600; text-decoration: none;
+  border-bottom: 1.5px solid transparent; transition: border-color 0.2s;
 }
-.figure img {
-  width: 100%;
-  height: auto;
-  display: block;
-  background: var(--panel);
-  border: 1px solid var(--rule);
-}
-.figure figcaption {
-  margin-top: 0.6rem;
-  font-size: 0.78rem;
-  color: var(--faint);
-}
-
-/* ---------- definition rows ---------- */
-.deflist { border-top: 2px solid var(--rule); }
-.def {
-  display: grid;
-  grid-template-columns: 170px 1fr;
-  gap: 1.5rem;
-  padding: 1.9rem 0;
-  border-bottom: 1px solid var(--line);
-}
-.def__key {
-  font-size: 0.85rem;
-  color: var(--ink);
-  font-weight: 700;
-  padding-top: 0.2rem;
-}
-.def__val { font-size: 1.05rem; color: var(--text); font-weight: 500; }
-.def__val .sub { color: var(--muted); font-size: 0.92rem; font-weight: 400; }
-.def__val ul { list-style: none; display: grid; gap: 1.3rem; }
-
-/* name-led CV item: name + right-aligned year on one row, muted
-   description below. only two roles of type — name (ink, 600) and
-   everything secondary (muted, 0.9rem) — so every row reads as one unit */
-.cv-item__top {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 1.2rem;
-}
-.cv-item__name { font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
-.cv-item__when {
-  color: var(--muted);
-  font-size: 0.9rem;
-  font-weight: 400;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  flex: 0 0 auto;
-}
-/* reserve room on the right for the year, so a long description wraps
-   before it reaches the right-aligned year column instead of running under it */
-.cv-item__desc { margin-top: 0.25rem; color: var(--muted); font-size: 0.9rem; font-weight: 400; padding-right: 11rem; }
-
-/* dense blocks (e.g. Collectives) fold into two columns so one long
-   list doesn't outweigh the single-item blocks above it */
-/* cap each entry's width so the name↔year pair stays tight; the empty
-   space to each column's right visually separates the two columns */
-.cv-list--two { grid-template-columns: 1fr 1fr; gap: 1.4rem 3rem; }
-.cv-list--two > li { max-width: 30rem; }
-
-.inline-tags { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; }
-.inline-tags span { font-size: 1.05rem; font-weight: 500; color: var(--ink); }
-.inline-tags span:not(:last-child)::after { content: "/"; color: var(--faint); margin-left: 1rem; font-weight: 400; }
-
-/* ---------- works index ---------- */
-.index { border-top: 2px solid var(--rule); }
-.work {
-  display: grid;
-  grid-template-columns: 64px 1fr;
-  gap: 1.5rem;
-  align-items: baseline;
-  padding: 2.2rem 0;
-  border-bottom: 1px solid var(--line);
-  transition: background 0.2s ease;
-}
-.work:hover { background: var(--panel); }
-.work__no { font-size: 0.85rem; color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; padding-top: 0.6rem; }
-.work__main { min-width: 0; }
-.work__icon {
-  width: 32px; height: 32px;
-  display: inline-block;
-  vertical-align: -0.6em;
-  margin-right: 0.55rem;
-}
-.work__kind {
-  display: block;
-  font-size: 0.8rem;
-  color: var(--muted);
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-.work__title {
-  font-size: clamp(1.6rem, 3.6vw, 2.6rem);
-  font-weight: 800;
-  letter-spacing: -0.015em;
-  margin-left: -0.03em;      /* optical: Jost d/S lsb @800 = 0.031em */
-  line-height: 1;
-  color: var(--ink);
-  display: inline;
-  /* same as the contact email: a green underline by default that fills up
-     into a solid block on hover, revealing the text in white */
-  background-image: linear-gradient(var(--accent), var(--accent));
-  background-size: 100% 2px;
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  transition: background-size 0.25s;
-}
-.work__title:not(.work__title--menu):hover,
-.work__title:not(.work__title--menu):focus-within { background-size: 100% 100%; color: #fff; }
-
-/* studyForest: hover the title to choose Python / Java build */
-.work__title--menu { position: relative; display: inline-block; background-image: none; }
-.work__trigger {
-  cursor: pointer;
-  color: var(--ink);
-  background-image: linear-gradient(var(--accent), var(--accent));
-  background-size: 100% 2px;
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  transition: background-size 0.25s;
-}
-.work__title--menu:hover .work__trigger,
-.work__title--menu:focus-within .work__trigger { background-size: 100% 100%; color: #fff; }
-.work__trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-
-.work__launch {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  margin-top: 0.7rem;
-  display: flex;
-  flex-direction: column;
-  min-width: 248px;
-  background: var(--bg);
-  border: 1px solid var(--rule);   /* single hard frame — no internal dividers */
-  padding: 0.4rem 0;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-6px);
-  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s linear 0.18s;
-  z-index: 30;
-}
-/* invisible bridge so moving the cursor into the menu doesn't cross a dead gap */
-.work__launch::before {
-  content: "";
-  position: absolute;
-  top: -0.7rem; left: 0; right: 0; height: 0.7rem;
-}
-.work__title--menu:hover .work__launch,
-.work__title--menu:focus-within .work__launch {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-  transition: opacity 0.18s ease, transform 0.18s ease;
-}
-/* items separated by whitespace only; a green underline wipes in on hover
-   (same accent-line motif as the nav and the work title) */
-.work__launch a {
-  position: relative;
-  display: block;
-  padding: 0.6rem 1.2rem;
-  font-size: 1.02rem;
-  font-weight: 700;
-  letter-spacing: -0.015em;
-  line-height: 1.2;
-  color: var(--ink);
-  text-decoration: none;
-}
-.work__launch a::after {
-  content: "↗";
-  position: absolute;
-  right: 1.2rem; top: 0.6rem;
-  font-weight: 600;
-  color: var(--accent);
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-.work__launch a:hover::after, .work__launch a:focus-visible::after {
-  opacity: 1; transform: translateX(0);
-}
-.work__launch a > span {
-  background-image: linear-gradient(var(--accent), var(--accent));
-  background-size: 0% 2px;
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  padding-bottom: 2px;
-  transition: background-size 0.28s cubic-bezier(.2,.7,.2,1);
-}
-.work__launch a:hover > span, .work__launch a:focus-visible > span { background-size: 100% 2px; }
-.work__launch a:focus-visible { outline: none; }
-.work__launch small {
-  display: block;
-  font-weight: 400;
-  font-size: 0.78rem;
-  color: var(--muted);
-  letter-spacing: 0;
-  margin-top: 4px;
-}
-/* museum-label eyebrow inside the launch panel: indent text to match items,
-   hairline spans the full panel width as a caption/statement divider */
-.work__launch .label-eyebrow {
-  padding: 0.15rem 1.2rem 0.5rem;
-  margin: 0.2rem 0 0.45rem;
-}
-
-.work__desc { margin-top: 0.8rem; color: var(--muted); max-width: var(--measure); font-weight: 400; }
-.work__year { font-size: 0.85rem; color: var(--muted); text-align: right; padding-top: 0.7rem; font-weight: 600; }
-/* A brand name that is also an ordinary Korean word ("맨날" = every day)
-   cannot be told apart from the running text by context alone. Ink weight
-   marks it as a name without resorting to quotes in body copy. */
+.work__links a:hover, .cv__pdf a:hover, .contact__links a:hover { border-color: currentColor; }
 .brand { font-weight: 700; color: var(--ink); }
-.work__desc code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85em; }
 
-/* quiet credit line under the title: course / personal context */
-.work__context {
-  display: block;
-  margin-top: 0.45rem;
-  font-size: 0.78rem;
-  line-height: 1.55;
-  color: var(--muted);
-  font-weight: 400;
+/* cv */
+.group + .group { margin-top: 2rem; }
+.group__h { font-size: 0.95rem; font-weight: 600; color: var(--muted); margin-bottom: 0.4rem; }
+.row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 1rem;
+  padding: 0.5rem 0 0.5rem 0.9rem; margin-left: -0.9rem; border-radius: 6px;
+  transition: background-color 0.25s;
 }
-/* museum caption spec: medium · materials · dimensions */
-.work__spec {
-  display: block;
-  margin-top: 0.25rem;
-  font-size: 0.76rem;
-  color: var(--muted);
-  font-weight: 400;
-}
+.row__n { font-weight: 600; color: var(--ink); line-height: 1.45; }
+.row__n--plain { font-weight: 500; }
+.row__t { color: var(--muted); font-size: 0.9rem; font-variant-numeric: tabular-nums; white-space: nowrap; padding-top: 0.12em; padding-right: 0.6rem; }
+.row__d { grid-column: 1 / -1; color: var(--muted); font-size: 0.93rem; line-height: 1.5; margin-top: 0.1rem; padding-right: 0.6rem; }
+.row.is-on { background: var(--green-wash); }
+.cv__pdf { margin-top: 2rem; }
 
-/* shared museum-label eyebrow: a small bold header over a hairline rule,
-   echoing the caption/statement divide on a gallery wall label */
-.label-eyebrow {
-  display: block;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--muted);
-  padding-bottom: 0.5rem;
-  margin-bottom: 0.7rem;
-  border-bottom: 1px solid var(--line);
+/* contact */
+.contact__mail {
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem); font-weight: 700; color: var(--ink);
+  text-decoration: none; border-bottom: 2px solid var(--green); letter-spacing: -0.01em;
 }
+.contact__mail:hover { color: var(--green-deep); }
+.contact__links { margin-top: 1rem; }
 
-/* inline glossary term: hover (or focus/tap) reveals a note panel.
-   reuses the green underline-wipe + single 1px frame motif */
-.gloss {
-  position: relative;
-  cursor: help;
-  color: var(--ink);
-  background-image: linear-gradient(var(--accent), var(--accent));
-  background-size: 100% 1px;
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  transition: background-size 0.28s cubic-bezier(.2,.7,.2,1);
+/* ---------- the score ---------- */
+.score {
+  grid-column: 2; grid-row: 1 / span 4; align-self: start;
+  position: sticky; top: calc(var(--nav-h) + 2rem);
+  padding-top: clamp(4rem, 9vh, 6.5rem);
+  display: none;
 }
-.gloss:hover, .gloss:focus-visible { background-size: 100% 2px; }
-.gloss:focus-visible { outline: none; }
-.gloss__panel {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  margin-top: 0.6rem;
-  width: max-content;
-  max-width: min(360px, 78vw);
-  background: var(--bg);
-  border: 1px solid var(--rule);   /* single hard frame — no shadow */
-  padding: 1.1rem 1.25rem;
-  font-size: 0.85rem;
-  line-height: 1.72;
-  font-weight: 400;
-  letter-spacing: 0;
-  color: var(--muted);
-  text-align: left;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-6px);
-  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s linear 0.18s;
-  z-index: 30;
-}
-/* invisible bridge so the cursor can travel into the panel without crossing a gap */
-.gloss__panel::before {
-  content: "";
-  position: absolute;
-  top: -0.6rem; left: 0; right: 0; height: 0.6rem;
-}
-.gloss:hover .gloss__panel,
-.gloss:focus .gloss__panel,
-.gloss:focus-within .gloss__panel {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-  transition: opacity 0.18s ease, transform 0.18s ease;
-}
-.work__video {
-  display: block;
-  margin-top: 1.1rem;
-  width: 100%;
-  height: auto;
-  max-width: 640px;
-  background: #000;
-  border: 1px solid var(--rule);
-}
+.js .score { display: block; }
+.score__stage { position: relative; }
+.score__scroll { overflow: visible; }
+#scoreSvg { width: 100%; height: auto; overflow: visible; }
+.score__cap { margin-top: 1rem; max-width: 34em; font-size: 0.88rem; line-height: 1.6; color: var(--muted); }
 
-/* Every entry is the same object: copy on the left, one plate on the right.
-   What used to break that was height — a 0.71 portrait poster next to two
-   short paragraphs left a 200px void, and stacking that one entry made 001
-   read as a different kind of thing from 002. So the plates share a height
-   instead of a width: --plate-h fixes how tall every plate stands, each one's
-   own --ratio gives its width, and they all hang flush to the column's right
-   edge. Different pictures, one shelf. */
-.work__split {
-  display: grid;
-  /* The copy track IS the measure — not a 1fr that stretches past it. With
-     1fr the text stopped at 550px inside a 900px track and the plate hung far
-     off at the right edge, leaving a 300px hole down the middle of every
-     entry. Sized to the measure, the plate sits directly against the text and
-     the two read as one block. */
-  grid-template-columns: minmax(0, var(--measure)) auto;
-  justify-content: start;
-  gap: clamp(1.5rem, 3vw, 3rem);
-  align-items: start;
-  margin-top: 1rem;
-}
-/* Collapse on the entry's own width, not the window's. The works column is
-   only part of the page, so a viewport breakpoint always fires at the wrong
-   moment; this one fires exactly when the pair no longer fits. */
-.work__main { container-type: inline-size; }
-@container (max-width: 46rem) {
-  .work__split { grid-template-columns: minmax(0, 1fr); }
-  .work__split > .work__media { margin-top: 1.5rem; max-width: var(--measure); }
-  /* stacked, height is no longer the thing being matched — width is, so the
-     plate goes back to filling the measure at its natural ratio */
-  .work__split > .work__media .plate { height: auto; width: 100%; }
-  /* the paper-stack slivers are sized off --plate-h; once the plate goes
-     width-driven they have to follow it or they float loose at the corner */
-  .deck::before, .deck::after { height: 100%; width: 100%; aspect-ratio: auto; }
-}
+.st-line { fill: none; stroke: var(--green); stroke-width: 1.3; }
+.st-bar { stroke: var(--ink); stroke-width: 1.5; }
+.st-hl { fill: none; stroke: var(--green); stroke-width: 3.2; stroke-linecap: round; opacity: 0; transition: opacity 0.25s; }
+.st-hl.is-on { opacity: 1; }
+.st-root { fill: var(--ink); }
+.st-rootlabel { font-size: 14px; font-weight: 700; fill: var(--ink); }
+.st-clef, .st-time { fill: var(--ink); }
+.st-label { font-size: 14px; fill: var(--muted); paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }
+.st-label.is-on { fill: var(--green-deep); font-weight: 700; }
+.st-year { font-size: 14px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.st-rest { fill: var(--ink); }
+.st-restnum { font-size: 14px; font-weight: 700; fill: var(--ink); }
+.st-ledger { stroke: var(--green); stroke-width: 1.3; }
 
-.work__copy { min-width: 0; }
-.work__split .work__desc { margin-top: 0; max-width: var(--measure); }
-.work__split .work__desc + .work__desc { margin-top: 0.8rem; }
+.nt { cursor: pointer; outline: none; }
+.nt__head { fill: var(--ink); transition: fill 0.15s; }
+.nt__ring { fill: none; stroke: var(--ink); stroke-width: 1.4; transition: stroke 0.15s; }
+.nt__stem { stroke: var(--ink); stroke-width: 1.3; transition: stroke 0.15s; }
+.nt__accent { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linejoin: round; transition: stroke 0.15s; }
+.nt__hit { fill: transparent; }
+.nt.is-on .nt__head, .nt:hover .nt__head, .nt:focus-visible .nt__head { fill: var(--green); }
+.nt.is-on .nt__ring, .nt:hover .nt__ring, .nt:focus-visible .nt__ring { stroke: var(--green); stroke-width: 2.4; }
+.nt.is-on .nt__stem, .nt:hover .nt__stem, .nt:focus-visible .nt__stem,
+.nt.is-on .nt__accent, .nt:hover .nt__accent { stroke: var(--green); }
+.nt.is-on .st-rest, .nt:hover .st-rest { fill: var(--green); }
 
-/* --- the plate: one framed picture box, whatever it holds --- */
-.work__media { margin-top: 0; max-width: none; display: block; }
-.plate {
-  display: block;
-  height: var(--plate-h);
-  aspect-ratio: var(--ratio);
-  width: auto;
-  overflow: hidden;
-  line-height: 0;
-  border: 1px solid var(--rule);
-  background: #000;
+.card {
+  position: absolute; z-index: 5; width: max-content; max-width: 260px;
+  padding: 0.75rem 0.9rem 0.8rem; border-radius: 10px;
+  background: var(--ink); color: #f3f5f3; font-size: 0.86rem; line-height: 1.5;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);   /* it floats */
 }
-.plate > img, .plate > video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;   /* the box carries the picture's own ratio, so nothing crops */
-  margin-top: 0;
-  border: none;
-}
-/* stills that are not links keep the page's white behind them */
-.plate--still { background: transparent; }
+.card b { display: block; font-size: 0.95rem; color: #fff; }
+.card__meta { display: block; color: #a9b3ac; font-size: 0.8rem; font-variant-numeric: tabular-nums; }
+.card p { margin-top: 0.35rem; }
+.card a { display: inline-block; margin-top: 0.4rem; color: #8fd3ad; font-weight: 600; text-decoration: none; }
 
-.work__plate-cap {
-  display: block;
-  margin-top: 0.55rem;
-  /* fills the plate at minimum, and may widen the column a little when the
-     plate is narrow — otherwise 001's poster link breaks over three lines
-     under a 237px card. Past this it would drag the plate away from the text. */
-  min-width: 100%;
-  max-width: 22rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--muted);
-  letter-spacing: -0.01em;
-}
-.work__plate-cap strong { color: var(--ink); font-weight: 700; }
-.work__plate-cap a { display: block; margin-top: 0.3rem; }
-.work__plate-cap a:hover,
-.work__plate-cap a:hover strong { color: var(--accent); }
+/* ---------- footer: the page ends on black ---------- */
+.foot { background: #0d0f0e; color: #9aa39d; padding-block: 4.5rem 3.5rem; font-size: 0.88rem; line-height: 1.7; }
+.foot__note { max-width: 60em; }
+.foot__note + .foot__note { margin-top: 0.9rem; }
+.foot__note i { font-style: italic; }
+.foot__note sup, .foot__note sub { font-size: 0.72em; line-height: 0; }
+.foot__sign { margin-top: 1.6rem; font-weight: 600; color: #f3f5f3; }
+.foot ::selection { background: var(--green); color: #fff; }
 
-/* --- the deck: a plate that opens into a paged reader --- */
-.deck {
-  display: block;
-  padding: 0;
-  border: 0;
-  background: none;
-  font: inherit;
-  color: var(--muted);
-  cursor: pointer;
-  position: relative;
-}
-.deck .plate { transition: opacity 0.2s ease; }
-/* the stacked-paper edge: two thin slivers behind the top card */
-.deck::before, .deck::after {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto auto;
-  height: var(--plate-h);
-  aspect-ratio: 1080 / 1350;
-  border: 1px solid var(--rule);
-  background: var(--bg);
-  z-index: -1;
-}
-/* fan the pages sideways only. Offsetting them downward too left two little
-   corner brackets poking out under the plate, which read as stray marks
-   rather than paper, and crowded the caption. */
-.deck::before { transform: translateX(6px); }
-.deck::after  { transform: translateX(12px); }
-.deck__cue {
-  position: absolute;
-  left: 0; bottom: 0;
-  padding: 0.5rem 0.7rem;
-  background: var(--ink);
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1;
-  transition: background 0.2s ease;
-}
-.deck:hover .deck__cue,
-.deck:focus-visible .deck__cue { background: var(--accent); }
-.deck:hover .plate { opacity: 0.9; }
-.deck:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+/* entrances: each block's parts rise once, never hidden without script */
+.js .rise { opacity: 0; transform: translateY(18px); transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); }
+.js .rise.in { opacity: 1; transform: none; }
 
-/* full-version trigger: quiet text button, green wipe on interaction */
-.work__fulllink {
-  display: inline-block;
-  margin-top: 0.7rem;
-  padding: 0;
-  background: none;
-  border: 0;
-  cursor: pointer;
-  font: inherit;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--muted);
-  border-bottom: 1px solid var(--line);
-  transition: color 0.18s ease, border-color 0.18s ease;
+/* ---------- narrow ---------- */
+@media (max-width: 1000px) {
+  .split { grid-template-columns: minmax(0, 1fr); }
+  .score { grid-column: 1; grid-row: auto; position: static; padding-top: 3rem; }
+  .score__scroll { overflow-x: auto; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); }
+  #scoreSvg { min-width: 760px; }
 }
-.work__fulllink:hover,
-.work__fulllink:focus-visible { color: var(--accent); border-color: var(--accent); outline: none; }
-
-/* lightbox: darkened screening room */
-.lightbox {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  display: grid;
-  place-items: center;
-  padding: clamp(1rem, 4vw, 3rem);
-  background: rgba(0, 0, 0, 0.94);
-  opacity: 0;
-  transition: opacity 0.22s ease;
+@media (max-width: 640px) {
+  .nav__links { display: none; }
+  .hero__name { font-size: clamp(3rem, 17vw, 4.4rem); }
+  .work { grid-template-columns: 60px minmax(0, 1fr); gap: 1rem; }
+  .work__plate { width: 60px; height: 60px; border-radius: 14px; }
+  .prose { font-size: 1.0625rem; }
 }
-.lightbox[hidden] { display: none; }
-.lightbox.open { opacity: 1; }
-.lightbox__stage {
-  width: 100%;
-  max-width: 1100px;
-  transform: translateY(8px);
-  transition: transform 0.22s ease;
-}
-.lightbox.open .lightbox__stage { transform: none; }
-.lightbox__video {
-  display: block;
-  width: 100%;
-  max-height: 80vh;
-  background: #000;
-  border: 1px solid #222;
-}
-.lightbox__cap {
-  margin-top: 1rem;
-  color: #c8c8c8;
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-.lightbox__cap .label-eyebrow {
-  display: inline-block;
-  margin: 0 0.7rem 0 0;
-  padding: 0;
-  border: 0;
-  color: #6f6f6f;
-  vertical-align: middle;
-}
-.lightbox__close {
-  position: absolute;
-  top: clamp(1rem, 3vw, 2rem);
-  right: clamp(1rem, 3vw, 2rem);
-  padding: 0.5rem 0.85rem;
-  background: none;
-  border: 1px solid #333;
-  color: #e8e8e8;
-  font: inherit;
-  font-size: 0.78rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: color 0.18s ease, border-color 0.18s ease;
-}
-.lightbox__close:hover,
-.lightbox__close:focus-visible { color: var(--accent); border-color: var(--accent); outline: none; }
-/* --- cardnews reader inside the lightbox --- */
-/* you linger over nine cards, so the room goes darker than the video's */
-.lightbox--deck { background: rgba(0, 0, 0, 0.975); }
-.lightbox--deck .lightbox__stage {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-.deck-stage__frame {
-  /* the card is 4:5 and portrait, so height is the binding constraint on a
-     laptop; cap against the viewport, not the stage's width */
-  max-height: min(78vh, 900px);
-  aspect-ratio: 1080 / 1350;
-  background: #fff;
-  line-height: 0;
-}
-.deck-stage__img { display: block; width: 100%; height: 100%; object-fit: contain; }
-.deck-stage__bar {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  color: #fff;
-}
-.deck-nav, .deck-theme__btn {
-  padding: 0.45rem 0.85rem;
-  background: none;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: #fff;
-  font: inherit;
-  font-size: 0.85rem;
-  font-weight: 700;
-  line-height: 1;
-  cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-}
-.deck-nav:hover, .deck-theme__btn:hover,
-.deck-nav:focus-visible, .deck-theme__btn:focus-visible {
-  color: var(--accent);
-  border-color: var(--accent);
-  outline: none;
-}
-.deck-theme { display: flex; gap: 0.4rem; margin-left: 0.6rem; }
-.deck-theme__btn.is-on { background: #fff; color: #0a0a0a; border-color: #fff; }
-.deck-count { font-size: 0.9rem; font-weight: 600; min-width: 4.5em; text-align: center; }
-.deck-count__i { font-weight: 800; font-variant-numeric: tabular-nums; }
-
-@media (prefers-reduced-motion: reduce) {
-  .lightbox, .lightbox__stage { transition: none; }
-}
-
-/* ---------- contact ---------- */
-.contact__big {
-  font-size: clamp(1.8rem, 6vw, 4rem);
-  font-weight: 800;
-  letter-spacing: -0.015em;
-  line-height: 1;
-  margin-left: -0.031em;     /* optical: Jost q's lsb @800 = 0.031em */
-  color: var(--ink);
-}
-.contact__big a { background-image: linear-gradient(var(--accent), var(--accent)); background-size: 100% 2px; background-position: 0 100%; background-repeat: no-repeat; transition: background-size 0.25s; }
-.contact__big a:hover { background-size: 100% 100%; color: #fff; }
-
-/* ---------- footer ---------- */
-.footer {
-  border-top: 1px solid var(--rule);
-  padding: 3rem var(--gutter);
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 1rem;
-  font-size: 0.78rem;
-  color: var(--muted);
-  font-weight: 500;
-}
-
-/* ---------- scroll reveal ---------- */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.75s ease, transform 0.75s cubic-bezier(.2,.7,.2,1);
-}
-.reveal.in { opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .reveal { opacity: 1; transform: none; transition: none; }
+  .js .hero__staff i, .js .hn { animation: none; }
+  .js .rise { opacity: 1; transform: none; transition: none; }
+  .field:hover .field__img, .field:focus-visible .field__img { transform: rotate(-20deg) scale(1.6); }
 }
 
-/* ---------- responsive ---------- */
-@media (max-width: 760px) {
-  .nav { padding: 0.85rem var(--gutter); }
-  .nav__links { gap: 0.9rem; }
-  .section__grid { grid-template-columns: 1fr; gap: 1.3rem; }
-  .section__head { position: static; }
-  .def { grid-template-columns: 1fr; gap: 0.4rem; }
-  .cv-list--two { grid-template-columns: 1fr; }
-  .cv-list--two > li { max-width: none; }
-  .about__body { grid-template-columns: 1fr; }
-  /* fallback for browsers without container queries; the @container rule
-     above already covers this width in Chrome 105+ / Safari 16+ / Firefox 110+ */
-  .work__split { grid-template-columns: 1fr; }
-  .cv-item__desc { padding-right: 0; }
-  .figure, .work__media { max-width: var(--measure); }
-  .work__media .plate { height: auto; width: 100%; }
-  /* the paper-stack slivers are sized off --plate-h; once the plate goes
-     width-driven they have to follow it or they float loose at the corner */
-  .deck::before, .deck::after { height: 100%; width: 100%; aspect-ratio: auto; }
-  .figure { float: none; width: auto; margin: 1.6rem 0 0; }
-  .work { grid-template-columns: 40px 1fr; }
-  .work__year { display: none; }
+/* ---------- the turn: name and staff become the score, the score settles beside the text ---------- */
+.morph { display: none; position: fixed; inset: 0; z-index: 30; pointer-events: none; visibility: hidden; }
+.morph-on .morph { display: block; }
+/* the hero holds still for a while the name and staff turn into the score */
+.morph-on .hero { position: sticky; top: var(--nav-h); }
+.runway { display: none; }
+.morph-on .runway { display: block; height: 70svh; }
+.morph-away .hero__name, .morph-away .hero__staff { visibility: hidden; }
+.morph-run .morph { visibility: visible; }
+.morph-run .score { visibility: hidden; }
+.morph__lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.morph__lines path { fill: none; stroke: var(--green); }
+.morph__score { position: absolute; left: 0; top: 0; transform-origin: 0 0; overflow: visible; }
+.morph__score .st-line, .morph__score .st-hl { display: none; }
+.morph__score .st-rootlabel { opacity: 0; }
+.morph__name {
+  position: absolute; left: 0; top: 0; transform-origin: 0 0;
+  font-weight: 800; line-height: 0.92; letter-spacing: -0.02em; color: var(--ink); white-space: nowrap;
 }
 
-/* a link inside running text or a CV title: the same quiet underline as the
-   hero's links, green on hover */
-.work__desc a, .cv-item__name a { border-bottom: 2px solid var(--line-2); transition: color 0.2s, border-color 0.2s; }
-.work__desc a:hover, .cv-item__name a:hover { color: var(--accent); border-color: var(--accent); }
+
+/* the hero's lines answer the pointer and can be plucked */
+.js .hero__staff { cursor: pointer; }
+.hero__staff i { transition: background-color 0.2s; }
+.hero__staff i.is-near { background: var(--green-deep); }
+.hero__staff i.is-plucked { animation: pluck 600ms cubic-bezier(0.3, 0.7, 0.4, 1); }
+@keyframes pluck { 0% { transform: translateY(0); } 12% { transform: translateY(-3px); } 28% { transform: translateY(2.4px); } 46% { transform: translateY(-1.6px); } 64% { transform: translateY(1px); } 82% { transform: translateY(-0.4px); } 100% { transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .hero__staff i.is-plucked { animation: none; } }
+
+/* a CV row lights under the pointer too */
+.row:hover { background: var(--green-wash); }
+
+/* the one call: keep reading. Inside it a leading tone leans toward its resolution;
+   the press resolves it (ti to do), and the music begins */
+.nudge {
+  position: fixed; left: 50%; bottom: 28px; z-index: 35;
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0.62rem 1.2rem 0.62rem 0.95rem; border-radius: 999px;
+  background: var(--ink); color: #fff; font-size: 0.92rem; font-weight: 600; text-decoration: none;
+  opacity: 0; pointer-events: none; transform: translate(-50%, 10px);
+  transition: opacity 0.35s var(--ease-out), transform 0.35s var(--ease-out), background-color 0.2s;
+}
+.nudge-on .nudge { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
+.nudge:active { transform: translate(-50%, 0) scale(0.97); }
+.nudge__staff { width: 30px; height: 20px; overflow: visible; }
+.nudge__staff path { stroke: rgba(255, 255, 255, 0.55); stroke-width: 1; fill: none; }
+.nudge__note { fill: #fff; transform-box: fill-box; transform-origin: center; rotate: -20deg; animation: lean 2.6s cubic-bezier(0.3, 0, 0.3, 1) infinite; transition: fill 0.2s; }
+@keyframes lean { 0%, 62%, 100% { translate: 0 0; } 74% { translate: 0 -1.4px; } 86% { translate: 0 -0.3px; } }
+.nudge:hover .nudge__note { animation: none; translate: 0 -1.2px; fill: #8fd3ad; transition: translate 0.25s var(--ease-out), fill 0.2s; }
+.nudge.is-resolved .nudge__note { animation: none; translate: 0 -2px; fill: #8fd3ad; transition: translate 0.3s var(--ease-out); }
+.nudge__arrow { opacity: 0.7; }
+@media (prefers-reduced-motion: reduce) { .nudge__note { animation: none; } }
+

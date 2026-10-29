@@ -1,53 +1,23 @@
-# DESIGN.md — MoMA-inspired
+# DESIGN.md · 녹색 오선 (2026-10-29)
 
-## Overview
-A stark modernist identity: pure white (`#ffffff`) and near-black (`#0a0a0a` / `#000`)
-with bold grotesque typography on a strong grid. The **studyForest green** (`#2f8f5b`)
-is held back as a single interaction accent — it appears only on hover, active nav,
-and as small section numbers, so the page reads black-and-white at rest and reveals
-color on touch.
+이전 MoMA 흑백 디자인을 대체한다. 시안 과정과 결정은 `DISCUSSION_LOG.md` 2026-10-29, 시안 원본은 로컬 `drafts/landing/green-staff-morph/`(git 제외).
 
-## Key characteristics
-- **Type**: Jost (Latin, bundled variable font in `assets/fonts/`, SIL OFL) + Pretendard
-  Variable (Hangul, jsdelivr CDN) at heavy weights (700–800). Jost is the open-source
-  Futura successor daily-todo ships, so both projects speak one geometric voice.
-  Oversized bold hero name; display tracking capped at `-0.02em` on both scripts, since
-  Jost's circular bowls collide where Inter's grotesque forms tolerated `-0.045em`.
-  Optical left offsets are Jost's own side bearings at weight 800 (m `.055em`,
-  d/S `.031em`, q `.031em`). **No tracked-out uppercase anywhere** — labels
-  (rail, def keys, work kinds, lexicon, CV) speak through weight, size, and green, in
-  written case with normal letter-spacing.
-- **Color**: black on white; neutral (not warm) grays; green only as interaction pop.
-- **Grid**: two-column scaffold (sticky rail label + body); sections divided by strong
-  1–2px black rules — modernist, graphic, confident.
-- **Measure**: `--measure: 34.4em` caps body text at 40 Hangul characters a line. A Hangul
-  glyph in Pretendard is a flat 0.86em wide at any size and `em` resolves at the point of
-  use, so one token serves every text size. **About is the one exception and takes no cap
-  at all**: the portrait floats *inside* those paragraphs, so the float itself holds the
-  lines beside it to ~39 characters, and the lines below it are meant to run out to the
-  column edge — which is exactly where the photo's right edge sits. Any cap stops the text
-  short of that edge and the wrap stops reading as a wrap. The price is ~54 characters
-  below the photo, paid on purpose. Text flowing around an image needs slack that a grid
-  column does not.
-- **Works**: exhibition index with big bold titles; a green underline wipes in on hover.
-  Every entry is the same object: copy left, one **plate** right, the project's own app
-  icon (32px) opening the kind line. The copy track **is** the measure, not a `1fr` that
-  stretches past it — with `1fr` the text stopped at 550px inside a 900px track and the
-  plate hung off at the far edge, leaving a 300px hole down the middle of every entry.
-  Sized to the measure, the plate sits directly against the text (45px gap) and the plates'
-  left edges line up down the whole section. `--plate-h` is then chosen so the widest ratio
-  still fits in what is left, which also lands every plate within ~90px of its copy's
-  baseline. Heights are not identical and do not need to be; the seam is what the eye reads.
-- **Deck**: 001's plate is the Thinket cardnews, stacked-paper edge and all, opening a
-  paged reader (9 cards, light/dark, arrow keys, Esc). The research poster stays as a
-  caption link — at plate size its text was never legible anyway, and it is a PDF.
-- **Reflow**: both columns of a side-by-side entry are `fr` tracks, and the pair collapses
-  on a container query over the entry's own width (`46rem`), not the viewport's. Fixed px
-  media tracks are banned: one made the text absorb every pixel of shrink, down to three
-  characters a line at 860px. The 760px media query survives only as a fallback.
-- **Motion**: smooth scroll + IntersectionObserver fade-up (`.reveal`); nav underline
-  grow; active-section tracking. Honors `prefers-reduced-motion`.
-- **Imagery**: portrait as a hard-framed B&W figure (not a circular avatar).
+## 한 가지 모티프: 오선
+- 상징색은 녹색 `#2f8f5b` 하나. 흰 바탕, 검정 글자, 녹색 줄. 맨 아래만 검정(`#0d0f0e`).
+- 히어로: 이름 「이윤태」 옆 굵은 녹색 다섯 줄. 화면 한 장을 혼자 차지한다. 다섯 줄은 누르면 퉁겨지는 현(아래부터 E G B D F).
+- 오른쪽 고정 악보 판: 이름 한 점에서 다섯 줄이 갈라진다. 아래부터 음악 · 인지심리학 · 계산신경과학 · 심리철학 · 학습과학. 음표는 그 일이 속한 줄(두 갈래면 사이 칸), 한 마디가 한 해. 장학금은 못갖춘마디(덧줄), 병역은 2023.10–2025.07을 가로지르는 쉼표 21, 상에는 악센트. 높은음자리표와 판각 4/4는 Bravura(SIL OFL) 윤곽. 마디줄은 검정.
+- 변신(1000px 이상, 움직임 줄이기가 아닐 때): 히어로가 0.7화면 동안 머무는 사이 이름은 판의 뿌리 이름표로, 다섯 직선은 갈라지는 판의 오선으로 옮겨 간다. 그다음 소개 글이 악보 옆으로 오르고, 진짜 판에 넘긴다.
+- 읽는 자리와 마우스가 가리키는 줄의 음표가 켜지고, 이름에서 그 음표까지 길이 밝혀진다(Thinket의 path to root).
 
-## Sections
-Nav · Hero · 01 About · 02 CV · 03 Works · 04 Courses · 05 Contact · 06 Colophon (AI Usage) · Footer.
+## 글
+- Jost(라틴, `assets/fonts/`) + Pretendard Variable(한글). 한국어는 낱말 단위 줄바꿈(`word-break: keep-all`), 본문 측도 34.4em(40자).
+- 관심사는 큰 제목이 아니라 줄글 속 링크. 링크 앞 작은 타원 그림(`assets/fields/`, 음표 머리 모양)이 마우스를 올리면 커진다.
+- 큰 얼굴 사진 없음. 장식 글꼴, 색면, 대문자 자간 레이블 없음.
+
+## 소리
+- 방문마다 새로 짜이는 선율(악절, K&K 1982 조성 프로파일 기반 확률 모형), 박 0.52초 고정, 스크롤 에너지에 따라 8분·16분 꾸밈음. 정의는 하단 「음악:」 문단.
+- 기본 켬. 브라우저 정책상 첫 클릭·탭·키에서 시작한다. 부름은 하단 「계속 읽기 ↓」 하나이고, 그 안의 음표(시)가 도로 기울었다 돌아오며, 누르면 시→도가 울리고 음악이 시작된다.
+- 탭을 떠나면 멈추고 돌아오면 잇는다. 움직임 줄이기 설정을 존중한다.
+
+## 캐시
+- CSS·JS를 바꿀 때마다 `index.html`의 `styles.css?v=` · `script.js?v=`를 올린다. 현재 v54 · v12.

@@ -1,427 +1,191 @@
-<!DOCTYPE html>
-<html lang="ko">
+<!doctype html>
+<html lang="ko" class="no-js">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- TODO: replace with your real name -->
-  <title>이윤태 — music_ing Lee · Quale</title>
-  <meta name="description" content="Personal page of a Computer Science & Engineering student at Seoul National University." />
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-  <!-- Latin: Jost, bundled (assets/fonts). Hangul: Pretendard Variable, CDN. -->
-  <link rel="preload" href="assets/fonts/Jost-var.woff2" as="font" type="font/woff2" crossorigin />
-  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=53" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>이윤태 · music_ing Lee</title>
+<meta name="description" content="심리학과 음악정보학을 공부하는 이윤태(music_ing Lee)의 페이지.">
+<script>document.documentElement.classList.replace('no-js', 'js');</script>
+<link rel="preload" href="assets/fonts/Jost-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="styles.css?v=54">
 </head>
 <body>
 
-  <!-- scroll-driven black/white inversion band (top ~1/5 of viewport) -->
-  <div class="invert-band" aria-hidden="true"></div>
+<header class="nav">
+  <div class="nav__inner wrap">
+    <a class="nav__brand" href="#score">music_ing&nbsp;Lee</a>
+    <nav class="nav__links" aria-label="페이지 안 이동">
+      <a href="#about">소개</a>
+      <a href="#works">작업</a>
+      <a href="#cv">이력</a>
+      <a href="#contact">연락</a>
+    </nav>
+    <button class="sound" id="sound" type="button" aria-pressed="false">
+      <span class="sound__dot" aria-hidden="true"></span><span class="sound__label">소리 켜기</span>
+    </button>
+  </div>
+  <div class="strip" aria-hidden="true"><div class="wrap"><svg id="strip"></svg></div></div>
+</header>
 
-  <!-- ===== nav (links to every section) ===== -->
-  <nav class="nav" id="nav">
-    <div class="nav__inner">
-    <a class="nav__brand" href="#top" aria-label="맨 위로">music_ing&nbsp;Lee</a>
-    <ul class="nav__links">
-      <li><a href="#musicking">Musicking</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#cv">CV</a></li>
-      <li><a href="#works">Works</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    </div>
-  </nav>
-
-  <!-- ===== hero ===== -->
-  <header class="hero wrap" id="top">
-    <div class="hero__namerow">
+<main>
+  <div class="pin">
+  <section class="hero wrap" id="top">
+    <div class="hero__row">
       <h1 class="hero__name">이윤태</h1>
-      <span class="hero__staff" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      <div class="hero__staff" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i>
+      </div>
     </div>
-    <p class="hero__aka">Yoontae&nbsp;Lee &nbsp;·&nbsp; music_ing&nbsp;Lee &nbsp;·&nbsp; Quale</p>
+    <p class="hero__aka">Yoontae Lee · music_ing Lee · Quale</p>
     <p class="hero__role">음악을 즐겨 듣고, 부르고, 만들고, 연구합니다.</p>
-    <div class="hero__meta">
-      <span>Psychology &amp; Music Informatics</span>
-      <span>Seoul National University</span>
-      <a href="mailto:qualia0521@snu.ac.kr">qualia0521@snu.ac.kr</a>
-      <a href="https://github.com/music-ingLee" target="_blank" rel="noopener">github.com/music-ingLee</a>
-    </div>
-  </header>
-
-  <main>
-
-    <!-- ===== Manifesto: musicking ===== -->
-    <section class="statement" id="musicking">
-      <div class="wrap reveal">
-        <p class="rail"><span class="num">✦</span> &nbsp;/&nbsp; Manifesto</p>
-        <div class="lexicon">
-          <h2 class="lexicon__word">musicking<span class="lexicon__pron">/ˈmjuːzɪkɪŋ/</span></h2>
-
-          <p class="lex__label">Etymology</p>
-          <p class="lex__etym">From <em>music</em>&nbsp;+‎&nbsp;<em>-ing</em>, coined by the musicologist Christopher Small (1927–2011).</p>
-
-          <p class="lex__label">Noun</p>
-          <p class="lex__headword">musicking <span class="lex__gram">(uncountable)</span></p>
-          <p class="lexicon__def">Any activity involving or related to music performance, such as performing, listening, rehearsing, or composing.</p>
-
-          <p class="lex__label">Influences</p>
-          <p class="lex__etym"><em>(Neo)Soul</em> — D’Angelo, Stevie Wonder, Prince, DeBarge, Donny Hathaway.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== 01 About ===== -->
-    <section class="section" id="about">
-      <div class="wrap section__grid reveal">
-        <div class="section__head">
-          <p class="rail"><span class="num">01</span> &nbsp;/&nbsp; About</p>
-          <h2 class="section__title">소개</h2>
-        </div>
-        <div class="section__body about__body">
-          <blockquote class="pullquote">
-            왜 leading tone은 ‘leading’ tone일까.
-          </blockquote>
-
-          <!-- editorial portrait: floats right; paragraphs wrap beside it, then full-width below -->
-          <figure class="figure">
-            <div class="figure__media">
-              <img src="assets/profile.jpg?v=2" alt="이윤태" width="675" height="1100"
-                   onerror="this.onerror=null;this.src='assets/portrait-placeholder.svg';" />
-              <div class="figure__shade" aria-hidden="true"></div>
-            </div>
-            <figcaption>이윤태 · music_ing&nbsp;Lee</figcaption>
-          </figure>
-
-          <p class="lede">
-            음악이론을 처음 접한 순간부터 놓지 못한 물음이다. 어릴 적부터 음악을 듣고
-            연주하기를 좋아했고, 고등학생에 이르러 인간의 음악처리 기전과 선호의 형성에
-            관심을 갖게 되었다. 그 답을 찾기 위해 인지 및 지각심리학과 신경과학을, 음악의
-            어법을 이해하기 위해 화성학을 공부하기 시작했다.
-          </p>
-          <p class="lede">
-            서양 음악 체계의 핵심인 기능화성은 음악을 움직이는 힘을 이끔음(leading
-            tone)에 귀속시킨다. 그러나 ‘이끌리기에 이끔음이고, 이끔음이기에 음악을
-            이끈다’는 설명은 순환논리일 뿐, 그 이끎이 왜 생겨나는지는 비어 있다. 같은
-            음을 듣고도 누군가는 이끌리고 누군가는 그렇지 않다면, ‘이끎’이란 음표가
-            아니라 그것을 듣는 청자의 마음과 뇌에서 일어나는 일일 것이다. 이 물음을
-            인지심리학과 신경과학의 언어로 풀어가는 것이 내가 답하고 싶은 과제다.
-          </p>
-          <p class="lede">
-            인공지능과 인간의 자연지능은 서로를 비추며 함께 발전해 왔다. 인간의 신경
-            정보처리에서 영감을 받아 신경망(neural network)과 심층신경망이 출발했고,
-            인간의 주의(attention)에서 비롯된 Transformer는 오늘날
-            거대언어모델(LLM)의 초석이 되었다. 나는 음악정보학도 같은 길을 따르리라
-            믿는다. 사람이 음악을 어떻게 듣고 처리하는지를 이해하는 일은 더 나은 음악
-            모델을 만드는 일과 분리되어 있지 않기에, 음악신경과학의 진전은 음악정보학의
-            발전으로 이어질 것이라 믿는다. 동시에 음악을 다루는 뇌를 이해하는 일은 그
-            자체로 신경과학 전반에 대한 기여가 된다.
-          </p>
-          <p class="lede">
-            ‘좋은’ 음악 생성 모델이란 결국 인간이 듣기 좋아하는 음악을 산출하는
-            모델이고, 그러려면 사람이 어떤 음악을 왜 좋아하는지를 신경과학으로 묻고,
-            그것을 음악이론의 어휘로 기술하며, MLDL로 모델에 옮길 수 있어야 한다고
-            생각한다. 음악정보학에서 컴퓨터 은유의 중요성이 더욱 커지는 것도 이
-            대목이다. 그래서 서울대학교의 학생설계전공 제도를 활용해, 주전공인 심리학에
-            더해 음악정보학을 함께 공부하고 있다. 음악인지신경과학과 음악정보학 전반을
-            한자리에서 탐구하기 위해서다.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== 02 CV ===== -->
-    <section class="section" id="cv">
-      <div class="wrap section__grid reveal">
-        <div class="section__head">
-          <p class="rail"><span class="num">02</span> &nbsp;/&nbsp; CV</p>
-          <h2 class="section__title">이력</h2>
-        </div>
-        <div class="section__body">
-          <div class="deflist">
-            <div class="def">
-              <div class="def__key">Education</div>
-              <div class="def__val">
-                <ul>
-                  <li>
-                    <div class="cv-item__top"><span class="cv-item__name">Seoul National University</span><span class="cv-item__when">2021 – present</span></div>
-                    <div class="cv-item__desc">B.A. Psychology · Main Major</div>
-                    <div class="cv-item__desc">B.E. Music Informatics · Student Design Major</div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="def">
-              <div class="def__key">Focus</div>
-              <div class="def__val">
-                <div class="inline-tags">
-                  <span>Cognitive&nbsp;Psychology</span><span>Music&nbsp;Informatics</span><span>Science&nbsp;of&nbsp;Learning</span><span>Computational&nbsp;Neuroscience</span><span>Philosophy&nbsp;of&nbsp;Mind</span>
-                </div>
-              </div>
-            </div>
-            <div class="def">
-              <div class="def__key">Skills</div>
-              <div class="def__val">
-                <div class="inline-tags">
-                  <span>Git</span><span>Python</span><span>Java</span><span>C++</span><span>Max·MSP·Jitter</span>
-                </div>
-              </div>
-            </div>
-            <div class="def">
-              <div class="def__key">Experience</div>
-              <div class="def__val">
-                <ul>
-                  <li>
-                    <div class="cv-item__top"><span class="cv-item__name">Interdisciplinary Seminar on Machine Intelligence · ISMI</span><span class="cv-item__when">2026.08 – 2026.12</span></div>
-                    <div class="cv-item__desc">Co-organizer · Student-Directed Seminar, SNU Student-Directed Education (SDE) · ₩500,000 grant</div>
-                  </li>
-                  <li>
-                    <div class="cv-item__top"><span class="cv-item__name">KAIST Music and Brain Lab · MuBL</span><span class="cv-item__when">2026.07 – 2026.08</span></div>
-                    <div class="cv-item__desc">Undergraduate Research Intern · Melodic Expectation at the Boundary of Vocal Range</div>
-                  </li>
-                  <li>
-                    <div class="cv-item__top"><span class="cv-item__name">Hanjae Connect · Hanjae Foundation</span><span class="cv-item__when">2026.07 – 2026.08</span></div>
-                    <div class="cv-item__desc">Developer · internal app for scholars and alumni · React Native, Next.js, Supabase</div>
-                  </li>
-                  <li>
-                    <div class="cv-item__top"><span class="cv-item__name">SNU Technology-Enhanced Learning Design Lab · TELD</span><span class="cv-item__when">2026.05 – 2026.12</span></div>
-                    <div class="cv-item__desc">Undergraduate Researcher · Independent Research, SNU SDE · ₩7,000,000 grant</div>
-                  </li>
-                  <li>
-                    <div class="cv-item__top"><span class="cv-item__name">SNU Connectome Lab</span><span class="cv-item__when">2025.12 – 2026.02</span></div>
-                    <div class="cv-item__desc">Undergraduate Research Intern</div>
-                  </li>
-                  <li>
-                    <div class="cv-item__top"><span class="cv-item__name">Republic of Korea Air Force</span><span class="cv-item__when">2023.10 – 2025.07</span></div>
-                    <div class="cv-item__desc">Military service</div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="def">
-              <div class="def__key">Collectives</div>
-              <div class="def__val">
-                <ul class="cv-list--two">
-                  <li>
-                    <div class="cv-item__top"><span class="cv-item__name">JAME</span><span class="cv-item__when">2021.03 – 2023.02</span></div>
-                    <div class="cv-item__desc">College of Humanities band · Vocal · 19th-gen Leader</div>
-                  </li>
-                  <li>
-                    <div class="cv-item__top"><span class="cv-item__name">Rgorhythm</span><span class="cv-item__when">2022.03 – present</span></div>
-                    <div class="cv-item__desc">Psychology dept. band · Vocal · Founder</div>
-                  </li>
-                  <li>
-                    <div class="cv-item__top"><span class="cv-item__name">Soundream</span><span class="cv-item__when">2022.09 – 2023.02</span></div>
-                    <div class="cv-item__desc">Composition club</div>
-                  </li>
-                  <li>
-                    <div class="cv-item__top"><span class="cv-item__name">Triple H</span><span class="cv-item__when">2023.03 – 2026.02</span></div>
-                    <div class="cv-item__desc">Vocal &amp; hip-hop club · Vocal</div>
-                  </li>
-                  <li>
-                    <div class="cv-item__top"><span class="cv-item__name">AERG</span><span class="cv-item__when">2023.03 – 2023.08</span></div>
-                    <div class="cv-item__desc">Drama society, College of Fine Arts · Sound team</div>
-                  </li>
-                  <li>
-                    <div class="cv-item__top"><span class="cv-item__name">BAB</span><span class="cv-item__when">2025.09 – 2026.08</span></div>
-                    <div class="cv-item__desc">College of Liberal Studies acoustic band · Vocal</div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="def">
-              <div class="def__key">Honors</div>
-              <div class="def__val">
-                <ul>
-                  <li>
-                    <div class="cv-item__top"><span class="cv-item__name">Hanjae Foundation Full Scholarship</span><span class="cv-item__when"></span></div>
-                    <div class="cv-item__desc">full tuition + ₩1,000,000 / month stipend · admission to graduation</div>
-                  </li>
-                  <li>
-                    <div class="cv-item__top"><span class="cv-item__name">Grand Prize · <a href="https://snuc.snu.ac.kr/20989/" target="_blank" rel="noopener">5th SNU Computing Competition</a></span><span class="cv-item__when">2026.10</span></div>
-                    <div class="cv-item__desc">Seoul National University · studyForest (now Thinket)</div>
-                  </li>
-                  <li>
-                    <div class="cv-item__top"><span class="cv-item__name">Top Project · Computer Programming</span><span class="cv-item__when">2026.06</span></div>
-                    <div class="cv-item__desc">Dept. of Computer Science &amp; Engineering, SNU · studyForest (now Thinket)</div>
-                  </li>
-                  <li>
-                    <div class="cv-item__top"><span class="cv-item__name">Best Undergraduate Research Award</span><span class="cv-item__when">2022.02</span></div>
-                    <div class="cv-item__desc">Korea Brain &amp; Cognitive Sciences Community</div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="def">
-              <div class="def__key">Talks</div>
-              <div class="def__val">
-                <ul>
-                  <li>
-                    <div class="cv-item__top"><span class="cv-item__name">“테크놀로지와 음악의 새로운 만남”</span><span class="cv-item__when">2023.06</span></div>
-                    <div class="cv-item__desc">Speaker (Part II) · 74th Seminar, Music Aesthetics Society (음악미학연구회)</div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="def">
-              <div class="def__key">Résumé</div>
-              <div class="def__val">
-                <!-- drop assets/cv.pdf to make this link resolve -->
-                <a href="assets/cv.pdf" download target="_blank" rel="noopener" style="border-bottom:2px solid var(--line-2)">Download CV (PDF) ↓</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== 03 Works (projects, exhibition-index style) ===== -->
-    <section class="section" id="works">
-      <div class="wrap section__grid reveal">
-        <div class="section__head">
-          <p class="rail"><span class="num">03</span> &nbsp;/&nbsp; Works</p>
-          <h2 class="section__title">작업</h2>
-        </div>
-        <div class="section__body">
-          <div class="index">
-            <article class="work">
-              <div class="work__no">001</div>
-              <div class="work__main">
-                <span class="work__kind"><img class="work__icon" src="assets/thinket-icon.svg" alt="" width="32" height="32" />Featured · Web</span>
-                <h3 class="work__title work__title--menu">
-                  <span class="work__trigger" tabindex="0" role="button" aria-haspopup="true">Thinket (구&nbsp;studyForest)&nbsp;↗</span>
-                  <span class="work__launch" role="menu" aria-label="Thinket 실행 방법 선택">
-                    <span class="label-eyebrow">라이브</span>
-                    <a href="https://thinket.ai/app?demo=1" target="_blank" rel="noopener" role="menuitem"><span>데모 체험</span><small>가입 없이 · 예시 숲이 열린다</small></a>
-                    <a href="https://thinket.ai" target="_blank" rel="noopener" role="menuitem"><span>thinket.ai</span><small>초대제 비공개 베타</small></a>
-                  </span>
-                </h3>
-                <span class="work__context">서울대학교 · 학부대학 · 컴퓨팅 핵심: 컴퓨터로 사고하기<br>서울대학교 · 공과대학 · 컴퓨터공학부 · 컴퓨터프로그래밍<br>서울대학교 · 사회과학대학 · 심리학과 · 고급학습심리학</span>
-                <span class="work__spec">웹 애플리케이션 · Python, Java · 2026</span>
-                <div class="work__split">
-                <div class="work__copy">
-                <p class="work__desc">사고는 한 줄로 흐르지 않는다. 하나의 생각은 여러 갈래로 뻗고, 그 갈래마다 또 새로운 생각이 자라난다. 그러나 LLM으로 학습하는 환경, 끝없이 아래로만 쌓이는 선형 스크롤 UI는 이렇게 분기하는 사고와 맞물리지 못한다. 깊이 들어갈수록 처음 무엇을 알고 싶었는지 흐려지고, 전체 맥락을 머릿속에 떠안게 된다. Thinket은 대화를 질문들의 숲으로 다시 세운다. 답변의 한 대목에 형광펜을 그으면 그 자리가 닻이 되어 가지가 자라고, 머릿속에 쌓이던 탐구의 구조가 화면으로 나와 눈으로 보고 오갈 수 있게 된다. 그리고 그 구조가 곧 모델이 읽는 맥락이 된다. 뿌리에서 지금까지의 경로만 모델에 보내므로, 무엇이 맥락으로 들어갈지는 손댈 수 없는 기본값이 아니라 학습자가 보고 고르는 것이 된다.</p>
-                <p class="work__desc">수업 과제로 출발해 제품이 됐다. Python으로 설계를 검증하고 같은 설계를 Java(OOP)로 전면 재구현하며 구조를 굳힌 뒤, Thinket으로 이름을 바꿔 자체 도메인에서 초대제 비공개 베타를 운영하고 있다. FastAPI와 PostgreSQL 위에 프레임워크도 빌드 단계도 없는 바닐라 JS 프런트엔드를 얹었고, 생성 비용은 서버가 부담해 이용자는 자기 API 키 없이 쓴다. 모체인 studyForest는 2026년 10월 <a href="https://snuc.snu.ac.kr/20989/" target="_blank" rel="noopener">서울대학교 제5회 컴퓨팅 경진대회</a>에서 대상을 받았다.</p>
-                </div><!-- /.work__copy -->
-                <div class="work__media">
-                  <button type="button" class="deck" data-cardnews="thinket-cardnews" aria-haspopup="dialog"
-                          aria-label="Thinket 카드뉴스 9장 펼쳐 보기">
-                    <span class="plate" style="--ratio: 1080 / 1350"><img src="assets/cardnews/light/01.png" alt="Thinket 카드뉴스 첫 장: “AI한테 물어본 건 많은데 왜 기억에 남는 게 없지?”" width="1080" height="1350" loading="lazy" /></span>
-                    <span class="deck__cue">9장 펼쳐 보기&nbsp;↗</span>
-                  </button>
-                  <p class="work__plate-cap">
-                    카드뉴스 · Thinket 소개 <strong>9장</strong>
-                    <a href="assets/studyforest-poster.pdf" target="_blank" rel="noopener">연구 포스터 · 컴퓨터프로그래밍 <strong>최우수 프로젝트</strong> (PDF)&nbsp;↗</a>
-                  </p>
-                </div><!-- /.work__media -->
-                </div><!-- /.work__split -->
-              </div>
-            </article>
-            <article class="work">
-              <div class="work__no">002</div>
-              <div class="work__main">
-                <span class="work__kind"><img class="work__icon" src="assets/maennal-icon.svg" alt="" width="32" height="32" />Featured · App</span>
-                <h3 class="work__title"><a href="https://maennal.com" target="_blank" rel="noopener">맨날 (Maennal)&nbsp;↗</a></h3>
-                <span class="work__context">개인 작업</span>
-                <span class="work__spec">macOS 앱 · 웹 PWA · React, Electron · 2026</span>
-                <div class="work__split">
-                <div class="work__copy">
-                <p class="work__desc"><span class="brand">맨날</span>은 오늘 할 일을 적는 앱이다. 열면 오늘 날짜가 먼저 뜨고, 곧바로 타이핑해 적는다. 하루가 지나면 그날은 달력에 도형 하나로 남는다. 다 해낸 날은 원, 남긴 일이 있는 날은 삼각, 오늘과 아직 오지 않은 날은 사각이다. 지나간 날은 이미 결론이 나 있고, 오지 않은 날은 속이 빈 채로 기다린다. 달력에서 붉게 칠해지는 칸은 오늘 하나뿐이다. 계획도 세워야 하고 기록도 남아야 하지만, 정작 살아낼 수 있는 날은 오늘 하루이기 때문이다.</p>
-                <p class="work__desc">같은 도형이라도 언제 적었는지에 따라 진하기가 다르다. 그날 그 자리에서 적은 것은 진하게, 나중에 되살려 적은 것은 옅게 남는다. 지나간 날은 평소 읽기 전용이어서, 고치려면 그 날을 되살리는 동작을 한 번 거쳐야 한다. 아직 오지 않은 날의 빈 도형은 마우스를 얹는 동안만 채워져, 그날을 미리 살아본 모습을 잠깐 보여준다. 과거를 굳혀두는 것과 미래를 미리 판단하지 않는 것은 결국 같은 말이다. 손댈 수 있는 곳을 오늘 하나로 남겨둔다는 것. 그래서 한 달을 펼치면 계획표가 아니라 그 달을 어떻게 살았는지가 보인다.</p>
-                <p class="work__desc">데이터는 로컬 우선으로 두되, 사람이 읽을 수 있는 JSON·마크다운 파일로 iCloud Drive에 양방향 미러링된다.</p>
-                </div><!-- /.work__copy -->
-                <figure class="work__media work__media--figure">
-                  <span class="plate plate--still" style="--ratio: 1442 / 1230"><img src="assets/maennal-calendar.png?v=2" alt="맨날의 한 달 달력. 완결한 날은 네이비 원, 미완의 날은 앰버 삼각, 오늘은 붉은 사각, 아직 오지 않은 날은 속 빈 사각이고, 여러 날에 걸친 일정은 색 띠로 지난다." width="1442" height="1230" loading="lazy" /></span>
-                  <figcaption class="work__plate-cap">한 달의 기록 · 원 <strong>완결</strong> · 삼각 <strong>미완</strong> · 사각 <strong>오늘</strong></figcaption>
-                </figure>
-                </div><!-- /.work__split -->
-              </div>
-            </article>
-            <article class="work">
-              <div class="work__no">003</div>
-              <div class="work__main">
-                <span class="work__kind">Max/MSP · Audiovisual</span>
-                <h3 class="work__title">Synaesthesia</h3>
-                <span class="work__context">서울대학교 · 음악대학 · 작곡과 · 전자음악 이론 및 실습 1</span>
-                <span class="work__spec">사운드 · LED 영상 · 4 악기 · 2026</span>
-                <div class="work__split">
-                <div class="work__copy">
-                <p class="work__desc">이 작업은 <span class="gloss" tabindex="0" role="button" aria-describedby="gloss-humanness">인간성에 대한 예술 철학<span class="gloss__panel" role="tooltip" id="gloss-humanness"><span class="label-eyebrow">작가의 말</span>인간다움은 무언가로 표출될 때 비로소 드러나고, 나는 예술이야말로 가장 이상화된 자기표현의 방식이라 믿는다. 말과 글이 언어에 갇히는 자리에서, 음악은 가장 미분화된 심리까지 길을 내어주기 때문이다. 그 인간성의 한 극단이 재즈의 즉흥, 곧 두 번 다시 똑같이 울리지 않는 ‘불완전성’이라 보았다. 이번 학기의 작업은 이 믿음을 알고리즘으로 시험하며 ‘인간성이란 무엇인가’를 다시 묻고 정교화해간 과정이다.</span></span>을 확률과 무선화 로직으로 실험해본 시도다. 음이 울리는 타이밍에는 확률 로직을, 음의 길이(duration)와 세기(velocity)에는 무선화 로직을 적용해 ‘즉흥성’을 알고리즘으로 구현하고자 했다. 조성이라는 최소한의 틀 속에서, 서로 다른 네 악기의 즉흥 연주를 시도했다.</p>
-                <p class="work__desc">무선화된 연주는 물방울의 심상을 떠올렸고, 악기마다 다른 음색은 상이한 색상에 매핑되어, 이 공감각을 시각화하는 작업으로 이어졌다. <code>lcd</code> 화면 위에서 그 색들이 펼쳐지고, 물방울이 떨어지는 인상은 고요한 바탕에 퍼지는 파동으로 치환됐다. 이 최소한의 틀이 허락하는 즉흥에서 비로소 미적 쾌감이 솟는다. Max/MSP.</p>
-                </div><!-- /.work__copy -->
-                <div class="work__media">
-                <div class="plate plate--still" style="--ratio: 1280 / 958">
-                <video class="work__video" width="1280" height="958" controls preload="metadata" playsinline poster="assets/synaesthesia-poster.jpg">
-                  <source src="assets/synaesthesia.mp4" type="video/mp4" />
-                  이 브라우저는 video 태그를 지원하지 않습니다. <a href="assets/synaesthesia.mp4">영상 내려받기 ↓</a>
-                </video>
-                </div>
-                <button type="button" class="work__fulllink" data-lightbox="synaesthesia-full" aria-haspopup="dialog">전체 버전 (2:14)&nbsp;↗</button>
-                </div><!-- /.work__media -->
-                </div><!-- /.work__split -->
-              </div>
-            </article>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== 04 Contact ===== -->
-    <section class="section" id="contact">
-      <div class="wrap section__grid reveal">
-        <div class="section__head">
-          <p class="rail"><span class="num">04</span> &nbsp;/&nbsp; Contact</p>
-          <h2 class="section__title">연락</h2>
-        </div>
-        <div class="section__body">
-          <p class="contact__big">
-            <a href="mailto:qualia0521@snu.ac.kr">qualia0521@snu.ac.kr</a>
-          </p>
-          <div class="deflist" style="margin-top:2.5rem">
-            <div class="def">
-              <div class="def__key">GitHub</div>
-              <div class="def__val"><a href="https://github.com/music-ingLee" target="_blank" rel="noopener" style="border-bottom:2px solid var(--line-2)">github.com/music-ingLee</a></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <footer class="footer">
-    <span>© 2026 이윤태 · music_ing Lee</span>
-    <span>Hosted on GitHub Pages</span>
-  </footer>
-
-  <!-- ===== lightbox: full-length screening ===== -->
-  <div class="lightbox" id="synaesthesia-full" role="dialog" aria-modal="true" aria-label="Synaesthesia 전체 버전" hidden>
-    <button type="button" class="lightbox__close" aria-label="닫기">닫기&nbsp;✕</button>
-    <div class="lightbox__stage">
-      <video class="lightbox__video" controls playsinline preload="none"
-             poster="assets/synaesthesia-poster.jpg" data-src="assets/synaesthesia-full.mp4"></video>
-      <p class="lightbox__cap"><span class="label-eyebrow">전체 버전</span>Synaesthesia · 2:14 · Max/MSP</p>
-    </div>
+    <p class="hero__meta">Psychology · Music Informatics, Seoul National University</p>
+  </section>
+    <div class="runway" aria-hidden="true"></div>
   </div>
 
-  <!-- ===== lightbox: Thinket cardnews, 9 cards in two themes ===== -->
-  <div class="lightbox lightbox--deck" id="thinket-cardnews" role="dialog" aria-modal="true" aria-label="Thinket 카드뉴스" hidden
-       data-count="9" data-path="assets/cardnews">
-    <button type="button" class="lightbox__close" aria-label="닫기">닫기&nbsp;✕</button>
-    <div class="lightbox__stage deck-stage">
-      <div class="deck-stage__frame">
-        <img class="deck-stage__img" src="assets/cardnews/light/01.png" alt="" width="1080" height="1350" />
-      </div>
-      <div class="deck-stage__bar">
-        <button type="button" class="deck-nav" data-step="-1" aria-label="이전 장">←</button>
-        <p class="deck-count" aria-live="polite"><b class="deck-count__i">1</b> / 9</p>
-        <button type="button" class="deck-nav" data-step="1" aria-label="다음 장">→</button>
-        <span class="deck-theme" role="group" aria-label="카드뉴스 테마">
-          <button type="button" class="deck-theme__btn is-on" data-theme="light" aria-pressed="true">라이트</button>
-          <button type="button" class="deck-theme__btn" data-theme="dark" aria-pressed="false">다크</button>
-        </span>
-      </div>
-    </div>
-  </div>
+  <div class="split wrap">
 
-  <script src="script.js?v=11"></script>
+    <section class="block" id="about" aria-labelledby="about-h">
+      <h2 class="label" id="about-h">소개</h2>
+      <p class="prose" data-lines="0">
+        음악이 먼저였다. 듣고, 부르고, 만들다 보니 그 음악을 듣는 마음이 궁금해졌고, 그래서 심리학을 공부한다.
+        처음 붙든 물음은 왜 leading tone이 ‘leading’ tone인가였다. 같은 음을 듣고도 누군가는 이끌리고 누군가는
+        그렇지 않다면, 이끎은 음표가 아니라 듣는 사람의 마음과 뇌에서 일어나는 일일 것이다.
+      </p>
+      <p class="prose">
+        그 물음은 네 갈래로 뻗었다. 사람이 음악을 듣는 방식을 모델에 옮기는
+        <a class="field" href="#score" data-thread="0"><span class="field__img"><img src="assets/fields/player-piano-roll-53993129211.jpg" alt="" width="640" height="427" loading="lazy"></span>음악정보학</a>,
+        뇌와 모델이라는 두 블랙박스 안에서 무엇이 표상되는지 읽어내려는
+        <a class="field" href="#score" data-thread="2"><span class="field__img"><img src="assets/fields/cajal-a-purkinje-neuron-from-the-human.jpg" alt="" width="450" height="640" loading="lazy"></span>계산신경과학</a>,
+        사람이 어떻게 배우고 도구가 그 배움을 어디까지 도울 수 있는지 묻는
+        <a class="field" href="#score" data-thread="4"><span class="field__img"><img src="assets/fields/guidonian-hand.jpg" alt="" width="545" height="640" loading="lazy"></span>학습과학</a>,
+        그리고 그 ‘들리는 느낌’ 자체가 마음 안에서 어떻게 표상되는지 묻는
+        <a class="field" href="#score" data-thread="3"><span class="field__img"><img src="assets/fields/treatise-of-man.jpg" alt="" width="520" height="640" loading="lazy"></span>심리철학</a>이다.
+      </p>
+      <p class="define"><b>musicking</b> any activity involving or related to music performance, such as performing, listening, rehearsing, or composing.</p>
+    </section>
+
+    <aside class="score" id="score" aria-label="작업과 이력의 악보">
+      <div class="score__stage">
+        <div class="score__scroll"><svg id="scoreSvg" role="img" aria-labelledby="score-cap"></svg></div>
+        <div class="card" id="card" hidden></div>
+      </div>
+      <p class="score__cap" id="score-cap">다섯 줄은 아래부터 음악, 인지심리학, 계산신경과학, 심리철학, 학습과학이다. 음표는 그 일이 속한 줄에, 한 해에 한 마디씩 놓인다.</p>
+    </aside>
+
+    <section class="block" id="works" aria-labelledby="works-h">
+      <h2 class="label" id="works-h">작업</h2>
+      <article class="work" id="thinket" data-note="thinket">
+        <a class="work__plate" href="https://thinket.ai/app?demo=1" target="_blank" rel="noopener" aria-label="Thinket 데모 열기">
+          <img src="assets/thinket-icon.svg" alt="" width="64" height="64">
+        </a>
+        <div class="work__body">
+          <h3 class="work__title">Thinket <span class="work__was">구 studyForest</span></h3>
+          <p class="work__meta">웹 애플리케이션 · 2026 · <a href="https://snuc.snu.ac.kr/20989/" target="_blank" rel="noopener">제5회 서울대학교 컴퓨팅 경진대회</a> 대상</p>
+          <p>대화를 질문들의 숲으로 다시 세우는 LLM 학습 도구다. 답변의 한 대목에 형광펜을 그으면 그 자리에서 가지가 자라고, 뿌리에서 지금까지의 경로만 모델의 맥락이 된다. 무엇이 맥락으로 들어갈지는 학습자가 보고 고른다.</p>
+          <p class="work__links"><a href="https://thinket.ai/app?demo=1" target="_blank" rel="noopener">가입 없이 데모 ↗</a><a href="https://thinket.ai" target="_blank" rel="noopener">thinket.ai ↗</a></p>
+        </div>
+      </article>
+
+      <article class="work" id="maennal" data-note="maennal">
+        <a class="work__plate work__plate--warm" href="https://maennal.com" target="_blank" rel="noopener" aria-label="맨날 열기">
+          <img src="assets/maennal-icon.svg" alt="" width="1024" height="1024">
+        </a>
+        <div class="work__body">
+          <h3 class="work__title"><span class="brand">맨날</span> <span class="work__was">Maennal</span></h3>
+          <p class="work__meta">macOS 앱 · 웹 · 2026</p>
+          <p><span class="brand">맨날</span>은 오늘 할 일을 적는 앱이다. 하루가 지나면 그날은 달력에 도형 하나로 남는다. 다 해낸 날은 원, 남긴 일이 있는 날은 삼각, 오늘과 아직 오지 않은 날은 사각이다. 달력에서 붉게 칠해지는 칸은 오늘 하나뿐이다.</p>
+          <p class="work__links"><a href="https://maennal.com" target="_blank" rel="noopener">maennal.com ↗</a></p>
+        </div>
+      </article>
+
+      <article class="work" id="synaesthesia" data-note="synaesthesia">
+        <a class="work__plate work__plate--media" href="assets/synaesthesia-full.mp4" target="_blank" rel="noopener" aria-label="Synaesthesia 전체 영상 열기">
+          <img src="assets/synaesthesia-poster.jpg" alt="" width="1280" height="958">
+          <video muted loop playsinline preload="none" data-src="assets/synaesthesia.mp4"></video>
+        </a>
+        <div class="work__body">
+          <h3 class="work__title">Synaesthesia</h3>
+          <p class="work__meta">사운드 · LED 영상 · Max/MSP · 2026</p>
+          <p>인간성에 대한 예술 철학을 확률과 무선화 로직으로 실험한 작업이다. 조성이라는 최소한의 틀 안에서 네 악기가 즉흥하고, 그 음색이 떠올린 색과 물방울의 심상을 lcd 위에 퍼지는 파동으로 옮겼다.</p>
+          <p class="work__links"><a href="assets/synaesthesia-full.mp4" target="_blank" rel="noopener">전체 영상 2:14 ↗</a></p>
+        </div>
+      </article>
+    </section>
+
+    <section class="block" id="cv" aria-labelledby="cv-h">
+      <h2 class="label" id="cv-h">이력</h2>
+      <div class="group">
+        <h3 class="group__h">Experience</h3>
+        <div class="row" data-note="ismi"><span class="row__n">Interdisciplinary Seminar on Machine Intelligence · ISMI</span><span class="row__t">2026.08 – 2026.12</span><span class="row__d">Co-organizer · Student-Directed Seminar, SNU Student-Directed Education (SDE) · ₩500,000 grant</span></div>
+        <div class="row" data-note="mubl"><span class="row__n">KAIST Music and Brain Lab · MuBL</span><span class="row__t">2026.07 – 2026.08</span><span class="row__d">Undergraduate Research Intern · Melodic Expectation at the Boundary of Vocal Range</span></div>
+        <div class="row"><span class="row__n">Hanjae Connect · Hanjae Foundation</span><span class="row__t">2026.07 – 2026.08</span><span class="row__d">Developer · internal app for scholars and alumni · React Native, Next.js, Supabase</span></div>
+        <div class="row" data-note="teld"><span class="row__n">SNU Technology-Enhanced Learning Design Lab · TELD</span><span class="row__t">2026.05 – 2026.12</span><span class="row__d">Undergraduate Researcher · Independent Research, SNU SDE · ₩7,000,000 grant</span></div>
+        <div class="row" data-note="connectome"><span class="row__n">SNU Connectome Lab</span><span class="row__t">2025.12 – 2026.02</span><span class="row__d">Undergraduate Research Intern</span></div>
+        <div class="row" data-note="service"><span class="row__n">Republic of Korea Air Force</span><span class="row__t">2023.10 – 2025.07</span><span class="row__d">Military service</span></div>
+      </div>
+
+      <div class="group">
+        <h3 class="group__h">Honors</h3>
+        <div class="row" data-note="grandprize"><span class="row__n">Grand Prize · <a href="https://snuc.snu.ac.kr/20989/" target="_blank" rel="noopener">5th SNU Computing Competition</a></span><span class="row__t">2026.10</span><span class="row__d">Seoul National University · studyForest (now Thinket)</span></div>
+        <div class="row" data-note="topproject"><span class="row__n">Top Project · Computer Programming</span><span class="row__t">2026.06</span><span class="row__d">Dept. of Computer Science &amp; Engineering, SNU · studyForest (now Thinket)</span></div>
+        <div class="row" data-note="hanjae"><span class="row__n">Hanjae Foundation Full Scholarship</span><span class="row__t"></span><span class="row__d">Full tuition + ₩1,000,000 / month stipend · admission to graduation</span></div>
+        <div class="row" data-note="bcsc"><span class="row__n">Best Undergraduate Research Award</span><span class="row__t">2022.02</span><span class="row__d">Korea Brain &amp; Cognitive Sciences Community</span></div>
+      </div>
+
+      <div class="group">
+        <h3 class="group__h">Education</h3>
+        <div class="row" data-note="major"><span class="row__n">Seoul National University</span><span class="row__t">2021 – present</span><span class="row__d">B.A. Psychology · Main Major / B.E. Music Informatics · Student Design Major</span></div>
+      </div>
+
+      <div class="group">
+        <h3 class="group__h">Collectives</h3>
+        <div class="row" data-note="bab"><span class="row__n">BAB</span><span class="row__t">2025.09 – 2026.08</span><span class="row__d">College of Liberal Studies acoustic band · Vocal</span></div>
+        <div class="row" data-note="tripleh"><span class="row__n">Triple H</span><span class="row__t">2023.03 – 2026.02</span><span class="row__d">Vocal &amp; hip-hop club · Vocal</span></div>
+        <div class="row" data-note="aerg"><span class="row__n">AERG</span><span class="row__t">2023.03 – 2023.08</span><span class="row__d">Drama society, College of Fine Arts · Sound team</span></div>
+        <div class="row" data-note="soundream"><span class="row__n">Soundream</span><span class="row__t">2022.09 – 2023.02</span><span class="row__d">Composition club</span></div>
+        <div class="row" data-note="rgorhythm"><span class="row__n">Rgorhythm</span><span class="row__t">2022.03 – present</span><span class="row__d">Psychology dept. band · Vocal · Founder</span></div>
+        <div class="row" data-note="jame"><span class="row__n">JAME</span><span class="row__t">2021.03 – 2023.02</span><span class="row__d">College of Humanities band · Vocal · 19th-gen Leader</span></div>
+      </div>
+
+      <div class="group">
+        <h3 class="group__h">Talks</h3>
+        <div class="row" data-note="talk"><span class="row__n">“테크놀로지와 음악의 새로운 만남”</span><span class="row__t">2023.06</span><span class="row__d">Speaker (Part II) · 74th Seminar, Music Aesthetics Society (음악미학연구회)</span></div>
+      </div>
+
+      <div class="group">
+        <h3 class="group__h">Skills</h3>
+        <div class="row"><span class="row__n row__n--plain">Git · Python · Java · C++ · Max/MSP/Jitter</span></div>
+      </div>
+
+      <p class="cv__pdf"><a href="assets/cv.pdf" target="_blank" rel="noopener">CV 내려받기 (PDF) ↓</a></p>
+    </section>
+
+    <section class="block" id="contact" aria-labelledby="contact-h">
+      <h2 class="label" id="contact-h">연락</h2>
+      <p><a class="contact__mail" href="mailto:qualia0521@snu.ac.kr">qualia0521@snu.ac.kr</a></p>
+      <p class="contact__links"><a href="https://github.com/music-ingLee" target="_blank" rel="noopener">github.com/music-ingLee ↗</a></p>
+    </section>
+
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p class="foot__note">음악: 방문할 때마다 새로 짜이는 선율이다. 음 <i>n</i>은 <i>P</i>(<i>n</i>) ∝ <i>K</i>(<i>n</i>)<sup>1.3</sup> · e<sup>−|<i>n</i>−<i>p</i>|/2.4</sup> · e<sup>−((<i>n</i>−<i>μ</i>)/7)²</sup> · <i>h</i>(<i>n</i>) · <i>r</i>(<i>n</i>)의 비율로 고른다(<i>K</i> 조성 안정도, Krumhansl &amp; Kessler 1982 · <i>p</i> 앞 음 · <i>μ</i> 음역 중심 · <i>h</i> 화음 적합도 · <i>r</i> 반복과 도약 보정). 악절은 반종지로 열고 정격종지로 닫으며 A A′ B A′로 돌아온다. 박은 0.52초로 고정이고, 스크롤 에너지 <i>E</i>(<i>t</i>) = Σ Δ<i>y</i><sub><i>i</i></sub> · 2<sup>−(<i>t</i>−<i>t</i><sub><i>i</i></sub>)/0.35</sup>가 40을 넘으면 8분음표, 220을 넘으면 16분음표 꾸밈음이 다음 음의 이웃까지 음계로 잇는다. 알고리즘 설계 이윤태.</p>
+    <p class="foot__note">그림: 자동 피아노 롤, Ethan Long, CC BY-SA 2.0 · 소뇌 푸르키녜 세포, Santiago Ramón y Cajal, 퍼블릭 도메인 · 귀도의 손, 퍼블릭 도메인 · 『인간론』의 도해, René Descartes, 퍼블릭 도메인. 모두 Wikimedia Commons. 악보 기호: Bravura, SIL OFL 1.1.</p>
+    <p class="foot__sign">© 2026 이윤태 · music_ing Lee</p>
+  </div>
+</footer>
+
+<div class="morph" id="morph" aria-hidden="true">
+  <svg class="morph__lines" id="morphLines"></svg>
+  <svg class="morph__score" id="morphScore"></svg>
+  <span class="morph__name" id="morphName">이윤태</span>
+</div>
+<a class="nudge" id="nudge" href="#about"><svg class="nudge__staff" viewBox="0 0 30 20" aria-hidden="true"><path d="M1 2H29M1 6H29M1 10H29M1 14H29M1 18H29"/><ellipse class="nudge__note" cx="16" cy="10" rx="3.2" ry="2.35"/></svg>계속 읽기 <span class="nudge__arrow" aria-hidden="true">↓</span></a>
+<script src="script.js?v=12"></script>
 </body>
 </html>
