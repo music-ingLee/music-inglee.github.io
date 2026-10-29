@@ -348,7 +348,7 @@
     const sb = stage.getBoundingClientRect(), nb = g.getBoundingClientRect();
     const cw = card.offsetWidth, ch = card.offsetHeight;
     let left = nb.left + nb.width / 2 - sb.left - cw / 2;
-    left = Math.max(0, Math.min(left, sb.width - cw));
+    left = Math.max(8, Math.min(left, sb.width - cw - 8));
     // above the note when the window has room for it under the nav, else below
     const roomAbove = nb.top - ch - 12 > 76;
     card.style.left = `${left}px`;
@@ -375,10 +375,34 @@
   });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { pinned = false; hideCard(); light(reading); } });
 
-  /* reading position lights the note of what is being read */
-  const readIO = new IntersectionObserver((es) => {
-    es.forEach((e) => { if (e.isIntersecting) { reading = e.target.dataset.note; if (!pinned && card.hidden) light(reading); } });
-  }, { rootMargin: '-46% 0px -50% 0px' });
+  /* reading position lights the note of what is being read. The reading line sits a little
+     above the middle of what shows below the top (the nav, and the score where it stays there) */
+  let readIO = null;
+  function watchReading(top) {
+    if (readIO) readIO.disconnect();
+    const room = innerHeight - top;
+    readIO = new IntersectionObserver((es) => {
+      es.forEach((e) => {
+        if (!e.isIntersecting) return;
+        const was = reading;
+        reading = e.target.dataset.note;
+        if (!pinned && card.hidden) light(reading);
+        if (reading !== was) follow(reading);
+      });
+    }, { rootMargin: `-${Math.round(top + room * 0.46)}px 0px -${Math.round(room * 0.5)}px 0px` });
+    $$('[data-note], #about').forEach((n) => readIO.observe(n));
+  }
+
+  /* on a narrow screen the score is wider than the window: it slides to the note being read */
+  const scroller = $('.score__scroll');
+  function follow(id) {
+    if (scroller.scrollWidth <= scroller.clientWidth + 1) return;
+    const entry = id && noteEls.get(id);
+    if (!entry) { scroller.scrollTo({ left: 0, behavior: reduce ? 'auto' : 'smooth' }); return; }   // back at the start: the root
+    const k = svg.getBoundingClientRect().width / W;
+    const x = svg.getBoundingClientRect().left - scroller.getBoundingClientRect().left + scroller.scrollLeft + entry.item.cx * k;
+    scroller.scrollTo({ left: Math.max(0, x - scroller.clientWidth / 2), behavior: reduce ? 'auto' : 'smooth' });
+  }
 
   /* the four fields in the prose light their threads */
   function bindFields() {
@@ -390,6 +414,8 @@
       f.addEventListener('pointerleave', off);
       f.addEventListener('focus', on);
       f.addEventListener('blur', off);
+      // where the score stays at the top, a tap lights the thread there instead of jumping to it
+      f.addEventListener('click', (e) => { if (!wideEnough.matches) { e.preventDefault(); hideCard(); lightThread(t); } });
     });
   }
 
@@ -568,7 +594,18 @@
   const VB_W = W, VB_H = BOT + 54;
   let paths = [], fades = [], rootLabel = null, turnOn = false;
 
+  // narrow screens keep the score at the top, so it drops the empty air above the staff
+  // and tells the page how tall it stands (anchors land below it)
+  const panelEl = $('.score');
+  function fitScore() {
+    svg.setAttribute('viewBox', wideEnough.matches ? `0 0 ${W} ${BOT + 54}` : `0 50 ${W} ${BOT + 44 - 50}`);
+    html.style.setProperty('--score-h', wideEnough.matches ? '0px' : `${panelEl.offsetHeight}px`);
+    watchReading(wideEnough.matches ? 0 : parseFloat(getComputedStyle(panelEl).top) + panelEl.offsetHeight);
+  }
+  new ResizeObserver(fitScore).observe(panelEl);
+
   function setupTurn() {
+    fitScore();
     turnOn = wideEnough.matches && !reduce;
     html.classList.toggle('morph-on', turnOn);
     if (!turnOn) { html.classList.remove('morph-run'); return; }
@@ -682,6 +719,43 @@
   });
 
   /* ---------- small things ---------- */
+  // the scrollbar floats on the page instead of standing in a gutter of its own, so it sits
+  // on white and on the black footer alike (touch screens keep their own floating bar)
+  if (matchMedia('(pointer: fine)').matches) {
+    const rail = document.createElement('div'), thumb = document.createElement('div');
+    rail.className = 'rail'; thumb.className = 'rail__thumb';
+    rail.setAttribute('aria-hidden', 'true');
+    rail.append(thumb); document.body.append(rail);
+    html.classList.add('own-scrollbar');
+    let idle = 0;
+    const place = () => {
+      const vh = innerHeight, dh = html.scrollHeight;
+      const h = Math.max(40, (vh * vh) / dh);
+      rail.hidden = dh <= vh + 1;
+      thumb.style.height = `${h}px`;
+      thumb.style.transform = `translateY(${(scrollY / Math.max(1, dh - vh)) * (vh - h)}px)`;
+    };
+    const wake = () => {
+      place();
+      rail.classList.add('is-awake');
+      clearTimeout(idle);
+      idle = setTimeout(() => rail.classList.remove('is-awake'), 1200);
+    };
+    addEventListener('scroll', wake, { passive: true });
+    addEventListener('resize', place);
+    new ResizeObserver(place).observe(document.body);
+    thumb.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      thumb.setPointerCapture(e.pointerId);
+      rail.classList.add('is-held');
+      const y0 = e.clientY, s0 = scrollY;
+      const k = (html.scrollHeight - innerHeight) / (innerHeight - thumb.offsetHeight);
+      const move = (ev) => scrollTo({ top: s0 + (ev.clientY - y0) * k, behavior: 'instant' });
+      thumb.addEventListener('pointermove', move);
+      thumb.addEventListener('pointerup', () => { thumb.removeEventListener('pointermove', move); rail.classList.remove('is-held'); }, { once: true });
+    });
+    place();
+  }
   // Synaesthesia's plate plays its loop while the pointer rests on it
   $$('.work__plate--media').forEach((a) => {
     const v = $('video', a);
@@ -704,5 +778,4 @@
   buildScore();
   setupTurn();
   bindFields();
-  $$('[data-note]').forEach((n) => readIO.observe(n));
 })();

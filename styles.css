@@ -20,13 +20,34 @@
   --measure: 34.4em;       /* 40 Hangul characters */
   --gutter: clamp(20px, 5vw, 72px);
   --nav-h: 60px;
+  --strip-h: 0px;          /* the melody strip under the nav, open while the sound is on */
+  --score-h: 0px;          /* the score's height when it stays at the top (narrow screens) */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   font-family: "Jost", "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
                "Apple SD Gothic Neo", "Helvetica Neue", Arial, sans-serif;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 24px); }
+html {
+  scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 24px);
+  color-scheme: light;
+  /* the scrollbar sits on the page: no track of its own, a quiet thumb */
+  scrollbar-color: rgba(17, 19, 17, 0.26) transparent;
+}
+::-webkit-scrollbar { width: 11px; height: 11px; background: transparent; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(17, 19, 17, 0.26); border: 3px solid transparent; border-radius: 99px; background-clip: padding-box; }
+/* with a mouse, the page draws its own: a thin bar floating over the page, grey on white and on black */
+html.own-scrollbar { scrollbar-width: none; }
+html.own-scrollbar::-webkit-scrollbar { display: none; }
+.rail { position: fixed; top: 0; right: 0; bottom: 0; width: 14px; z-index: 50; pointer-events: none; mix-blend-mode: difference; }
+.rail__thumb {
+  position: absolute; top: 0; right: 3px; width: 6px; border-radius: 99px;
+  background: #808080; opacity: 0.55; pointer-events: auto; cursor: default;
+  transition: opacity 0.3s, width 0.15s var(--ease-out);
+}
+.rail.is-awake .rail__thumb, .rail.is-held .rail__thumb, .rail__thumb:hover { opacity: 0.95; }
+.rail.is-held .rail__thumb, .rail__thumb:hover { width: 9px; }
 body {
   background: var(--bg); color: var(--text);
   font-size: 1.0625rem; line-height: 1.7;
@@ -71,6 +92,7 @@ a { color: inherit; }
 /* it hangs below the nav instead of pushing the page down when it opens */
 .strip { position: absolute; left: 0; right: 0; top: 100%; background: var(--bg); height: 0; overflow: hidden; transition: height 0.35s var(--ease-out); }
 .sound-on .strip { height: 34px; }
+.sound-on { --strip-h: 34px; }
 .strip svg { width: 100%; height: 34px; overflow: visible; }
 .strip line { stroke: var(--green); stroke-width: 1; opacity: 0.55; }
 .strip .sn { fill: var(--ink); }
@@ -264,10 +286,24 @@ a { color: inherit; }
 
 /* ---------- narrow ---------- */
 @media (max-width: 1000px) {
+  /* one column: the score comes first and stays under the nav, the reading scrolls beneath it */
+  html { scroll-padding-top: calc(var(--nav-h) + var(--strip-h) + var(--score-h) + 20px); }
   .split { grid-template-columns: minmax(0, 1fr); }
-  .score { grid-column: 1; grid-row: auto; position: static; padding-top: 3rem; }
-  .score__scroll { overflow-x: auto; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); }
-  #scoreSvg { min-width: 760px; }
+  .score {
+    grid-column: 1; grid-row: auto; order: -1;
+    position: sticky; top: calc(var(--nav-h) + var(--strip-h)); z-index: 20;
+    margin-inline: calc(var(--gutter) * -1); padding: 0.3rem 0 0.2rem;
+    background: var(--bg);
+    transition: top 0.35s var(--ease-out);
+  }
+  .score::after {   /* the reading fades as it slides under */
+    content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 22px;
+    background: linear-gradient(var(--bg), rgba(255, 255, 255, 0)); pointer-events: none;
+  }
+  .score__scroll { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; padding-inline: var(--gutter); }
+  .score__scroll::-webkit-scrollbar { display: none; }
+  #scoreSvg { min-width: 640px; }
+  .score__cap { display: none; }
 }
 @media (max-width: 640px) {
   .nav__links { display: none; }
