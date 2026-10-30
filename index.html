@@ -12,7 +12,7 @@
 <link rel="preload" href="assets/fonts/Jost-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="styles.css?v=59">
+<link rel="stylesheet" href="styles.css?v=60">
 </head>
 <body>
 
@@ -26,7 +26,9 @@
       <a href="#contact">연락</a>
     </nav>
     <button class="sound" id="sound" type="button" aria-pressed="false">
-      <span class="sound__dot" aria-hidden="true"></span><span class="sound__label">소리 켜기</span>
+      <canvas class="sound__scope" width="88" height="26" aria-hidden="true"></canvas>
+      <svg class="sound__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.3L12 5.6v12.8l-4.7-3.9H4z"/><path class="sound__wave" d="M15.4 9.3a3.8 3.8 0 0 1 0 5.4M18 6.8a7.4 7.4 0 0 1 0 10.4"/><path class="sound__mute" d="M16 9.6l4.8 4.8M20.8 9.6L16 14.4"/></svg>
+      <span class="sound__label">소리 켜기</span>
     </button>
   </div>
   <div class="strip" aria-hidden="true"><div class="wrap"><svg id="strip"></svg></div></div>
@@ -81,6 +83,15 @@
         <div class="card" id="card" hidden></div>
       </div>
       <p class="score__cap" id="score-cap">다섯 줄은 아래부터 음악, 인지심리학, 계산신경과학, 심리철학, 학습과학이다. 음표는 그 일이 속한 줄에, 한 해에 한 마디씩 놓인다.</p>
+      <div class="wstage" aria-hidden="true">
+        <div class="ws" data-work="thinket">
+          <svg class="ws__grove" viewBox="0 0 660 270" preserveAspectRatio="xMidYMid meet"></svg>
+          <span class="ws__mole"><img src="assets/works/char-mole.svg" alt=""></span>
+          <span class="ws__toucan"><img src="assets/works/char-toucan.svg" alt=""></span>
+        </div>
+        <svg class="ws" data-work="maennal" viewBox="-48 232 1120 560" preserveAspectRatio="xMidYMid meet"></svg>
+        <canvas class="ws" data-work="synaesthesia"></canvas>
+      </div>
     </aside>
 
     <section class="block" id="works" aria-labelledby="works-h">
@@ -182,7 +193,7 @@
 
 <footer class="foot">
   <div class="wrap">
-    <p class="foot__note">음악: 방문할 때마다 새로 짜이는 선율이다. 음 <i>n</i>은 <i>P</i>(<i>n</i>) ∝ <i>K</i>(<i>n</i>)<sup>1.3</sup> · e<sup>−|<i>n</i>−<i>p</i>|/2.4</sup> · e<sup>−((<i>n</i>−<i>μ</i>)/7)²</sup> · <i>h</i>(<i>n</i>) · <i>r</i>(<i>n</i>)의 비율로 고른다(<i>K</i> 조성 안정도, Krumhansl &amp; Kessler 1982 · <i>p</i> 앞 음 · <i>μ</i> 음역 중심 · <i>h</i> 화음 적합도 · <i>r</i> 반복과 도약 보정). 악절은 4/4 네 마디씩 반종지로 열고 정격종지로 닫으며 A A′ B A′로 돌아온다. 박은 0.52초로 고정이고, 스크롤 에너지 <i>E</i>(<i>t</i>) = Σ Δ<i>y</i><sub><i>i</i></sub> · 2<sup>−(<i>t</i>−<i>t</i><sub><i>i</i></sub>)/0.35</sup>가 40을 넘으면 8분음표, 220을 넘으면 16분음표 꾸밈음이 다음 음의 이웃까지 음계로 잇는다. 알고리즘 설계 이윤태.</p>
+    <p class="foot__note">Algorithmic music by Yoontae Lee, voiced in neuron bursts.<br>선율: <i>P</i>(<i>n</i>) ∝ <i>K</i>(<i>n</i>)<sup>1.3</sup> · e<sup>−|<i>n</i>−<i>p</i>|/2.4</sup> · e<sup>−((<i>n</i>−<i>μ</i>)/7)²</sup> · <i>h</i>(<i>n</i>) · <i>r</i>(<i>n</i>) (<i>K</i> 조성 안정도, Krumhansl &amp; Kessler 1982 · <i>p</i> 앞 음 · <i>μ</i> 음역 중심 · <i>h</i> 화음 · <i>r</i> 반복과 도약)<br>꾸밈음: 스크롤 에너지 <i>E</i>(<i>t</i>) = Σ Δ<i>y</i><sub><i>i</i></sub> · 2<sup>−(<i>t</i>−<i>t</i><sub><i>i</i></sub>)/0.35</sup></p>
     <p class="foot__note">그림: 자동 피아노 롤, Ethan Long, CC BY-SA 2.0 · 소뇌 푸르키녜 세포, Santiago Ramón y Cajal, 퍼블릭 도메인 · 『인간론』의 도해, René Descartes, 퍼블릭 도메인 · 귀도의 손, 퍼블릭 도메인. 모두 Wikimedia Commons. 악보 기호: Bravura, SIL OFL 1.1.</p>
     <p class="foot__sign">© 2026 이윤태 · music_ing Lee</p>
   </div>
@@ -193,6 +204,6 @@
   <svg class="morph__score" id="morphScore"></svg>
   <span class="morph__name" id="morphName">이윤태</span>
 </div>
-<script src="script.js?v=19"></script>
+<script src="script.js?v=20"></script>
 </body>
 </html>

@@ -76,16 +76,17 @@ a { color: inherit; }
   background: none; border: 0; padding: 0.55rem 0; cursor: pointer;
 }
 .js .sound { display: inline-flex; }
-.sound__dot {
-  width: 0.62rem; height: 0.46rem; border-radius: 50%;
-  border: 1.6px solid var(--green); transform: rotate(-20deg);
-  transition: background-color 0.2s;
-}
-.sound[aria-pressed="true"] .sound__dot { background: var(--green); }
 /* armed: on, waiting for the first touch to be allowed to sound */
-.sound-armed .sound__dot { animation: breathe 1.8s ease-in-out infinite; }
+/* the probe, framed as a small oscilloscope screen: a bezel, a faint graticule inside (drawn) */
+.sound__scope { display: block; width: 88px; height: 26px; border: 1px solid #cfd6d1; border-radius: 5px; background: #f6f9f7; box-sizing: content-box; }
+/* the switch is an icon (a line speaker: waves while on, a cross while off); its words stay for screen readers */
+.sound__icon { display: block; width: 21px; height: 21px; fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.sound[aria-pressed="true"] .sound__mute, .sound[aria-pressed="false"] .sound__wave { display: none; }
+.sound:hover .sound__icon { stroke: var(--green-deep); }
+.sound__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.sound-armed .sound__scope, .sound-armed .sound__wave { animation: breathe 1.8s ease-in-out infinite; }
 @keyframes breathe { 50% { opacity: 0.35; } }
-@media (prefers-reduced-motion: reduce) { .sound-armed .sound__dot { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .sound-armed .sound__scope, .sound-armed .sound__wave { animation: none; } }
 .sound:active { transform: scale(0.97); }
 
 /* the melody's own staff, open only while the sound is on */
@@ -162,8 +163,8 @@ a { color: inherit; }
 
 /* the four field pictures: a row under the score beside the intro (at the end of the intro
    on phones). The one in focus widens, the others step back; once the intro is read they go */
-.plates { display: flex; gap: 10px; margin-top: 1.6rem; transition: opacity 0.4s, transform 0.4s var(--ease-out); }
-.plates-away .plates { opacity: 0; transform: translateY(10px); pointer-events: none; }
+.plates { display: flex; gap: 10px; margin-top: 1.6rem; transition: opacity 0.6s ease 0.18s, transform 0.7s var(--ease-out) 0.18s, visibility 0s 0s; }
+.plates-away .plates { opacity: 0; transform: translateY(6px); pointer-events: none; visibility: hidden; transition: opacity 0.35s ease, transform 0.35s ease, visibility 0s 0.35s; }
 .plate { flex: 1 1 0; min-width: 0; display: block; text-decoration: none; transition: flex-grow 0.45s var(--ease-out), opacity 0.3s; }
 .plate.field { border: 0; white-space: normal; font-weight: 400; color: var(--muted); }
 .plate__img { display: block; aspect-ratio: 3 / 4; overflow: hidden; border-radius: 4px; background: #efefeb; }
@@ -188,6 +189,32 @@ a { color: inherit; }
 .lb__x { position: absolute; top: 10px; right: 12px; width: 34px; height: 34px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.9); font-size: 1.2rem; cursor: pointer; }
 .lb[open] figure { animation: lb-in 0.28s var(--ease-out); }
 @keyframes lb-in { from { opacity: 0; transform: translateY(10px) scale(0.98); } }
+/* the works, drawn: in the same place under the score, once the intro is read */
+.wstage { display: none; }
+@media (min-width: 1000px) {
+  html.js .score { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; }   /* over .js .score below */
+  .score > .plates, .score > .wstage { grid-row: 3; grid-column: 1; align-self: start; }
+  .wstage {
+    display: block; position: relative; margin-top: 1.6rem;
+    height: clamp(170px, calc(100vh - 480px), 290px); border-radius: 8px; overflow: hidden;
+    opacity: 0; transform: translateY(6px); pointer-events: none; visibility: hidden;
+    transition: opacity 0.35s ease, transform 0.35s ease, visibility 0s 0.35s;
+  }
+  .ws-on .wstage {
+    opacity: 1; transform: none; pointer-events: auto; visibility: visible;
+    transition: opacity 0.6s ease 0.18s, transform 0.7s var(--ease-out) 0.18s, visibility 0s 0s;
+  }
+  .ws { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.55s ease; }
+  .ws.is-on { opacity: 1; }
+  .ws[data-work="thinket"] { background: var(--plate); overflow: hidden; }
+  .ws__grove { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .ws__toucan, .ws__mole { position: absolute; left: 0; top: 0; pointer-events: none; }
+  .ws[data-work="maennal"] { background: #201c15; }
+  .ws[data-work="synaesthesia"] { background: #1c1026; cursor: crosshair; }
+  .ws:not(.is-on) { pointer-events: none; }
+}
+@media (prefers-reduced-motion: reduce) { .wstage, .ws-on .wstage, .ws, .plates-away .plates { transition: none; } }
+
 @media (max-width: 999.98px) {
   .plates { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 12px; margin-top: 1.8rem; }
   .plates.has-on .plate:not(.is-on) { opacity: 1; }

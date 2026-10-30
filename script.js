@@ -143,7 +143,7 @@
   const opening = first.slice(0, cut);   // the question, played first when the sound comes on
   gen.later(first.slice(cut));           // the answer follows
 
-  /* ---------- sound: the spike voice, a soft low root ---------- */
+  /* ---------- sound: a bursting neuron, a soft low root ---------- */
   let ctx = null, master = null;
   function audio() {
     const AC = window.AudioContext || window.webkitAudioContext;
@@ -173,8 +173,162 @@
     o.start(t);
     o.stop(t + decay + 0.05);
   }
-  const pluck = (m, vel = 1, when = 0) => audio() && voice(m, { type: 'triangle', cutoff: 2400, peak: 0.16 * vel, decay: 0.55 }, when);
-  const low = (m, vel = 1, when = 0) => audio() && voice(m, { type: 'sine', cutoff: 900, peak: 0.13 * vel, decay: 1.7 }, when);
+  const osc = (type, f, t, dur) => { const o = ctx.createOscillator(); o.type = type; o.frequency.value = f; o.start(t); o.stop(t + dur + 0.05); return o; };
+  const filt = (type, f, q = 0.7) => { const n = ctx.createBiquadFilter(); n.type = type; n.frequency.value = f; n.Q.value = q; return n; };
+  const amp = (t, peak, decay, attack = 0.008) => {
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(peak, t + attack);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + decay);
+    g.connect(master);
+    return g;
+  };
+  /* the voice is taken from the neuron itself. An electrode's signal played on a speaker (the audio
+     monitor of a spike-recording rig) turns each action potential into a click of a millisecond or
+     two, and a train of them at f spikes a second is heard as a buzz of pitch f. So one period of
+     this oscillator is an action potential (a spike, then the undershoot after it, a little wider
+     than a real one to take the glare off), and the note's pitch is the firing rate. Struck, a
+     neuron fires fast and then slows (spike-frequency adaptation): the rate starts high and settles
+     onto the note. It fires in bursts, faster the higher the note (18 a second at C4, 32 at A5) and
+     slowing as the note dies. The bursts open and close on a sine (a square gate clicked at every
+     edge), the top is taken off twice (the first cut follows the pitch), and the note starts a
+     touch less abruptly than a click */
+  let spikeWave = null;
+  const spikeCycle = () => {
+    if (spikeWave) return spikeWave;
+    const N = 512, H = 48, v = [];
+    for (let i = 0; i < N; i++) {
+      const p = i / N;
+      v.push(Math.exp(-(((p - 0.09) / 0.04) ** 2)) - 0.28 * Math.exp(-(((p - 0.24) / 0.1) ** 2)));
+    }
+    const re = new Float32Array(H), im = new Float32Array(H);
+    for (let n = 1; n < H; n++) for (let i = 0; i < N; i++) { re[n] += v[i] * Math.cos(2 * Math.PI * n * i / N); im[n] += v[i] * Math.sin(2 * Math.PI * n * i / N); }
+    return (spikeWave = ctx.createPeriodicWave(re, im));
+  };
+  const BURST_SLOW = 0.42;
+  const burstRate = (f) => 18 + 14 * Math.max(0, Math.min(1, Math.log2(f / 261.63) / 1.75));
+  function burst(f, t, peak) {
+    const r0 = burstRate(f), o = osc('sine', f, t, 0.55), gate = ctx.createGain(), lfo = osc('sine', r0, t, 0.55), d = ctx.createGain();
+    o.setPeriodicWave(spikeCycle());
+    o.frequency.setValueAtTime(f * 1.4, t);
+    o.frequency.exponentialRampToValueAtTime(f, t + 0.06);
+    lfo.frequency.setValueAtTime(r0, t);
+    lfo.frequency.exponentialRampToValueAtTime(r0 * BURST_SLOW, t + 0.5);
+    gate.gain.value = 0.55;
+    d.gain.value = 0.45;
+    lfo.connect(d).connect(gate.gain);
+    o.connect(gate).connect(filt('lowpass', 1300 + f * 0.9, 0.5)).connect(filt('lowpass', 3600, 0.5)).connect(amp(t, peak * 0.76, 0.55, 0.006));
+  }
+  // a single action potential, for the letters. Drawn true to life (0.16 ms wide) it put most of
+  // its energy at 2-5 kHz, where the ear is keenest, and it pricked; drawn twice as wide and
+  // rounded, with the top above 2 kHz taken off, it is a soft 톡 (its centre of energy 1.3 kHz → 0.54
+  // kHz, 2-5 kHz -23 dB, peak -10 dB, rendered offline). The shape is its own envelope: no gate on
+  // it, which would cut into the spike. Each one a little wider or narrower, louder or softer
+  let apBuf = null;
+  const apClick = () => {
+    if (apBuf) return apBuf;
+    const sr = ctx.sampleRate, n = Math.round(sr * 0.008);
+    apBuf = ctx.createBuffer(1, n, sr);
+    const d = apBuf.getChannelData(0);
+    for (let i = 0; i < n; i++) {
+      const ms = (i / sr) * 1000;
+      d[i] = Math.exp(-(((ms - 1) / 0.32) ** 2)) - 0.35 * Math.exp(-(((ms - 1.7) / 0.64) ** 2));
+    }
+    return apBuf;
+  };
+  const fire = (t, peak, rate = 1) => {
+    const s = ctx.createBufferSource(), g = ctx.createGain();
+    s.buffer = apClick();
+    s.playbackRate.value = rate;
+    g.gain.value = peak * 0.8 * (0.85 + Math.random() * 0.3);
+    s.connect(filt('highpass', 250)).connect(filt('lowpass', 2000, 0.5)).connect(g).connect(master);
+    s.start(t);
+    s.stop(t + 0.012);
+  };
+  /* the probe: the spikes drawn as an electrode beside the playing neuron would record them, on a
+     small oscilloscope screen beside the sound switch (a bezel, a faint graticule of eight by two
+     divisions). The beam sweeps left to right and starts again, writing
+     over the last sweep, which fades as it waits; just ahead of the beam the screen is clear. A
+     spike is a peak and a dip. Each note is a burst at the pace you hear: the higher the note, the
+     faster and the more spikes (the rate is the pitch's), the louder, the taller; no two alike,
+     as a neuron's are not. A letter touched is one small spike; the low root a slow swell beneath */
+  const probe = (() => {
+    const cv = $('.sound__scope'), W = 88, H = 26, PPS = 110, T = (W / PPS) * 1000, GAP = 7;
+    if (!cv) return { burst() {}, spike() {}, swell() {}, run() {}, clear() {} };
+    const g = cv.getContext('2d');
+    let ev = [], raf = 0;
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    cv.width = W * dpr; cv.height = H * dpr;
+    const ms = (t) => performance.now() + (t - ctx.currentTime) * 1000;   // audio clock → page clock
+    const xAt = (t) => ((t / 1000) * PPS) % W;                            // where the beam writes time t
+    const noise = (t) => {   // the same wobble for the same 12 ms
+      let x = Math.imul(Math.floor(t / 12), 2654435761) >>> 0;
+      x ^= x >>> 15; x = Math.imul(x, 2246822507) >>> 0; x ^= x >>> 13;
+      return (x >>> 0) / 2147483648 - 1;
+    };
+    function draw() {
+      const now = performance.now(), mid = H / 2, live = soundOn && !armed, head = xAt(now);
+      ev = ev.filter((e) => now - e.t < T + 600);
+      g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      g.clearRect(0, 0, W, H);
+      // the graticule
+      g.fillStyle = 'rgba(31, 107, 67, 0.13)';
+      for (let i = 1; i < 8; i++) g.fillRect(Math.round((i * W) / 8), 0, 0.6, H);
+      for (let x = 0; x < W; x += 2.2) g.fillRect(x, mid - 0.3, 1.1, 0.6);
+      g.lineWidth = 1;
+      g.lineJoin = 'round';
+      const ink = live ? '31, 107, 67' : '167, 174, 169';
+      const swell = (t) => ev.reduce((v, e) => { const d = t - e.t; return e.slow && d > 0 && d < 450 ? v + e.a * 2.4 * Math.sin((Math.PI * d) / 450) : v; }, 0);
+      // the baseline, column by column: newest by the beam, fading with age, a clear gap ahead
+      for (let x = 0; x < W; x++) {
+        const age = ((head - x + W) % W) / PPS * 1000;
+        if (live && age > T - (GAP / PPS) * 1000) continue;   // switched off, the screen shows one quiet line
+        const t = now - age, t2 = t + 1000 / PPS;
+        const y1 = mid - (live ? noise(t) * 0.3 + swell(t) : 0), y2 = mid - (live ? noise(t2) * 0.3 + swell(t2) : 0);
+        g.strokeStyle = `rgba(${ink}, ${live ? (1 - 0.75 * (age / T)).toFixed(3) : 1})`;
+        g.beginPath(); g.moveTo(x, y1); g.lineTo(x + 1, y2); g.stroke();
+      }
+      // the spikes: up to the peak, down through the line to the dip, back
+      for (const e of ev) {
+        if (e.slow) continue;
+        const age = now - e.t;
+        if (age < 0 || age > T - (GAP / PPS) * 1000) continue;
+        const x = xAt(e.t), h = e.a * (mid - 2);
+        g.strokeStyle = `rgba(${ink}, ${(1 - 0.75 * (age / T)).toFixed(3)})`;
+        g.beginPath();
+        g.moveTo(x - 0.7, mid); g.lineTo(x, mid - h); g.lineTo(x + 0.9, mid + Math.min(H - mid - 2, h * 0.42)); g.lineTo(x + 1.8, mid);
+        g.stroke();
+      }
+      // the beam
+      if (live) {
+        g.fillStyle = `rgb(${ink})`;
+        g.beginPath(); g.arc(head, mid - noise(now) * 0.3 - swell(now), 1.4, 0, Math.PI * 2); g.fill();
+      }
+      raf = live && !document.hidden ? requestAnimationFrame(draw) : 0;
+    }
+    return {
+      // one note's burst, paced as the voice's bursts are (burstRate), with a neuron's unevenness
+      burst(t, vel, f) {
+        const r0 = burstRate(f || 440);
+        for (let s = 0; s < 0.5;) {
+          const a = Math.min(1, vel * 1.2 * Math.exp(-s / 0.13) * (0.86 + Math.random() * 0.28));
+          if (a < 0.16) break;
+          ev.push({ t: ms(t + s), a });
+          const r = r0 * Math.pow(BURST_SLOW, Math.min(1, s / 0.5));
+          s += (1 / r) * (0.85 + Math.random() * 0.3);
+        }
+        this.run();
+      },
+      spike(t, a) { ev.push({ t: ms(t), a }); this.run(); },
+      swell(t, vel) { ev.push({ t: ms(t), a: vel * 0.8, slow: true }); },
+      run() { if (!raf) raf = requestAnimationFrame(draw); },
+      clear() { ev = []; this.run(); },
+    };
+  })();
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) probe.run(); });
+  const pluck = (m, vel = 1, when = 0) => { if (!audio()) return; const t = ctx.currentTime + 0.02 + when; burst(hz(m), t, 0.16 * vel); probe.burst(t, vel, hz(m)); };
+  const low = (m, vel = 1, when = 0) => { if (!audio()) return; voice(m, { type: 'sine', cutoff: 900, peak: 0.13 * vel, decay: 1.7 }, when); probe.swell(ctx.currentTime + 0.02 + when, vel); };
+  const TOUCH_VOL = 0.035;   // a letter's spike
   function sound(ev, vel, when = 0) {
     pluck(ev.m, vel, when);
     if (ev.bass) low(ev.bass, vel, when);
@@ -187,7 +341,7 @@
   // th: the threads it belongs to (one → on that line, two neighbours → the space between).
   // y: the measure (a year), or 'pickup' for the anacrusis before the first barline.
   const ITEMS = [
-    { id: 'hanjae', y: 'pickup', t: '한재공익재단 전액 장학생', d: '2021 입학부터 졸업까지', th: null, honor: true, note: '등록금 전액과 매달 100만 원의 생활비. 모든 것에 앞서 들어오는 못갖춘마디', href: '#cv' },
+    { id: 'hanjae', y: 'pickup', t: '한재공익재단 전액 장학생', d: '2021 입학부터 졸업까지', th: null, honor: true, note: 'full tuition + stipend', href: '#cv' },
     { id: 'jame', y: 2021, t: 'JAME', d: '2021.03 – 2023.02', th: [0], note: '인문대 밴드 · 보컬 · 19대 회장', href: '#cv' },
     { id: 'bcsc', y: 2022, t: 'BCSC 학부생 연구 1등상', d: '2022.02', th: [2, 3], honor: true, note: '신경미학: 아름다움과 숭고가 함께 쓰는 미적 판단의 핵심 신경망, DMN (fMRI · DCM 설계)', href: '#cv' },
     { id: 'rgorhythm', y: 2022, t: 'Rgorhythm', d: '2022.03 – 지금', th: [0], note: '심리학과 밴드를 만들었다 · 보컬', href: '#cv' },
@@ -208,7 +362,6 @@
     { id: 'grandprize', y: 2026, t: '서울대학교 컴퓨팅 경진대회 대상', d: '2026.10', th: [4], honor: true, note: '제5회 · studyForest(현 Thinket)', href: COMPETITION, out: true },
   ];
   const SERVICE = { id: 'service', y: 2024, t: '대한민국 공군', d: '2023.10.30 – 2025.07.29', note: '병역 · 21개월의 쉼표', href: '#cv', rest: true };
-  const BY_ID = new Map([...ITEMS, SERVICE].map((it) => [it.id, it]));
   const stepFor = (it) => (it.rest ? 4 : !it.th ? 10 : it.th.length === 1 ? it.th[0] * 2 : it.th[0] * 2 + 1);
   const pitchFor = (it) => midiOf(Math.min(stepFor(it), 10));
 
@@ -374,7 +527,7 @@
 
   let soundOn = false;
   function bind(g, item, m) {
-    const enter = () => { if (!pinned) { light(item.id); showCard(item, g); if (soundOn && !armed && m) pluck(m, 0.8); } };
+    const enter = () => { if (!pinned) { light(item.id); showCard(item, g); } };
     const leave = () => { if (!pinned) { hideCard(); light(reading); } };
     g.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') enter(); });
     g.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') leave(); });
@@ -484,6 +637,7 @@
     el('line', { class: 'bar', x1: x, x2: x, y1: 6, y2: 26 }, g);
     drift(g);
   }
+  const heard = [];   // listeners told of each note as it sounds (Synaesthesia's field listens)
   const at = (t) => Math.max(0, t - ctx.currentTime - 0.02);   // audio time → the offset pluck() takes
   const show = (t, fn) => setTimeout(fn, Math.max(0, (t - ctx.currentTime) * 1000));
 
@@ -537,7 +691,7 @@
     sound(ev, 0.75, at(t));
     const downbeat = beat % 4 === 0;
     beat += ev.dur;
-    show(t, () => { if (downbeat) stripBar(); stripNote(ev.m, false, ev.dur); });
+    show(t, () => { if (downbeat) stripBar(); stripNote(ev.m, false, ev.dur); heard.forEach((f) => f(ev)); });
   }
   function schedule() {
     if (!soundOn) return;
@@ -554,7 +708,7 @@
         else if (lv === 1 && eighth) m = fig8[slot / 2 - 1];
         if (m != null) {
           pluck(m, eighth ? 0.5 : 0.4, at(tSlot));
-          show(tSlot, () => stripNote(m, true, lv === 2 ? 0.25 : 0.5));
+          show(tSlot, () => { stripNote(m, true, lv === 2 ? 0.25 : 0.5); heard.forEach((f) => f({ m, orn: true })); });
         }
         slot++;
       } else {
@@ -575,7 +729,7 @@
     armed = true;
     soundOn = true;
     soundBtn.setAttribute('aria-pressed', 'true');
-    $('.sound__label', soundBtn).textContent = '소리 끄기';
+    $('.sound__label', soundBtn).textContent = soundBtn.title = '소리 끄기';
     document.documentElement.classList.add('sound-armed');
     // A finger's pointerdown, or a touch that becomes a scroll, does not let a page sound,
     // so every press tries, and the music begins only once the audio is really running.
@@ -601,9 +755,10 @@
     document.documentElement.classList.remove('sound-armed');
     soundOn = on;
     soundBtn.setAttribute('aria-pressed', String(on));
-    $('.sound__label', soundBtn).textContent = on ? '소리 끄기' : '소리 켜기';
+    $('.sound__label', soundBtn).textContent = soundBtn.title = on ? '소리 끄기' : '소리 켜기';
     document.documentElement.classList.toggle('sound-on', on);
     clearTimeout(timer);
+    probe.clear();
     if (!on) return;
     if (!audio()) return;
     live = true;
@@ -690,14 +845,316 @@
       lb.showModal();
     }));
     lb.addEventListener('click', (e) => { if (e.target === lb || e.target.closest('.lb__x')) lb.close(); });
-    const away = () => {
-      const landed = panelEl.getBoundingClientRect().top <= (parseFloat(getComputedStyle(panelEl).top) || 0) + 0.5;
-      html.classList.toggle('plates-away', wideEnough.matches && ((turnOn && !landed) || aboutEl.getBoundingClientRect().bottom < innerHeight * 0.42));
-    };
-    addEventListener('scroll', () => requestAnimationFrame(away), { passive: true });
-    addEventListener('resize', away);
-    away();
   }
+
+  /* ---------- the works, drawn ----------
+     Under the score the pictures belong to the intro alone. Once the heading 작업 passes the
+     reading line they go, and the work being read is drawn there instead: Thinket's grove,
+     toucan and mole put themselves together facet by facet; 맨날's three shapes arrive one
+     by one and its three ribbons are drawn through them; Synaesthesia is a field of LEDs on
+     which every note the page plays falls as a drop and spreads as a ripple. */
+  const WORKS = ['thinket', 'maennal', 'synaesthesia'];
+  const wstage = $('.wstage'), scenes = {};
+  let shown = null, hoverWork = null;
+  // a drawing seen a moment ago is not drawn again from the start: coming back within 20 s, it
+  // is as it was left (Thinket's two carry on); after longer, or the first time, it enters anew
+  const leftAt = {};
+  function showWork(id) {
+    if (!wstage || id === shown) return;
+    if (shown) leftAt[shown] = performance.now();
+    shown = id;
+    html.classList.toggle('ws-on', !!id);
+    $$('.ws', wstage).forEach((s) => s.classList.toggle('is-on', s.dataset.work === id));
+    WORKS.forEach((w) => { if (w !== id && scenes[w]) scenes[w].stop(); });
+    if (!id) return;
+    const fresh = !(id in leftAt) || performance.now() - leftAt[id] > 20000;
+    (scenes[id] || (scenes[id] = SCENES[id]($(`.ws[data-work="${id}"]`, wstage)))).play(fresh);
+  }
+  const pop = (n, delay, from = 'scale(0.2) rotate(-10deg)') => {
+    n.getAnimations().forEach((a) => a.cancel());
+    if (reduce) return;
+    n.animate([{ transform: from, opacity: 0 }, { transform: 'none', opacity: 1 }],
+      { duration: 340, delay, easing: 'cubic-bezier(0.3, 1.3, 0.5, 1)', fill: 'backwards' });
+  };
+  const svgOf = (url) => fetch(url).then((r) => r.text()).then((t) => new DOMParser().parseFromString(t, 'image/svg+xml').documentElement);
+  const centre = (n) => { const b = n.getBBox(); return [b.x + b.width / 2, b.y + b.height / 2]; };
+  const SCENES = {
+    // the grove of the Thinket mark between two stumps. Its toucan and mole move as they do on
+    // Thinket's own landing, with the same motion modules: the toucan flies in and perches, and now
+    // and then crosses the grove to the other stump; the mole bursts up out of the ground, and now
+    // and then burrows, digs its way along under the earth and comes up somewhere else
+    thinket(host) {
+      const svgEl = $('.ws__grove', host), GROUND = 248;
+      const STUMP = { r: [562, 192], l: [60, 206] };   // stump tops (viewBox units)
+      const DENS = [190, 474];                          // where the mole comes up (foot x), either side of the grove
+      const DIRT = ['#6b4a2e', '#8a6440', '#4e3520', '#a5794c'];
+      const fit = () => { const w = host.clientWidth, h = host.clientHeight, k = Math.min(w / 660, h / 270); return { w, h, k, x: (w - 660 * k) / 2, y: (h - 270 * k) / 2 }; };
+      const px = (x, y) => { const f = fit(); return [f.x + x * f.k, f.y + y * f.k]; };
+      let parts = [], tc = null, mm = null, timers = [], live = false, perch = 'r', den = 0, tw = 0, beat = 0;
+      const later = (ms, fn) => timers.push(setTimeout(fn, ms));
+      // where the toucan's belly meets the stump (60% across the drawing, or 40% when it faces right)
+      const seat = (which) => { const [x, y] = px(...STUMP[which]); return [x - tw * (which === 'r' ? 0.6 : 0.4), y - tw * (660.4 / 820.8) * 0.78]; };
+      const size = () => {
+        const { k } = fit();
+        tw = 132 * k;
+        $('.ws__toucan', host).style.width = `${tw}px`;
+        $('.ws__mole', host).style.width = `${112 * k}px`;
+      };
+      const stump = ([x, y]) => {
+        const g = el('g', {}, svgEl);
+        el('polygon', { points: `${x - 13},${y} ${x + 13},${y} ${x + 17},${GROUND} ${x - 17},${GROUND}`, fill: '#4a2e18' }, g);
+        el('polygon', { points: `${x - 13},${y} ${x + 13},${y} ${x + 8},${y + 5} ${x - 8},${y + 5}`, fill: '#6b4a2e' }, g);
+        return g;
+      };
+      const ready = Promise.all([svgOf('assets/thinket-icon.svg'), import('./assets/works/forest/toucan.js'), import('./assets/works/forest/mole.js')]).then(([grove, T, M]) => {
+        el('line', { x1: 20, x2: 640, y1: GROUND + 0.5, y2: GROUND + 0.5, stroke: '#2b4a35', 'stroke-width': 1.2 }, svgEl);
+        const st = [stump(STUMP.l), stump(STUMP.r)];
+        const g = el('g', { transform: `translate(${330 - 32 * 3.6} ${GROUND - 58 * 3.6}) scale(3.6)` }, svgEl);
+        [...grove.children].forEach((n) => g.appendChild(document.importNode(n, true)));
+        // stumps, trunks, then leaves from the bottom up
+        const polys = $$('polygon', g), trunks = polys.filter((n) => n.getAttribute('fill') === '#4a2e18');
+        const leaves = polys.filter((n) => !trunks.includes(n)).sort((a, b) => centre(b)[1] - centre(a)[1]);
+        parts = [...st, ...trunks, ...leaves].map((n, i) => [n, i * 40]);
+        parts.forEach(([n]) => { n.style.transformBox = 'fill-box'; n.style.transformOrigin = '50% 100%'; });
+        size();
+        tc = T.mountToucan($('.ws__toucan img', host), { restFace: 1 });
+        mm = M.mountMole($('.ws__mole img', host), { hidden: true, face: -1 });
+        // the stage changes size (the window does): everything keeps its place on the new scale
+        let was = '';
+        new ResizeObserver(() => {
+          const now = `${host.clientWidth}x${host.clientHeight}`;
+          if (now === was) return;
+          const first = !was;
+          was = now;
+          if (first || !live) return;
+          size();
+          if (tc.flying) tc.to(...seat(perch), { fly: true, face: perch === 'r' ? 1 : -1 }); else tc.place(...seat(perch), perch === 'r' ? 1 : -1);
+          mm.place(...px(DENS[den], GROUND));
+        }).observe(host);
+      });
+      // a hump of earth running along under the ground, throwing up crumbs, from one den to the next
+      const crumb = (x) => {
+        const s = 2 + Math.random() * 2.6, dx = (Math.random() - 0.5) * 22, up = 8 + Math.random() * 13;
+        const c = el('polygon', { points: `0,${-s} ${s},${s * 0.6} ${-s},${s * 0.7}`, fill: DIRT[Math.floor(Math.random() * 4)] }, svgEl);
+        c.animate([{ transform: `translate(${x}px, ${GROUND}px)` }, { transform: `translate(${x + dx * 0.6}px, ${GROUND - up}px) rotate(110deg)`, offset: 0.45 },
+          { transform: `translate(${x + dx}px, ${GROUND + 1}px) rotate(220deg)`, opacity: 0 }], { duration: 560, easing: 'cubic-bezier(0.3, 0.6, 0.5, 1)' }).onfinish = () => c.remove();
+      };
+      const tunnel = (a, b) => new Promise((done) => {
+        if (reduce) { done(); return; }
+        const hump = el('polygon', { points: '-14,0.5 -6,-6 6,-8 15,0.5', fill: '#6b4a2e' }, svgEl);
+        const dur = Math.abs(b - a) / 0.26, t0 = performance.now();
+        let last = 0;
+        const step = (now) => {
+          const k = Math.min(1, (now - t0) / dur), e = k < 0.5 ? 2 * k * k : 1 - (2 - 2 * k) ** 2 / 2, x = a + (b - a) * e;
+          hump.setAttribute('transform', `translate(${x} ${GROUND})`);
+          if (now - last > 70) { last = now; crumb(x); }
+          if (k < 1 && live) requestAnimationFrame(step); else { hump.remove(); done(); }
+        };
+        requestAnimationFrame(step);
+      });
+      async function dig() {
+        const from = DENS[den];
+        den = (den + 1 + Math.floor(Math.random() * (DENS.length - 1))) % DENS.length;
+        await mm.burrow();
+        if (!live) return;
+        await tunnel(from, DENS[den]);
+        if (!live) return;
+        mm.place(...px(DENS[den], GROUND), den === 0 ? -1 : 1);
+        mm.emerge();
+      }
+      // every few seconds one of them moves: the toucan to the other stump, or the mole to another den
+      function wander() {
+        if (!live) return;
+        if (beat++ % 2 === 0) { perch = perch === 'r' ? 'l' : 'r'; tc.to(...seat(perch), { fly: true, face: perch === 'r' ? 1 : -1 }); }
+        else dig();
+        later(5500 + Math.random() * 4000, wander);
+      }
+      let entered = false;
+      return {
+        play(fresh) {
+          ready.then(() => {
+            if (shown !== 'thinket') return;
+            live = true;
+            timers.forEach(clearTimeout); timers = [];
+            if (!fresh && entered) {
+              // back after a moment: both are where they were (a mole caught underground comes up)
+              if (!mm.visible) { mm.place(...px(DENS[den], GROUND), den === 0 ? -1 : 1); later(500, () => mm.emerge()); }
+              if (!reduce) later(4000 + Math.random() * 3000, wander);
+              return;
+            }
+            entered = true;
+            parts.forEach(([n, d]) => pop(n, d, 'scaleY(0.2) scaleX(0.6)'));
+            size();
+            // the toucan flies in from beyond the left edge, over the grove, to the right stump; the mole comes up on the left
+            perch = 'r'; den = 0; beat = 0;
+            tc.place(-tw - 30, 130, -1);
+            later(reduce ? 0 : 480, () => tc.to(...seat('r'), { fly: !reduce, face: 1 }));
+            mm.hide();
+            mm.place(...px(DENS[0], GROUND), -1);
+            later(reduce ? 0 : 1300, () => mm.emerge());
+            if (!reduce) later(6500 + Math.random() * 2500, wander);
+          });
+        },
+        stop() { live = false; timers.forEach(clearTimeout); timers = []; },
+      };
+    },
+    // the 맨날 mark: a circle, a triangle, a square, then the three ribbons drawn through them
+    maennal(host) {
+      const sh = [
+        el('circle', { cx: 193.9, cy: 512, r: 131.6, fill: '#3c4a80' }, host),
+        el('polygon', { points: '512,380.4 663.9,643.6 360.1,643.6', fill: '#e3a334' }, host),
+        el('rect', { x: 698.4, y: 380.4, width: 263.2, height: 263.2, fill: '#d2492e' }, host),
+      ];
+      const rb = [
+        el('rect', { x: 112.5, y: 460.3, width: 799, height: 34.4, fill: '#f2ebd9' }, host),
+        el('rect', { x: 112.5, y: 494.7, width: 481.3, height: 34.4, fill: '#d2492e' }, host),
+        el('rect', { x: 430.2, y: 529.1, width: 481.3, height: 34.4, fill: '#3c4a80' }, host),
+      ];
+      sh.forEach((n) => { n.style.transformBox = 'fill-box'; n.style.transformOrigin = 'center'; });
+      rb.forEach((n) => { n.style.transformBox = 'fill-box'; n.style.transformOrigin = 'left center'; });
+      return {
+        play(fresh) {
+          if (!fresh) return;   // still drawn as it was left
+          sh.forEach((n, i) => {
+            n.getAnimations().forEach((a) => a.cancel());
+            if (!reduce) n.animate([{ transform: 'scale(0)', opacity: 0 }, { transform: 'scale(1.08)', opacity: 1, offset: 0.7 }, { transform: 'none', opacity: 1 }],
+              { duration: 420, delay: 150 + i * 300, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'backwards' });
+          });
+          rb.forEach((n, i) => {
+            n.getAnimations().forEach((a) => a.cancel());
+            if (!reduce) n.animate([{ transform: 'scaleX(0)' }, { transform: 'none' }],
+              { duration: i ? 360 : 480, delay: 1150 + [0, 430, 740][i], easing: 'cubic-bezier(0.65, 0, 0.2, 1)', fill: 'backwards' });
+          });
+        },
+        stop() {},
+      };
+    },
+    // a field of LEDs. Each note the page plays falls on it as a drop: the melody in amber
+    // (higher notes higher up), its ornaments in rose, the low root in blue, the closing third in
+    // green, four voices as the piece had four instruments. When the page is silent the field
+    // improvises on its own, a drop at a random place and time. A press drops one, and sounds.
+    synaesthesia(cv) {
+      const g = cv.getContext('2d');
+      const COL = { mel: [255, 196, 38], orn: [255, 96, 146], low: [112, 132, 255], third: [90, 214, 158] };
+      const OFF = [62, 48, 74], PITCH = 13;
+      const drops = [];
+      let raf = 0, w = 0, h = 0, dpr = 1, idle = 0, trail = null;
+      const size = () => {
+        dpr = Math.min(2, devicePixelRatio || 1);
+        w = cv.clientWidth; h = cv.clientHeight;
+        cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+      };
+      const drop = (x, y, c, big = false) => {
+        drops.push({ x, y, c, t0: performance.now(), v: big ? 0.075 : 0.12, life: big ? 2600 : 1700, wd: big ? 11 : 6.5 });
+        if (drops.length > 28) drops.shift();
+      };
+      const yOf = (m) => h * (0.86 - 0.72 * clamp01((stepOf(snap(m)) + 2) / 12));
+      heard.push((ev) => {
+        if (shown !== 'synaesthesia' || !w) return;
+        const x = () => w * (0.08 + 0.84 * Math.random());
+        if (ev.orn) { drop(x(), yOf(ev.m), COL.orn); return; }
+        drop(x(), yOf(ev.m), COL.mel);
+        if (ev.bass) drop(x(), h * 0.62, COL.low, true);
+        if (ev.dyad) drop(x(), yOf(ev.dyad), COL.third);
+      });
+      function frame(now) {
+        g.setTransform(dpr, 0, 0, dpr, 0, 0);
+        g.fillStyle = '#1c1026';
+        g.fillRect(0, 0, w, h);
+        const cols = Math.floor((w - 8) / PITCH), rows = Math.floor((h - 8) / PITCH);
+        const ox = (w - (cols - 1) * PITCH) / 2, oy = (h - (rows - 1) * PITCH) / 2;
+        for (let j = 0; j < rows; j++) {
+          for (let i = 0; i < cols; i++) {
+            const x = ox + i * PITCH, y = oy + j * PITCH;
+            let r = 0, gg = 0, b = 0, a = 0;
+            for (const d of drops) {
+              const age = now - d.t0, fade = 1 - age / d.life;
+              if (age < 0 || fade <= 0) continue;
+              const dist = Math.hypot(x - d.x, y - d.y), rad = age * d.v;
+              const k = (Math.exp(-((dist - rad) ** 2) / (2 * d.wd * d.wd)) + 0.35 * Math.exp(-((dist - rad * 0.55) ** 2) / (2 * d.wd * d.wd))) * fade * fade;
+              r += d.c[0] * k; gg += d.c[1] * k; b += d.c[2] * k; a += k;
+            }
+            const t = Math.min(1, a);
+            const c = a > 0.02 ? [r / a, gg / a, b / a] : OFF;
+            g.fillStyle = `rgb(${Math.round(OFF[0] + (c[0] - OFF[0]) * t)},${Math.round(OFF[1] + (c[1] - OFF[1]) * t)},${Math.round(OFF[2] + (c[2] - OFF[2]) * t)})`;
+            g.beginPath();
+            g.arc(x, y, 3.6 + 1.3 * t, 0, Math.PI * 2);
+            g.fill();
+          }
+        }
+        while (drops.length && now - drops[0].t0 > drops[0].life) drops.shift();
+        // silence: the field improvises
+        if ((!soundOn || armed) && now > idle) {
+          const keys = Object.keys(COL), c = COL[keys[Math.floor(Math.random() * keys.length)]];
+          drop(w * Math.random(), h * Math.random(), c, c === COL.low);
+          idle = now + 300 + Math.random() * 800;
+        }
+        raf = requestAnimationFrame(frame);
+      }
+      const at = (e) => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+      cv.addEventListener('pointerdown', (e) => {
+        const [x, y] = at(e);
+        const m = SCALE[Math.round(clamp01((0.86 - y / h) / 0.72) * (SCALE.length - 1))];
+        drop(x, y, COL.mel);
+        if (soundOn && !armed) pluck(m, 0.6);
+      });
+      cv.addEventListener('pointermove', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        const [x, y] = at(e);
+        if (!trail || Math.hypot(x - trail[0], y - trail[1]) > 70) { trail = [x, y]; drop(x, y, COL.orn); }
+      });
+      new ResizeObserver(size).observe(cv);
+      return {
+        play() { size(); cancelAnimationFrame(raf); if (reduce) { frame(performance.now()); cancelAnimationFrame(raf); } else raf = requestAnimationFrame(frame); },
+        stop() { cancelAnimationFrame(raf); raf = 0; },
+      };
+    },
+  };
+
+  /* which picture the score carries: the intro's four, then the work being read, then nothing
+     (the CV is read against the score alone). Sections change as their heading passes the
+     reading line; a work under the pointer comes forward.
+     A reader flying past is not shown everything on the way: the picture changes only once the
+     page has been going slowly (or has stopped) and the same choice has held for a moment, so a
+     fast scroll leaves the panel as it was and the drawing begins where the reader slows down.
+     During the turn the pictures step away at once, as the score itself does */
+  const worksH = $('#works-h'), cvH = $('#cv-h');
+  let want = null, wantAt = 0, holdT = 0, speed = 0, sy0 = scrollY, st0 = performance.now(), movedAt = 0;
+  addEventListener('scroll', () => {
+    const now = performance.now();
+    speed = Math.abs(scrollY - sy0) / Math.max(8, now - st0);   // px per ms
+    sy0 = scrollY; st0 = now; movedAt = now;
+  }, { passive: true });
+  function under(force) {
+    const now = performance.now(), vh = innerHeight, line = vh * 0.6, wide = wideEnough.matches;
+    const landed = panelEl.getBoundingClientRect().top <= (parseFloat(getComputedStyle(panelEl).top) || 0) + 0.5;
+    if (!wide || (turnOn && !landed)) {
+      clearTimeout(holdT); want = null;
+      html.classList.toggle('plates-away', wide);
+      showWork(null);
+      return;
+    }
+    let pick = 'intro';
+    if (cvH.getBoundingClientRect().top < line) pick = 'none';
+    else if (worksH.getBoundingClientRect().top < line) {
+      pick = WORKS[0];
+      WORKS.forEach((w) => { if ($('#' + w).getBoundingClientRect().top < line) pick = w; });
+      if (hoverWork) pick = hoverWork;
+    }
+    if (pick !== want) { want = pick; wantAt = now; }
+    clearTimeout(holdT);
+    const calm = now - movedAt > 120 || speed < 0.9;
+    if (force === true || (now - wantAt >= 220 && calm)) {
+      html.classList.toggle('plates-away', pick !== 'intro');
+      showWork(WORKS.includes(pick) ? pick : null);
+    } else holdT = setTimeout(() => under(), 110);
+  }
+  $$('.work').forEach((n) => {
+    n.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') { hoverWork = n.id; under(); } });
+    n.addEventListener('pointerleave', () => { hoverWork = null; under(); });
+  });
+  addEventListener('scroll', () => requestAnimationFrame(() => under()), { passive: true });
+  addEventListener('resize', () => under());
 
   function setupTurn() {
     fitScore();
@@ -767,6 +1224,25 @@
   let raf = 0;
   const queue = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; turn(); }); };
   addEventListener('scroll', queue, { passive: true });
+
+  /* a turn is never left half done: when the scroll comes to rest partway, the page glides on to
+     where the score lands (or, if the reader was heading back up, home to the hero). Going down,
+     a small scroll is enough; going up, the score must be left behind a little first */
+  let snapT = 0, lastS = scrollY, dir = 1;
+  function settle() {
+    if (!turnOn || $('.rail.is-held')) return;
+    const rest = parseFloat(getComputedStyle(panelEl).top) || 0;
+    const s = scrollY, land = s + panelEl.getBoundingClientRect().top - rest;
+    if (s <= 0 || s >= land - 1) return;
+    const p = s / land;
+    scrollTo({ top: (dir > 0 ? p > 0.06 : p > 0.9) ? land : 0, behavior: 'smooth' });
+  }
+  addEventListener('scroll', () => {
+    if (scrollY !== lastS) dir = Math.sign(scrollY - lastS);
+    lastS = scrollY;
+    clearTimeout(snapT);
+    snapT = setTimeout(settle, 150);
+  }, { passive: true });
   addEventListener('resize', () => { setupTurn(); });
   wideEnough.addEventListener('change', setupTurn);
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(setupTurn);
@@ -776,8 +1252,6 @@
     n.addEventListener('pointerenter', (e) => {
       if (e.pointerType !== 'mouse' || pinned) return;
       light(n.dataset.note);
-      const it = BY_ID.get(n.dataset.note);
-      if (soundOn && !armed && it && !it.rest) pluck(pitchFor(it), 0.6);
     });
     n.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse' && !pinned) light(reading); });
   });
@@ -798,6 +1272,40 @@
     pluck(STRING_MIDI[i], 1);
     l.classList.remove('is-plucked'); void l.offsetWidth; l.classList.add('is-plucked');
   });
+
+  /* the letters answer the pointer: with the sound on, moving onto a letter makes a tiny touch
+     of sound (empty paper stays silent). Each letter speaks once as the pointer arrives on it */
+  function letterAt(x, y) {
+    let node, off;
+    if (document.caretPositionFromPoint) { const c = document.caretPositionFromPoint(x, y); if (c) { node = c.offsetNode; off = c.offset; } }
+    else if (document.caretRangeFromPoint) { const c = document.caretRangeFromPoint(x, y); if (c) { node = c.startContainer; off = c.startOffset; } }
+    if (!node || node.nodeType !== 3) return null;
+    const r = document.createRange();
+    for (const i of [off, off - 1]) {   // the caret falls on whichever side of the letter is nearer
+      if (i < 0 || i >= node.length || /\s/.test(node.data[i])) continue;
+      r.setStart(node, i); r.setEnd(node, i + 1);
+      const b = r.getBoundingClientRect();
+      if (x >= b.left && x <= b.right && y >= b.top && y <= b.bottom) return [node, i];
+    }
+    return null;
+  }
+  let lastLetter = null, letterAt0 = 0, px = 0, py = 0, looking = false;
+  addEventListener('pointermove', (e) => {
+    if (e.pointerType !== 'mouse' || !soundOn || armed || !ctx || ctx.state !== 'running') return;
+    px = e.clientX; py = e.clientY;
+    if (looking) return;
+    looking = true;
+    requestAnimationFrame(() => {
+      looking = false;
+      const hit = letterAt(px, py), now = performance.now();
+      if (hit && !(lastLetter && hit[0] === lastLetter[0] && hit[1] === lastLetter[1]) && now - letterAt0 > 22) {
+        fire(ctx.currentTime + 0.005, TOUCH_VOL, 0.85 + Math.random() * 0.3);
+        probe.spike(ctx.currentTime + 0.005, 0.42);
+        letterAt0 = now;
+      }
+      lastLetter = hit;
+    });
+  }, { passive: true });
 
   /* ---------- small things ---------- */
   // the scrollbar floats on the page instead of standing in a gutter of its own, so it sits
@@ -849,7 +1357,8 @@
   });
 
   // entrances: the parts of each block rise once as they arrive
-  const parts = $$('.block > *');
+  // (the pictures are left out: they come and go with the score, and the entrance's opacity outranked their leaving)
+  const parts = $$('.block > *:not(.plates)');
   parts.forEach((p) => p.classList.add('rise'));
   const riseIO = new IntersectionObserver((es) => es.forEach((e) => {
     if (e.isIntersecting) { e.target.classList.add('in'); riseIO.unobserve(e.target); }
@@ -859,4 +1368,6 @@
   buildScore();
   setupTurn();
   bindFields();
+  under(true);
+  probe.run();
 })();
