@@ -4,6 +4,8 @@
 > "무엇을 했는지"는 `git log`에 상세히 있음. 이 파일은 **현재 상태 · 규칙 · 결정 · 다음 할 일**.
 > 마지막 업데이트: 2026-06-13. ⚠️ 2026-10-29 랜딩이 「녹색 오선」으로 전면 개편됐다. 아래 6월 서술(파쇄기, MoMA 흑백, Works 레이아웃 등)은 옛 디자인 기준이다. 지금 디자인은 `DESIGN.md`, 경과는 `DISCUSSION_LOG.md` 2026-10-29.
 
+> ⚠️ 2026-11-21: 동아리(Collectives)는 웹과 CV 에서 모두 뺐다(운영자 결정, 다시 넣지 않는다). CV 는 맨 위 한 줄 없이 Education / Focus / Research / Projects / Honors / Experience / Talks / Skills 순서다. 아래의 Collectives 서술은 옛 기준이다. 경과는 `DISCUSSION_LOG.md` 2026-11-21.
+
 ## 무엇인가
 이윤태 개인 포트폴리오 사이트 `music-inglee.github.io`. MoMA 스타일(흰/검 + 초록 포인트).
 디자인 명세는 `DESIGN.md` 참조.

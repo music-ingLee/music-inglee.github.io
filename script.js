@@ -342,15 +342,9 @@
   // y: the measure (a year), or 'pickup' for the anacrusis before the first barline.
   const ITEMS = [
     { id: 'hanjae', y: 'pickup', t: '한재공익재단 전액 장학생', d: '2021 입학부터 졸업까지', th: null, honor: true, note: 'full tuition + stipend', href: '#cv' },
-    { id: 'jame', y: 2021, t: 'JAME', d: '2021.03 – 2023.02', th: [0], note: '인문대 밴드 · 보컬 · 19대 회장', href: '#cv' },
     { id: 'bcsc', y: 2022, t: 'BCSC 학부생 연구 1등상', d: '2022.02', th: [2, 3], honor: true, note: '신경미학: 아름다움과 숭고가 함께 쓰는 미적 판단의 핵심 신경망, DMN (fMRI · DCM 설계)', href: '#cv' },
-    { id: 'rgorhythm', y: 2022, t: 'Rgorhythm', d: '2022.03 – 지금', th: [0], note: '심리학과 밴드를 만들었다 · 보컬', href: '#cv' },
-    { id: 'soundream', y: 2022, t: 'Soundream', d: '2022.09 – 2023.02', th: [0], note: '작곡 동아리', href: '#cv' },
-    { id: 'tripleh', y: 2023, t: 'Triple H', d: '2023.03 – 2026.02', th: [0], note: '보컬·힙합 동아리 · 보컬', href: '#cv' },
-    { id: 'aerg', y: 2023, t: 'AERG', d: '2023.03 – 2023.08', th: [0], note: '미술대학 연극회 · 음향팀', href: '#cv' },
     { id: 'talk', y: 2023, t: '“테크놀로지와 음악의 새로운 만남”', d: '2023.06', th: [0], note: '음악미학연구회 제74회 세미나 발표', href: '#cv' },
     { id: 'major', y: 2023, t: '음악정보학 학생설계전공 개설', d: '2023.03 신청 · 2023.09 진입', th: [0], note: '심리학 주전공에 더해, 음악정보학을 스스로 설계한 전공으로 열었다', href: '#cv' },
-    { id: 'bab', y: 2025, t: 'BAB', d: '2025.09 – 2026.08', th: [0], note: '학부대학 어쿠스틱 밴드 · 보컬', href: '#cv' },
     { id: 'connectome', y: 2025, t: 'SNU Connectome Lab', d: '2025.12 – 2026.02', th: [2], note: '학부 연구 인턴', href: '#cv' },
     { id: 'maennal', y: 2025, t: '맨날', d: '2025.12 –', th: [1], note: '인지심리학에서 온 생각: 오늘 할 일을 적고, 하루를 도형 하나로 남기는 앱', href: '#maennal', img: 'assets/maennal-icon.svg', bg: '#201c15', fit: 'meet' },
     { id: 'thinket', y: 2026, t: 'Thinket', d: '2026.01 –', th: [4], note: '대화를 질문들의 숲으로 세우는 LLM 학습 도구', href: '#thinket', img: 'assets/thinket-icon.svg', bg: '#0f1411', fit: 'meet' },
@@ -406,7 +400,8 @@
     const room = (it) => (it.img ? 1.8 : 1);
     // military service rests from late 2023 to mid 2025: a slot at the end of 2023, all of 2024, a slot at the start of 2025
     const restRoom = (y) => (y === 2023 || y === 2025 ? 1 : 0);
-    const units = segs.map((y) => (y === 2024 ? 1.4 : ITEMS.filter((it) => it.y === y).reduce((a, it) => a + room(it), 0) + (y === 'pickup' ? 0.4 : 0.9) + restRoom(y)));
+    // a year with nothing in it still gets the width of a one-note measure, so its year label keeps clear of the next
+    const units = segs.map((y) => (y === 2024 ? 1.4 : Math.max(y === 'pickup' ? 0 : 1.9, ITEMS.filter((it) => it.y === y).reduce((a, it) => a + room(it), 0) + (y === 'pickup' ? 0.4 : 0.9) + restRoom(y))));
     const unit = (X1 - X0) / units.reduce((a, b) => a + b, 0);
     let x = X0, restFrom = 0, restTo = 0;
     segs.forEach((y, k) => {
