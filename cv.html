@@ -24,7 +24,7 @@
     font-family: "Jost", "Futura", "Avenir Next", "Century Gothic",
                  "Pretendard Variable", "Pretendard", -apple-system,
                  BlinkMacSystemFont, "Apple SD Gothic Neo", "Helvetica Neue", Arial, sans-serif;
-    color: #111; line-height: 1.45; font-size: 9.7pt;
+    color: #111; line-height: 1.45; font-size: 9.7pt; font-weight: 300;
     -webkit-print-color-adjust: exact; print-color-adjust: exact;
   }
 
@@ -51,12 +51,12 @@
   /* stretch to the text block's height (name top → tagline bottom); contain
      keeps the emblem square without distortion, pinned to the right */
   .crest { flex: 0 0 auto; width: 26mm; align-self: stretch; height: auto; object-fit: contain; object-position: right center; }
-  .name { font-size: 23pt; font-weight: 800; letter-spacing: -0.015em; line-height: 1; margin-left: -0.03em; /* optical: 이's side bearing */ }
-  .aka { color: #6a6a6a; font-weight: 600; margin-top: 5px; font-size: 10pt; }
+  .name { font-size: 23pt; font-weight: 400; letter-spacing: -0.015em; line-height: 1; margin-left: -0.03em; /* optical: 이's side bearing */ }
+  .aka { color: #6a6a6a; font-weight: 400; margin-top: 5px; font-size: 10pt; }
   .contact { margin-top: 7px; color: #6a6a6a; font-size: 9pt; }
   .contact a { color: #1e6e43; text-decoration: none; }
   .contact a.link-plain { color: #6a6a6a; }
-  .tagline { margin-top: 9px; font-size: 9pt; font-weight: 500; color: #111; white-space: nowrap; }
+  .tagline { margin-top: 9px; font-size: 9pt; font-weight: 300; color: #111; white-space: nowrap; }
 
   /* section: label-left / content-right */
   .section {
@@ -65,7 +65,7 @@
   }
   .label {
     font-size: 8.4pt;
-    color: #1e6e43; font-weight: 700; padding-top: 2px;
+    color: #1e6e43; font-weight: 400; padding-top: 2px;
   }
 
   /* the date sits on the title line only, so it is pinned there and the
@@ -75,15 +75,15 @@
   .entry .main { padding-right: 27mm; }
   .cols2 .entry .main { padding-right: 24mm; }
   .entry + .entry { margin-top: 7px; }
-  .entry .main { font-weight: 600; }
-  .entry .sub { color: #6a6a6a; font-weight: 400; font-size: 9pt; margin-top: 1px; }
+  .entry .main { font-weight: 400; }
+  .entry .sub { color: #6a6a6a; font-weight: 300; font-size: 9pt; margin-top: 1px; }
   /* project links stay in the muted run of the line — the URL is there to be
      clicked in the PDF, not to shout */
   .entry .sub a, .entry .main a { color: inherit; text-decoration: none; }
   .entry .main .was { color: #6a6a6a; font-weight: 400; }
   .entry .when { color: #6a6a6a; font-size: 8.6pt; white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; position: absolute; top: 0; right: 0; line-height: inherit; padding-top: 0.12em; }
 
-  .fields { font-weight: 600; }
+  .fields { font-weight: 400; }
   .fields span:not(:last-child)::after { content: "  ·  "; color: #b3b3b3; font-weight: 400; }
   /* the field before a forced line break gets no trailing separator */
   .fields .line-end::after { content: none !important; }
